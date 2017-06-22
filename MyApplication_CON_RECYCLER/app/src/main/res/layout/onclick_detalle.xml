@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/tools"
+    android:id="@+id/detalle_ancla">
+
+
+
+
+
+
+
+
+    <ScrollView android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="@color/paleta0">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/paleta0">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/altoImagenDetalle"
+                android:orientation="vertical"
+                android:background="@color/paleta4"
+                android:id="@+id/detalle_linear">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/altoImagenDetalle"
+                    android:background="@color/paleta4"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    >
+
+                    <ImageButton
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/altoImagenDetalle"
+                        android:id="@+id/detalle_img"
+                        android:src="@drawable/strange"
+                        android:background="@color/paleta4"
+                        android:scaleType="fitXY"
+
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        />
+                </FrameLayout>
+
+            </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/recycler_actores"
+                android:layout_below="@id/detalle_linear"
+                android:layout_centerHorizontal="true"></android.support.v7.widget.RecyclerView>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_star"
+                android:layout_below="@id/recycler_actores"
+                android:layout_marginTop="4dp"
+                android:background="@null"
+                android:layout_marginRight="@dimen/tabTexto"
+                android:layout_alignParentRight="true"
+                android:id="@+id/rating"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:maxLines="1"
+                android:layout_height="wrap_content"
+                android:text="sa"
+                android:id="@+id/textViewrating"
+                android:textColor="@color/marfil"
+                android:layout_below="@+id/rating"
+                android:layout_marginRight="@dimen/tabTexto"
+                android:layout_alignStart="@id/rating"
+                android:textAlignment="center"/>
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textViewrating"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="@dimen/tabTexto"
+                android:textSize="25sp"
+                android:text="@string/detalle_nombre_peli"
+                android:id="@+id/tag_nombre2"
+
+                android:textAlignment="center"
+                android:textColor="@color/paleta4"
+                android:layout_marginBottom="30dp"
+                />
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tag_nombre2"
+                android:textSize="@dimen/detalle_texto_tags"
+                android:text="@string/detalle_año_peli"
+                android:textColor="@color/paleta4"
+                android:textStyle="bold"
+                android:id="@+id/tag_año"
+                android:layout_marginLeft="@dimen/tabTexto"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginRight="@dimen/tabTexto"
+                android:layout_below="@id/tag_año"
+                android:layout_marginLeft="@dimen/tabTexto"
+                android:textSize="18sp"
+                android:text="@string/detalle_nombre_peli"
+                android:id="@+id/tag_año2"
+                android:textColor="@color/marfil" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tag_año2"
+                android:textSize="@dimen/detalle_texto_tags"
+                android:text="@string/detalle_sinopsis_peli"
+                android:textColor="@color/paleta4"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                android:id="@+id/tag_sinopsis"
+                android:layout_marginLeft="@dimen/tabTexto"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginRight="@dimen/tabTexto"
+                android:layout_below="@id/tag_sinopsis"
+                android:layout_marginLeft="@dimen/tabTexto"
+                android:textSize="18sp"
+                android:text="@string/detalle_nombre_peli"
+                android:id="@+id/tag_sinopsis2"
+                android:textColor="@color/marfil"
+                android:layout_marginBottom="30sp"/>
+
+               <android.support.v7.widget.RecyclerView
+                   android:layout_width="wrap_content"
+                   android:layout_below="@id/tag_sinopsis2"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/recycler_Similares"
+                   >
+
+               </android.support.v7.widget.RecyclerView>
+
+
+        </RelativeLayout>
+
+
+
+
+    </ScrollView>
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="bottom|right"
+        fab:menu_fab_size="normal"
+        fab:menu_showShadow="true"
+        fab:menu_shadowColor="#66000000"
+        fab:menu_shadowRadius="4dp"
+        fab:menu_shadowXOffset="1dp"
+        fab:menu_shadowYOffset="3dp"
+        fab:menu_colorNormal="#43A047"
+        fab:menu_colorPressed="#2E7D32"
+        fab:menu_colorRipple="#1B5E20"
+        fab:menu_animationDelayPerItem="50"
+        fab:menu_icon="@drawable/fab_add"
+        fab:menu_buttonSpacing="0dp"
+        fab:menu_labels_margin="0dp"
+        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+        fab:menu_labels_paddingTop="4dp"
+        fab:menu_labels_paddingRight="8dp"
+        fab:menu_labels_paddingBottom="4dp"
+        fab:menu_labels_paddingLeft="8dp"
+        fab:menu_labels_padding="8dp"
+        fab:menu_labels_textColor="#FFFFFF"
+        fab:menu_labels_textSize="14sp"
+        fab:menu_labels_cornerRadius="3dp"
+        fab:menu_labels_colorNormal="#333333"
+        fab:menu_labels_colorPressed="#444444"
+        fab:menu_labels_colorRipple="#66FFFFFF"
+        fab:menu_labels_showShadow="true"
+        fab:menu_labels_singleLine="false"
+        fab:menu_labels_ellipsize="none"
+
+
+
+        fab:menu_labels_position="left"
+        fab:menu_openDirection="up"
+        fab:menu_backgroundColor="@android:color/transparent"
+        fab:menu_fab_label="your_label_here"
+        fab:menu_fab_show_animation="@anim/my_show_animation"
+        fab:menu_fab_hide_animation="@anim/my_hide_animation">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/addToFavorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_favorite_black_24dp"
+            fab:fab_label="Agregar a Favorito"
+            fab:fab_size="mini"
+            android:visibility="gone"
+            style="@style/FABGreen" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/watchTrailer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:src="@drawable/ic_camera_roll_black_24dp"
+            fab:fab_label="Mirar Trailer"
+            fab:fab_size="mini"
+            style="@style/FABGreen" />
+
+
+    </com.github.clans.fab.FloatingActionMenu>
+</FrameLayout>

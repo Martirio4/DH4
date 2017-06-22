@@ -1,0 +1,128 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context="com.craps.myapplication.View.Activities.ActivityRegister"
+    android:background="@color/paleta0">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ReelShot"
+        android:textSize="50sp"
+        android:layout_marginTop="50dp"
+        android:textStyle="bold"
+        android:textColor="@color/marfil"
+        android:id="@+id/textViewLogin"
+        android:layout_centerHorizontal="true"
+        />
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logofilm"
+        android:alpha=".2"
+        android:layout_centerInParent="true"
+        />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewLogin"
+        android:layout_marginTop="30dp"
+        app:errorTextAppearance="@style/error_appearance"
+        android:textColorHint="@color/marfil"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/inputLayout1">
+
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="Nombre de usuario"
+            android:textColor="@color/marfil"
+            android:textAlignment="center"
+            android:id="@+id/editTextUsuario"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inputLayout1"
+        app:errorTextAppearance="@style/error_appearance"
+        android:textColorHint="@color/marfil"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/inputLayout2">
+
+        <EditText
+            android:id="@+id/editTextmail"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="Mail"
+            android:inputType="textEmailAddress"
+            android:textAlignment="center"
+            android:textColor="@color/marfil" />
+
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inputLayout2"
+        android:id="@+id/inputLayout3"
+        app:errorTextAppearance="@style/error_appearance"
+        android:textColorHint="@color/marfil"
+        android:layout_centerHorizontal="true"
+        >
+
+        <EditText
+            android:layout_width="300dp"
+            android:inputType="textPassword"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextPassword"
+            android:textColor="@color/marfil"
+            android:textAlignment="center"
+            android:hint="Password"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inputLayout3"
+        android:id="@+id/inputLayout4"
+        app:errorTextAppearance="@style/error_appearance"
+        android:textColorHint="@color/marfil"
+        android:layout_centerHorizontal="true"
+        >
+
+        <EditText
+            android:layout_width="300dp"
+            android:inputType="textPassword"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextPasswordRepetir"
+            android:textColor="@color/marfil"
+            android:textAlignment="center"
+            android:hint="Repetir Password"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="continuar"
+        android:id="@+id/button_register_register"
+        android:textColor="@color/marfil"
+        android:background="@drawable/boton"
+        android:layout_below="@id/inputLayout4"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        />
+</RelativeLayout>
+
+
+

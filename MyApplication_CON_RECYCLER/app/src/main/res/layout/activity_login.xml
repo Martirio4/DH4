@@ -1,0 +1,121 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:layout_height="match_parent"
+    xmlns:adroid="http://schemas.android.com/apk/res-auto"
+    tools:context="com.craps.myapplication.View.Activities.ActivityLogin"
+    android:background="@color/paleta0">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ReelShot"
+        android:textSize="50sp"
+        android:layout_marginTop="50dp"
+        android:textStyle="bold"
+        android:textColor="@color/marfil"
+        android:id="@+id/textViewLogin"
+        android:layout_centerHorizontal="true"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logofilm"
+        android:alpha=".2"
+        android:layout_centerInParent="true"
+        />
+
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/textViewLogin"
+        android:layout_centerHorizontal="true">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            adroid:errorTextAppearance="@style/error_appearance"
+            android:textColorHint="@color/marfil"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/inputLayout1">
+
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="Mail"
+                android:inputType="textEmailAddress"
+               android:textColor="@color/marfil"
+                android:textAlignment="center"
+                android:id="@+id/editTextUsuario"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/inputLayout1"
+            android:id="@+id/inputLayout2"
+            adroid:errorTextAppearance="@style/error_appearance"
+            android:textColorHint="@color/marfil"
+            android:layout_centerHorizontal="true"
+            >
+
+            <EditText
+                android:layout_width="300dp"
+                android:inputType="textPassword"
+                android:layout_height="wrap_content"
+                android:id="@+id/editTextPassword"
+                android:textColor="@color/marfil"
+                android:textAlignment="center"
+                android:hint="Password"
+                />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INICIAR SESION"
+            android:id="@+id/buttonLogin"
+            android:layout_below="@id/inputLayout2"
+            android:background="@drawable/boton"
+            android:textColor="@color/marfil"
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="REGISTRARSE"
+            android:id="@+id/buttonRegister"
+            android:background="@drawable/boton"
+            android:layout_below="@+id/buttonLogin"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/marfil"
+            android:elevation="10dp"
+            android:layout_centerHorizontal="true"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="mas tarde..."
+            android:id="@+id/buttonDespues"
+            android:background="@drawable/boton2"
+            android:layout_below="@+id/buttonRegister"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/paleta0"
+            android:elevation="10dp"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

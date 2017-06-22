@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+
+    <item android:title="Categorias">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/peliMasVista"
+                    android:title="Peliculas mas vistas" />
+                <item
+                    android:id="@+id/serieMasVista"
+                    android:title="Series mas vistas" />
+
+                <item
+                    android:id="@+id/animacion"
+                    android:title="Animacion" />
+                <item
+                    android:id="@+id/documentales"
+                    android:title="Documentales" />
+
+                <item
+                    android:id="@+id/seriesHoy"
+                    android:title="Series de Hoy" />
+
+
+
+            </group>
+        </menu>
+    </item>
+
+
+    <item android:title="Herramientas">
+        <menu>
+            <!--
+            <item
+                android:id="@+id/opciones"
+                android:title="Opciones" />
+                -->
+            <item
+                android:id="@+id/aboutus"
+                android:title="Acerca de nostros" />
+        </menu>
+    </item>
+
+</menu>

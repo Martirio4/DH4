@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">ReelShot</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="titulo_series">SERIES</string>
+    <string name="titulo_peliculas">PELICULAS</string>
+    <string name="detalle_nombre_peli">NOMBRE</string>
+    <string name="detalle_genero_peli">GENERO</string>
+    <string name="detalle_año_peli">FECHA DE LANZAMIENTO:</string>
+    <string name="detalle_director_peli">DIRECTOR:</string>
+    <string name="detalle_actor_ppal">PROTAGONISTA M:</string>
+    <string name="detalle_actriz_ppal">PROTAGONISTA F:</string>
+    <string name="detalle_sinopsis_peli">SINOPSIS:</string>
+    <string name="hint">Busca peli, serie, genero, director...</string>
+    <string name="add_to_favorite">Agregar a favoritos</string>
+    <string name="watch_trailer">Ver trailer</string>
+</resources>
