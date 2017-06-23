@@ -68,7 +68,7 @@ package com.craps.myapplication.Utils;
 
 
         public static String getCastMovie(Integer movieId,String language){
-            return baseUrl + "/movie/" + movieId + "credits?api_key=" + apiKey + "&language=" + language;
+            return baseUrl + "/movie/" + movieId + "/credits?api_key=" + apiKey + "&language=" + language;
         }
 
         public static String getCastTv(Integer tvId, String language){

@@ -2,8 +2,6 @@ package com.craps.myapplication.View.Adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +12,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.craps.myapplication.Model.Actor;
-import com.craps.myapplication.Model.Actor;
+
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.TMDBHelper;
-import com.craps.myapplication.View.Fragments.FragmentBusqueda;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -53,7 +50,7 @@ public class AdapterActores extends RecyclerView.Adapter implements View.OnClick
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View viewCelda = layoutInflater.inflate(R.layout.detalle_celda, parent, false);
+        View viewCelda = layoutInflater.inflate(R.layout.detalle_celda_actores, parent, false);
         FormatoViewHolder actoresViewHolder = new FormatoViewHolder(viewCelda);
         viewCelda.setOnClickListener(this);
         //ACA AGREGO EL LONG CLICK?!=!=!"="?=!"
@@ -66,13 +63,7 @@ public class AdapterActores extends RecyclerView.Adapter implements View.OnClick
         FormatoViewHolder formatoViewHolder = (FormatoViewHolder) holder;
         formatoViewHolder.cargarActor(unActor);
 
-        formatoViewHolder.imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                favoritable=(Favoritable)v.getContext();
-                favoritable.recibirFormatoFavorito(unActor);
-            }
-        });
+
     }
 
     @Override
@@ -94,24 +85,27 @@ public class AdapterActores extends RecyclerView.Adapter implements View.OnClick
         //private TextView textViewTitulo;
         private ImageButton imageButton;
         private RatingBar ratingBar;
-        private TextView textViewTitulo;
-        private TextView textViewDescripcion;
+        private TextView textViewNombreActor;
+        private TextView textViewNombrePersonaje;
 
         public FormatoViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.peli_img_celda);
-            ratingBar = (RatingBar) itemView.findViewById(R.id.ratingbar);
+            textViewNombreActor = (TextView) itemView.findViewById(R.id.peli_texto_celda);
+            textViewNombrePersonaje = (TextView) itemView.findViewById(R.id.detalleBusqueda);
 
 
             Typeface roboto = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
-            
-            
+            textViewNombreActor.setTypeface(roboto);
+            textViewNombrePersonaje.setTypeface(roboto);
+
 
         }
 
         public void cargarActor(Actor unActor) {
 
-            ratingBar.setRating(unActor.getPopularidad()/2);
+            textViewNombreActor.setText(unActor.getNombreActor());
+            textViewNombrePersonaje.setText(unActor.getPersonaje());
 
             Picasso.with(imageView.getContext())
                     .load(TMDBHelper.getImagePoster(TMDBHelper.IMAGE_SIZE_W92,unActor.getFotoPerfilActor()))

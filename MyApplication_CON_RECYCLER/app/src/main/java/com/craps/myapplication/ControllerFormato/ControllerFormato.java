@@ -3,8 +3,6 @@ package com.craps.myapplication.ControllerFormato;
 import android.app.Activity;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.media.MediaBrowserServiceCompat;
 import android.view.View;
 import android.widget.Toast;
 
@@ -12,15 +10,16 @@ import com.craps.myapplication.DAO.Db.DAOFavoritosDatabase;
 import com.craps.myapplication.DAO.File.DAOArchivo;
 import com.craps.myapplication.DAO.Db.DAOFormatoDatabase;
 import com.craps.myapplication.DAO.Inet.DAOFormatoInternet;
+
 import com.craps.myapplication.Model.Actor;
 import com.craps.myapplication.Model.Formato;
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.HTTPConnectionManager;
 import com.craps.myapplication.Utils.ResultListener;
 import com.craps.myapplication.View.Activities.ActivityMain;
-import com.craps.myapplication.View.Fragments.FragmentFavoritos;
 
 import java.util.List;
+
 
 /**
  * Created by elmar on 3/6/2017.
@@ -60,10 +59,9 @@ public class ControllerFormato {
             daoFormatoInternet.obtenerActoresInet(new ResultListener<List<Actor>>() {
                 @Override
                 public void finish(List<Actor> resultado) {
-
                     listenerFromView.finish(resultado);
                 }
-            }, queBuscoEnInet);
+            },queBuscoEnInet);
         }
 
         else {

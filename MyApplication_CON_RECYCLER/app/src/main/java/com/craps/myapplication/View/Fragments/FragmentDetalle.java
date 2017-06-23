@@ -5,12 +5,10 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,7 +102,7 @@ public class FragmentDetalle extends Fragment {
 
         //recycler actores
         recyclerActores=(RecyclerView)view.findViewById(R.id.recycler_actores);
-        recyclerActores.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerActores.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false));
 
         adapterActores= new AdapterActores();
         adapterActores.setContext(view.getContext());
