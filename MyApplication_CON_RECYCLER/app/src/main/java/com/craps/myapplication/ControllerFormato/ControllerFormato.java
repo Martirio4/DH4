@@ -28,6 +28,33 @@ import java.util.List;
 public class ControllerFormato {
 
     private Context context;
+    private Boolean terminarPaginacion;
+    private Integer numeroPagina;
+
+    /*  public void getNextPostPage(final ResultListener<List<Post>> listenerFromView, Context context) {
+
+        PostDAO postDAO = new PostDAO();
+        postDAO.getPostPaginated(new ResultListener<List<Post>>() {
+            @Override
+            public void finish(List<Post> unaPagina) {
+
+                if(unaPagina == null || unaPagina.isEmpty()){
+                    endPaging = true;
+                }
+                else{
+                    //TENGO QUE CAMBIAR EL OFFSET
+                    offset = offset + LIMIT;
+
+                    //LE AVISO A LA VISTA
+                    listenerFromView.finish(unaPagina);
+                }
+            }
+        }, offset, LIMIT);
+    }
+
+    public Boolean isPageAvailable() {
+        return !endPaging;
+    }*/
 
     public ControllerFormato(Context context) {
         this.context = context;
@@ -70,6 +97,7 @@ public class ControllerFormato {
 
     }
 
+
     public void obtenerFormatos(final ResultListener<List<Formato>> listenerFromView, String queBuscoEnInet) {
 
         if (HTTPConnectionManager.isNetworkingOnline(context)) {
@@ -88,7 +116,7 @@ public class ControllerFormato {
                     daoFormatoDatabase.addFormatos(resultado);
                     listenerFromView.finish(resultado);
                 }
-            }, queBuscoEnInet);
+            }, queBuscoEnInet,numeroPagina);
         }
 
         else {

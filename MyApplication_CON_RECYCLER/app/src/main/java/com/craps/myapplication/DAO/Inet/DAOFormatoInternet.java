@@ -27,7 +27,7 @@ public class DAOFormatoInternet {
     
 
 
-    public void obtenerFormatosDesdeInternet(ResultListener<List<Formato>> listenerFromController,String queBuscoEnInet){
+    public void obtenerFormatosDesdeInternet(ResultListener<List<Formato>> listenerFromController,String queBuscoEnInet,Integer numeroPagina){
 
         //cargo el string de la busqueda con la que le pego al api
         this.queBuscoEnInet=queBuscoEnInet;

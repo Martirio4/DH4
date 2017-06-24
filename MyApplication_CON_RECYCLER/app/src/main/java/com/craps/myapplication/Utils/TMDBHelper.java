@@ -128,7 +128,7 @@ package com.craps.myapplication.Utils;
                     "&sort_by=vote_average.desc&language=" + language + "&page=" + page.toString();
         }
 
-        public static String getHighestGrossingMovies(String language_ENGLISH,Integer page,String specificYear){
+        public static String getHighestGrossingMovies(String language_ENGLISH,String specificYear,Integer page){
 
             return baseUrl + "/discover/movie?api_key=" + apiKey + "&sort_by=revenue.desc" + "&primary_release_year=" + specificYear +
                     "&language=" + language_ENGLISH + "&page=" + page.toString();
@@ -153,11 +153,11 @@ package com.craps.myapplication.Utils;
             return baseUrl + "/genre/list?api_key=" +apiKey +"&language="+language;
         }
 
-        public static String getMoviesByGenre(String genre, Integer page,String language){
+        public static String getMoviesByGenre(String genre,String language, Integer page){
             return baseUrl + "/discover/movie?api_key=" +apiKey +"&language="+language+"&page="+page.toString()+"&sort_by=popularity.desc&include_adult=false&include_video=true&page=1&with_genres="+genre;
         }
 
-        public static String getTVByGenre(String genre, Integer page,String language){
+        public static String getTVByGenre(String genre,String language, Integer page){
             return baseUrl + "/discover/tv?api_key=" +apiKey +"&language="+language+"&page="+page.toString()+"&sort_by=popularity.desc&include_adult=false&include_video=true&page=1&with_genres="+genre+"&include_null_first_air_dates=false";
         }
 

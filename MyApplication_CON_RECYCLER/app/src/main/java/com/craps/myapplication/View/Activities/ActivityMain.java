@@ -47,9 +47,11 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
     private String queMostrar = "peliculas";
     private TabLayout tabLayout;
     private DrawerLayout drawerLayout;
-
     private NavigationView navigationView;
     private EditText editBusqueda;
+    private ControllerFormato controllerFormato;
+    //isLoading Paginacion
+    private Boolean isLoading;
 
     //PABLO 1/4A (VER LAYOUT HEADER Y ACTIVITY MAIN)
     public static final String USUARIO = "usuario";
@@ -123,11 +125,15 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String editString=editBusqueda.getText().toString().toLowerCase();
+                editString = editString.replaceAll(" ", "%20");
+
                 if (HTTPConnectionManager.isNetworkingOnline(v.getContext())) {
-                    if (editBusqueda.getText().toString().toLowerCase() == null || editBusqueda.getText().toString().toLowerCase().isEmpty()) {
-                        realizarBusqueda(TMDBHelper.getPopularMovies(TMDBHelper.language_SPANISH, 1));
+                    if (editString == null || editString.isEmpty()) {
+                        realizarBusqueda(TMDBHelper.getPopularMovies(TMDBHelper.language_SPANISH,1));
                     } else {
-                        realizarBusqueda(editBusqueda.getText().toString().toLowerCase());
+                        realizarBusqueda(editString);
                     }
 
                 } else {
@@ -145,10 +151,10 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
                 if (HTTPConnectionManager.isNetworkingOnline(navigationView.getContext())) {
 
                     if (item.getItemId() == R.id.peliMasVista) {
-                        cargarOpcionMenu(TMDBHelper.getNowPlayingMovies(TMDBHelper.language_SPANISH, 1));
+                        cargarOpcionMenu(TMDBHelper.getNowPlayingMovies(TMDBHelper.language_SPANISH,1));
                     }
                     if (item.getItemId() == R.id.serieMasVista) {
-                        cargarOpcionMenu(TMDBHelper.getTVTopRated(TMDBHelper.language_SPANISH, 1));
+                        cargarOpcionMenu(TMDBHelper.getTVTopRated(TMDBHelper.language_SPANISH,1));
                     }
                     if (item.getItemId() == R.id.animacion) {
                         cargarOpcionMenu(TMDBHelper.getMoviesByGenre(TMDBHelper.MOVIE_GENRE_ANIMATION, 1, TMDBHelper.language_SPANISH));
@@ -162,7 +168,8 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
                     if (item.getItemId() == R.id.aboutus) {
                         cargarAboutUs();
                     }
-                } else {
+                }
+                else {
                     cargarFragmentSinConexion();
                 }
                 drawerLayout.closeDrawers();
@@ -174,7 +181,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
         //SI HAY INET CORRE NORMAL EL VIEWPAGER, SINO CARGA UN FRAGMENT "SIN CONEXION"
 
         //BUSCO EL VIEW PAGER DE PELICULAS
-        ControllerFormato controllerFormato = new ControllerFormato(this);
+        controllerFormato = new ControllerFormato(this);
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPagerFragmentMaestro);
 
         //CASTEO LAS TAB
@@ -202,7 +209,6 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
         //LE SETEO EL ADAPTER AL VIEW PAGER, EL ADAPTER UTILIZA EL FRAGMENT MANAGER PARA CARGAR FRAGMENT Y LA LISTA DE PELICULAS PARA CREAR LOS FRAGMENTS CORRESPONDIENTES
         AdapterPagerMaestro adapterPagerMaestro = new AdapterPagerMaestro(getSupportFragmentManager(), listaFragmentsMaestros,this);
         adapterPagerMaestro.setContext(this);
-
         viewPager.setAdapter(adapterPagerMaestro);
 
     }
@@ -253,7 +259,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
 
     @Override
     public void recibirFormatoFavorito(Formato unFormato) {
-       ControllerFormato controllerFormato= new ControllerFormato(this);
+        controllerFormato= new ControllerFormato(this);
         controllerFormato.agregarFavorito(unFormato, usuario);
     }
 
