@@ -2,6 +2,7 @@ package com.craps.myapplication.ControllerFormato;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Toast;
@@ -17,8 +18,11 @@ import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.HTTPConnectionManager;
 import com.craps.myapplication.Utils.ResultListener;
 import com.craps.myapplication.View.Activities.ActivityMain;
+import com.craps.myapplication.View.Activities.ActivityRegister;
 
 import java.util.List;
+
+import static com.craps.myapplication.R.id.peliMasVista;
 
 
 /**
@@ -30,6 +34,11 @@ public class ControllerFormato {
     private Context context;
     private Boolean endPaging =false;
     private Integer numeroPagina=1;
+    private Registrable registrable;
+
+    public interface Registrable{
+        public void solicitarRegistro();
+    }
 
     public Integer getNumeroPagina() {
         return numeroPagina;
@@ -65,6 +74,7 @@ public class ControllerFormato {
 
     public ControllerFormato(Context context) {
         this.context = context;
+        this.registrable=(Registrable) context;
     }
 
 
@@ -142,6 +152,8 @@ public class ControllerFormato {
                     if (unaPagina == null || unaPagina.isEmpty()) {
                         endPaging = true;
                     } else {
+                        DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+                        daoFormatoDatabase.addFormatos(unaPagina);
                         //TENGO QUE CAMBIAR EL OFFSET
                         numeroPagina = numeroPagina + 1;
 
@@ -169,6 +181,8 @@ public class ControllerFormato {
                     if (unaPagina == null || unaPagina.isEmpty()) {
                         endPaging = true;
                     } else {
+                        DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+                        daoFormatoDatabase.addFormatos(unaPagina);
                         //TENGO QUE CAMBIAR EL OFFSET
                         numeroPagina = numeroPagina + 1;
 
@@ -196,6 +210,8 @@ public class ControllerFormato {
                     if (unaPagina == null || unaPagina.isEmpty()) {
                         endPaging = true;
                     } else {
+                        DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+                        daoFormatoDatabase.addFormatos(unaPagina);
                         //TENGO QUE CAMBIAR EL OFFSET
                         numeroPagina = numeroPagina + 1;
 
@@ -223,6 +239,8 @@ public class ControllerFormato {
                     if (unaPagina == null || unaPagina.isEmpty()) {
                         endPaging = true;
                     } else {
+                        DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+                        daoFormatoDatabase.addFormatos(unaPagina);
                         //TENGO QUE CAMBIAR EL OFFSET
                         numeroPagina = numeroPagina + 1;
 
@@ -250,6 +268,8 @@ public class ControllerFormato {
                     if (unaPagina == null || unaPagina.isEmpty()) {
                         endPaging = true;
                     } else {
+                        DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+                        daoFormatoDatabase.addFormatos(unaPagina);
                         //TENGO QUE CAMBIAR EL OFFSET
                         numeroPagina = numeroPagina + 1;
 
@@ -277,6 +297,8 @@ public class ControllerFormato {
                     if (unaPagina == null || unaPagina.isEmpty()) {
                         endPaging = true;
                     } else {
+                        DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+                        daoFormatoDatabase.addFormatos(unaPagina);
                         //TENGO QUE CAMBIAR EL OFFSET
                         numeroPagina = numeroPagina + 1;
 
@@ -304,6 +326,8 @@ public class ControllerFormato {
                     if (unaPagina == null || unaPagina.isEmpty()) {
                         endPaging = true;
                     } else {
+                        DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+                        daoFormatoDatabase.addFormatos(unaPagina);
                         //TENGO QUE CAMBIAR EL OFFSET
                         numeroPagina = numeroPagina + 1;
 
@@ -383,6 +407,8 @@ public class ControllerFormato {
                 public void finish(List<Formato> unaPagina) {
 
                     if (unaPagina == null || unaPagina.isEmpty()) {
+                        DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+                        daoFormatoDatabase.addFormatos(unaPagina);
                         endPaging = true;
                     } else {
                         //TENGO QUE CAMBIAR EL OFFSET
@@ -412,6 +438,8 @@ public class ControllerFormato {
                     if (unaPagina == null || unaPagina.isEmpty()) {
                         endPaging = true;
                     } else {
+                        DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+                        daoFormatoDatabase.addFormatos(unaPagina);
                         //TENGO QUE CAMBIAR EL OFFSET
                         numeroPagina = numeroPagina + 1;
 
@@ -489,26 +517,42 @@ public class ControllerFormato {
     }
 
     public void agregarFavorito(Formato unFormato, String unString){
-        final DAOFavoritosDatabase daoFavoritosDatabase= new DAOFavoritosDatabase(context);
-        final Formato elFormato=unFormato;
-        if (daoFavoritosDatabase.checkIfExist(unFormato.getId(), ActivityMain.usuario)){
-            Toast.makeText(context, "El formato ya figura entre los favoritos", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            daoFavoritosDatabase.addFormato(unFormato, unString);
+        if (ActivityMain.login) {
+            final DAOFavoritosDatabase daoFavoritosDatabase = new DAOFavoritosDatabase(context);
+            final Formato elFormato = unFormato;
+            if (daoFavoritosDatabase.checkIfExist(unFormato.getId(), ActivityMain.usuario)) {
 
+                Toast.makeText(context, "El formato ya figura entre los favoritos", Toast.LENGTH_SHORT).show();
+            } else {
+                daoFavoritosDatabase.addFormato(unFormato, unString);
+
+                Activity unaActivity = (Activity) context;
+                View view = (View) unaActivity.findViewById(R.id.detalle_contenedor_fragment);
+
+                Snackbar.make(view, "Formato Agregado a Favoritos", Snackbar.LENGTH_SHORT)
+                        .setAction("Deshacer?", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                daoFavoritosDatabase.borrarFavorito(elFormato, ActivityMain.usuario);
+                            }
+                        })
+                        .show();
+
+            }
+        }
+        else{
             Activity unaActivity = (Activity) context;
             View view = (View) unaActivity.findViewById(R.id.detalle_contenedor_fragment);
 
-            Snackbar.make(view, "Formato Agregado a Favoritos",Snackbar.LENGTH_SHORT)
-                    .setAction("Deshacer?", new View.OnClickListener() {
+            Snackbar.make(view, "Funcion exclusiva para usuarios Registrados", Snackbar.LENGTH_SHORT)
+                    .setAction("Ir a Registro", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            daoFavoritosDatabase.borrarFavorito(elFormato,ActivityMain.usuario);
+                            registrable.solicitarRegistro();
+
                         }
                     })
                     .show();
-
         }
     }
     
@@ -533,6 +577,16 @@ public class ControllerFormato {
         }
         else{
             Toast.makeText(context, "El formato, no se encuentra en la lista de favoritos", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void traerBusquedaDrawer(Integer id){
+        switch (id){
+            case R.id.peliMasVista:
+            case R.id.serieMasVista:
+            case R.id.animacion:
+            case R.id.documentales:
+            case R.id.seriesHoy:
         }
     }
 

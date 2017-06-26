@@ -121,16 +121,11 @@ public class FragmentFavoritos extends Fragment {
         return fragmentFavoritos;
     }
 
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        controllerFormato.obtenerFavoritos(new ResultListener<List<Formato>>() {
-            @Override
-            public void finish(List<Formato> resultado) {
 
-                unadapter1.setListaFormatosOriginales(resultado);
-                unadapter1.notifyDataSetChanged();
-            }
-        },ActivityMain.usuario);
-        super.onViewStateRestored(savedInstanceState);
-    }
+
+
+
+
+
 }
+

@@ -18,7 +18,7 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivitySegunda extends AppCompatActivity implements AdapterFormato.Favoritable, FragmentDetalle.FavoritableFav {
+public class ActivitySegunda extends AppCompatActivity implements ControllerFormato.Registrable,AdapterFormato.Favoritable, FragmentDetalle.FavoritableFav {
 
     public static final String IDFORMATO = "IDFORMATO";
     public static final String ORIGEN = "ORIGEN";
@@ -64,7 +64,6 @@ public class ActivitySegunda extends AppCompatActivity implements AdapterFormato
         viewPagerDetalle.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
@@ -72,11 +71,13 @@ public class ActivitySegunda extends AppCompatActivity implements AdapterFormato
                 if (position>=(adapterPagerDetalle.getCount()-2)){
                     pedirListaSegunOrigen();
                 }
+
+                adapterPagerDetalle.notifyDataSetChanged();
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                adapterPagerDetalle.notifyDataSetChanged();
             }
         });
 
@@ -267,13 +268,10 @@ public class ActivitySegunda extends AppCompatActivity implements AdapterFormato
 
     @Override
     public void recibirFormatoFavorito(Formato unFormato) {
-        if (ActivityMain.login==true){
+
             ControllerFormato controllerFormato= new ControllerFormato(this);
             controllerFormato.agregarFavorito(unFormato, ActivityMain.usuario);
-        }
-        else{
-            Toast.makeText(this, "Funcion exclusiva para usuarios registrados", Toast.LENGTH_SHORT).show();
-        }
+
 
     }
 
@@ -285,10 +283,9 @@ public class ActivitySegunda extends AppCompatActivity implements AdapterFormato
         }
     }
 
-
-
-
-
-
-
+    @Override
+    public void solicitarRegistro() {
+        Intent unIntent = new Intent(this, ActivityRegister.class);
+        startActivity(unIntent);
+    }
 }

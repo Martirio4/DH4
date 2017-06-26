@@ -30,8 +30,10 @@ public class FragmentBusqueda extends Fragment {
     private Notificable Notificable;
 
     public static final String QUEBUSCO="QUEBUSCO";
+    public static final String DRAWERID="DRAWERID";
 
     private String stringABuscar;
+    private Integer drawerId;
     ControllerFormato controllerBusquedaFormatos;
 
 
@@ -53,6 +55,7 @@ public class FragmentBusqueda extends Fragment {
 
         Bundle unbundle = getArguments();
         stringABuscar = unbundle.getString(QUEBUSCO);
+        drawerId= unbundle.getInt(DRAWERID);
 
         //CASTEAR RECYCLER Y SETEAR ADAPTER
         final RecyclerView recycler1 = (RecyclerView) view.findViewById(R.id.recycler1);
@@ -61,9 +64,12 @@ public class FragmentBusqueda extends Fragment {
         adapterBusquedaFormatos = new AdapterFormato();
         adapterBusquedaFormatos.setContext(view.getContext());
 
-        //CARGAR DATOS
         adapterBusquedaFormatos.setListaFormatosOriginales(new ArrayList<Formato>());
         controllerBusquedaFormatos= new ControllerFormato(view.getContext());
+
+        //CARGAR DATOS
+        if (drawerId==null){
+
         controllerBusquedaFormatos.buscarPelicula(new ResultListener<List<Formato>>() {
             @Override
             public void finish(List<Formato> resultado) {
@@ -76,6 +82,12 @@ public class FragmentBusqueda extends Fragment {
                 }
             }
         },stringABuscar);
+
+        }
+        else{
+            controllerBusquedaFormatos.traerBusquedaDrawer(drawerId);
+
+        }
 
 
 
@@ -98,9 +110,43 @@ public class FragmentBusqueda extends Fragment {
                 Notificable.recibirFormatoClickeado(formatoClickeado,controllerBusquedaFormatos.getNumeroPagina());
             }
         };
+
         adapterBusquedaFormatos.setListener(listener1);
 
+
+
+
+
         return view;
+    }
+
+    public void pedirPaginaRecyclerSuperior(){
+        if (controllerRecyclerSuperior.isPageAvailable()) {
+            isLoading = true;
+
+            if (formatoAMostrar.equals("peliculas")) {
+                controllerRecyclerSuperior.obtenerPeliculasPopulares(new ResultListener<List<Formato>>() {
+                    @Override
+                    public void finish(List<Formato> resultado) {
+
+                        adapterRecyclerSuperior.addListaFormatosOriginales(resultado);
+                        adapterRecyclerSuperior.notifyDataSetChanged();
+                        isLoading = false;
+                    }
+                });
+            } else {
+                controllerRecyclerSuperior.obtenerSeriesPopulares(new ResultListener<List<Formato>>() {
+                    @Override
+                    public void finish(List<Formato> resultado) {
+
+                        adapterRecyclerSuperior.addListaFormatosOriginales(resultado);
+                        adapterRecyclerSuperior.notifyDataSetChanged();
+                        isLoading = false;
+
+                    }
+                });
+            }
+        }
     }
 
 

@@ -39,7 +39,7 @@ import com.craps.myapplication.View.Fragments.FragmentSinConexion;
 
 import java.util.List;
 
-public class ActivityMain extends AppCompatActivity implements FragmentMain.Notificable{
+public class ActivityMain extends AppCompatActivity implements ControllerFormato.Registrable ,FragmentMain.Notificable,FragmentSinConexion.Notificable, FragmentFavoritos.Notificable{
 
     private FloatingActionButton floatingActionButton;
     private List<String> listaFragmentsMaestros;
@@ -134,9 +134,8 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
 
                 if (HTTPConnectionManager.isNetworkingOnline(v.getContext())) {
                     if (editString == null || editString.isEmpty()) {
-                        pedirListaBuscada(null);
                     } else {
-                        pedirListaBuscada(editString);
+                        pedirListaBuscada(editString, null);
                     }
 
                 } else {
@@ -152,25 +151,13 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if (HTTPConnectionManager.isNetworkingOnline(navigationView.getContext())) {
-
-                    if (item.getItemId() == R.id.peliMasVista) {
-                        cargarOpcionMenu(TMDBHelper.getNowPlayingMovies(TMDBHelper.language_SPANISH,1));
-                    }
-                    if (item.getItemId() == R.id.serieMasVista) {
-                        cargarOpcionMenu(TMDBHelper.getTVTopRated(TMDBHelper.language_SPANISH,1));
-                    }
-                    if (item.getItemId() == R.id.animacion) {
-                        cargarOpcionMenu(TMDBHelper.getMoviesByGenre(TMDBHelper.MOVIE_GENRE_ANIMATION, TMDBHelper.language_SPANISH, 1));
-                    }
-                    if (item.getItemId() == R.id.documentales) {
-                        cargarOpcionMenu(TMDBHelper.getTVByGenre(TMDBHelper.TV_GENRE_DOCUMENTARY,TMDBHelper.language_SPANISH, 1));
-                    }
-                    if (item.getItemId() == R.id.seriesHoy) {
-                        cargarOpcionMenu(TMDBHelper.getTVAiringToday(TMDBHelper.language_SPANISH, 1));
-                    }
-                    if (item.getItemId() == R.id.aboutus) {
+                    if (item.getItemId()==R.id.aboutus){
                         cargarAboutUs();
                     }
+                    else{
+                        pedirListaBuscada(null,item.getItemId());
+                    }
+
                 }
                 else {
                     cargarFragmentSinConexion();
@@ -241,17 +228,13 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-    public void pedirListaBuscada(String queBuscar){
+    public void pedirListaBuscada(String queBuscar, Integer drawerId){
         //CARGO EL FRAGMENT
         FragmentBusqueda fragment_busqueda = new FragmentBusqueda();
         Bundle otroBundle = new Bundle();
+        otroBundle.putString(FragmentBusqueda.QUEBUSCO, queBuscar);
+        otroBundle.putInt(FragmentBusqueda.DRAWERID, drawerId);
 
-        if (queBuscar==null||queBuscar.isEmpty()) {
-            otroBundle.putString(FragmentBusqueda.QUEBUSCO, null);
-        }
-        else{
-            otroBundle.putString(FragmentBusqueda.QUEBUSCO, queBuscar);
-        }
 
         //LE CARGO EL BUNDLE
         fragment_busqueda.setArguments(otroBundle);
@@ -269,10 +252,15 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
             imm.hideSoftInputFromWindow(editBusqueda.getWindowToken(), 0);
         }
     }
-    public void cargarOpcionMenu(String urlBusqueda) {
-       pedirListaBuscada(urlBusqueda);
-    }
+    /*
+    public void cargarOpcionMenu(Integer id) {
+        FragmentBusqueda fragmentBusqueda=new FragmentBusqueda();
+        Bundle bundle= new Bundle();
+        bundle.putInt(FragmentBusqueda.IDDRAWER, id);
+        fragmentBusqueda.setArguments(bundle);
 
+    }
+*/
     // PABLO 4/4A
     public void botonNavViewApretado (View view) {
 
@@ -337,10 +325,22 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
 
     }*/
 
+    @Override
+    public void recibirFormatoClickeado(Formato formato, String url) {
 
+    }
 
+    @Override
+    public void recibirFavoritoClickeado(Formato formato) {
 
-    // GENERO EL METODO PARA CARGAR EL FRAGMENT LOGIN LUEGO DEL CLICK.
+    }
+    @Override
+    public void solicitarRegistro() {
+        Intent unIntent = new Intent(this, ActivityRegister.class);
+        startActivity(unIntent);
+    }
+
+// GENERO EL METODO PARA CARGAR EL FRAGMENT LOGIN LUEGO DEL CLICK.
 
 
     // GENERO EL METODO PARA CARGAR EL FRAGMENT LOGOUT LUEGO DEL CLICK.
