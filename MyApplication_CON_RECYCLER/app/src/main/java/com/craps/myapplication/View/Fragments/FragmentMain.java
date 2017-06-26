@@ -94,6 +94,12 @@ public class FragmentMain extends Fragment {
         filtroRecyclerMedio = unbundle.getString(QUEFILTROAPLICOR2);
         filtroRecyclerSuperior = unbundle.getString(QUEFILTROAPLICOR3);
 
+
+        //HARCODEO LOS TITULOS DE LOS RECYCLER - REEMPLAZAR CON TMDBHELPER
+
+
+
+
         //SETEAR EL ADAPTER
 
 
@@ -114,7 +120,7 @@ public class FragmentMain extends Fragment {
             public void onClick(View view) {
                 //ESTO SE UTILIZA PARA OBTENER LA POSITION DE LO QUE FUE CLICKEADO.
                 Integer posicion = recyclerSuperior.getChildAdapterPosition(view);
-                Integer numeroPagina= (int) Math.ceil(posicion/20.0);
+                Integer numeroPagina= (int) Math.ceil((posicion+1)/20.0);
                 List < Formato > listaPeliculasOriginales = adapterRecyclerSuperior.getListaFormatosOriginales();
                 Formato formatoClickeado = listaPeliculasOriginales.get(posicion);
                 notificable.recibirFormatoClickeado(formatoClickeado, "superior", numeroPagina);
@@ -159,9 +165,10 @@ public class FragmentMain extends Fragment {
             public void onClick(View view) {
                 //ESTO SE UTILIZA PARA OBTENER LA POSITION DE LO QUE FUE CLICKEADO.
                 Integer posicion = recyclerMedio.getChildAdapterPosition(view);
+                Integer numeroPagina= (int) Math.ceil((posicion+1)/20.0);
                 List < Formato > listaPeliculasOriginales = adapterRecyclerMedio.getListaFormatosOriginales();
                 Formato formatoClickeado = listaPeliculasOriginales.get(posicion);
-                notificable.recibirFormatoClickeado(formatoClickeado, "medio", controllerRecyclerMedio.getNumeroPagina());
+                notificable.recibirFormatoClickeado(formatoClickeado, "medio", numeroPagina);
             }
         };
         //CARGAR DATOS
@@ -202,9 +209,10 @@ public class FragmentMain extends Fragment {
             public void onClick(View view) {
                 //ESTO SE UTILIZA PARA OBTENER LA POSITION DE LO QUE FUE CLICKEADO.
                 Integer posicion = recyclerMedio.getChildAdapterPosition(view);
+                Integer numeroPagina= (int) Math.ceil((posicion+1)/20.0);
                 List < Formato > listaPeliculasOriginales = adapterRecyclerInferior.getListaFormatosOriginales();
                 Formato formatoClickeado = listaPeliculasOriginales.get(posicion);
-                notificable.recibirFormatoClickeado(formatoClickeado, "inferior",controllerRecyclerInferior.getNumeroPagina());
+                notificable.recibirFormatoClickeado(formatoClickeado, "inferior",numeroPagina);
             }
         };
         //CARGAR DATOS
@@ -238,10 +246,19 @@ public class FragmentMain extends Fragment {
         tituloRecyclerMedio.setTypeface(roboto);
         tituloRecyclerInferior.setTypeface(roboto);
 
+
+        //HARCODEO LOS TITULOS HASTA QUE LOS PODAMOS TRAER CON FIREBASE Y JSON
+
+        tituloRecyclerSuperior.setText("POPULAR");
+        tituloRecyclerMedio.setText("COMEDIA");
+        tituloRecyclerInferior.setText("DRAMA");
+
+
+        /* //TITULOS PARAMETRIZADOS NO BORRAR
         tituloRecyclerSuperior.setText(filtroRecyclerSuperior);
         tituloRecyclerMedio.setText(filtroRecyclerMedio);
         tituloRecyclerInferior.setText(filtroRecyclerInferior);
-
+        */
         return view;
     }
 

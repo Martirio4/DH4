@@ -89,13 +89,12 @@ package com.craps.myapplication.Utils;
         }
 
         public static String getCastTv(Integer tvId, String language){
-            return baseUrl +"/tv/" + tvId + "?api_key=" + apiKey + "&language=" + language;
+            return baseUrl +"/tv/" + tvId + "/credits?api_key=" + apiKey + "&language=" + language;
         }
 
         public static String getPerson(Integer personId, String language){
             return baseUrl +"/person/" + personId +"?api_key=" + apiKey +"&language="+language;
         }
-
 
         //los de nivo
         public static String getMovieDetailURL(Integer movieID,String language){

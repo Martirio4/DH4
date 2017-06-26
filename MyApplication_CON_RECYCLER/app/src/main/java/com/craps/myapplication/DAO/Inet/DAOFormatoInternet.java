@@ -129,15 +129,15 @@ public class DAOFormatoInternet {
         tarea.execute();
     }
 
-    /*// OBTENER LISTADO DE ACTORES DE SERIES
-    public void obtenerActoresSerie(ResultListener<List<Actor>> listenerFromController,Integer idFormato){
+   // OBTENER LISTADO DE ACTORES DE SERIES
+    public void obtenerActoresSerie(ResultListener<List<Actor>> listenerFromController,Integer idFormato) {
 
-        this.urlParaAsyncTask =TMDBHelper.getCastTv(idFormato, idiomaDeLaSesion);
+        this.urlParaAsyncTask = TMDBHelper.getCastTv(idFormato, idiomaDeLaSesion);
         //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
         ObtenerListadoDeActoresTask tarea = new ObtenerListadoDeActoresTask();
         tarea.setListenerFromController(listenerFromController);
         tarea.execute();
-    }*/
+    }
 
     //BUSCAR PELICULAS RELACIONADAS
     public void ObtenerPeliculasRelacionadas(ResultListener<List<Formato>> listenerFromController,Integer idPelicula, Integer numeroPagina){

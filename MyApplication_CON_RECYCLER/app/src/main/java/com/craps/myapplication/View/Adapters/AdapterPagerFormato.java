@@ -4,6 +4,7 @@ package com.craps.myapplication.View.Adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 
 import com.craps.myapplication.Model.Formato;
 import com.craps.myapplication.View.Fragments.FragmentDetalle;
@@ -66,4 +67,6 @@ public class AdapterPagerFormato extends FragmentStatePagerAdapter {
         }
         notifyDataSetChanged();
     }
+
+
 }

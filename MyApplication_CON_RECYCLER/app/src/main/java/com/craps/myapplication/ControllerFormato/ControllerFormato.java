@@ -83,7 +83,7 @@ public class ControllerFormato {
         return DAOArchivo.cargarCategorias();
     }
 
-    public void obtenerActores(final ResultListener<List<Actor>> listenerFromView, Integer id){
+    public void obtenerActoresPelicula(final ResultListener<List<Actor>> listenerFromView, Integer id){
 
         if (HTTPConnectionManager.isNetworkingOnline(context)) {
 
@@ -92,6 +92,27 @@ public class ControllerFormato {
 
             DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
             daoFormatoInternet.obtenerActoresPelicula(new ResultListener<List<Actor>>() {
+                @Override
+                public void finish(List<Actor> resultado) {
+                    listenerFromView.finish(resultado);
+                }
+            },id);
+        }
+
+        else {
+            Toast.makeText(context, "no hay resultados", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    public void obtenerActoresSerie(final ResultListener<List<Actor>> listenerFromView, Integer id){
+
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+
+            //SI HAY CONEXION PIDO A INTERNET LOS DATOS Y LOS ALMACENO EN LA BASE DE DATOS. PARA PEDIR LOS DATOS A INTERNET
+            //UTILIZO EL DAOPersonasInternet que es el encargado de realizar esa tarea.
+
+            DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
+            daoFormatoInternet.obtenerActoresSerie(new ResultListener<List<Actor>>() {
                 @Override
                 public void finish(List<Actor> resultado) {
                     listenerFromView.finish(resultado);

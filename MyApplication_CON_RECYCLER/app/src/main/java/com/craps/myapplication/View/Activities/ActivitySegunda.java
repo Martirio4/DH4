@@ -59,8 +59,32 @@ public class ActivitySegunda extends AppCompatActivity implements AdapterFormato
         controllerDetalle = new ControllerFormato(this);
 
         controllerDetalle.setNumeroPagina(numeroPagina);
+        pedirListaSegunOrigen();
+
+        viewPagerDetalle.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position>=(adapterPagerDetalle.getCount()-2)){
+                    pedirListaSegunOrigen();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
 
+
+    }
+
+    public void pedirListaSegunOrigen(){
         switch (origenFormato){
             case "superior":
                 pedirPaginaRecyclerSuperior();
@@ -78,13 +102,6 @@ public class ActivitySegunda extends AppCompatActivity implements AdapterFormato
             case"self":
                 break;
         }
-
-
-
-
-
-
-
     }
 
     public void pedirPaginaRecyclerSuperior(){

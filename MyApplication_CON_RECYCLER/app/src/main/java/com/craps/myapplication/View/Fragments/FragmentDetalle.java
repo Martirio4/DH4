@@ -33,6 +33,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 /**
@@ -103,7 +104,7 @@ public class FragmentDetalle extends Fragment {
 
 
 
-        //recycler actores
+        //RECYCLER ACTORES
         recyclerActores=(RecyclerView)view.findViewById(R.id.recycler_actores);
         recyclerActores.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false));
 
@@ -113,13 +114,27 @@ public class FragmentDetalle extends Fragment {
         recyclerActores.setAdapter(adapterActores);
 
         controllerFragmentDetalle= new ControllerFormato(view.getContext());
-        controllerFragmentDetalle.obtenerActores(new ResultListener<List<Actor>>() {
-            @Override
-            public void finish(List<Actor> resultado) {
-                adapterActores.setListaActoresOriginales(resultado);
-                adapterActores.notifyDataSetChanged();
-            }
-        }, id);
+
+        if (title==null||title.isEmpty()){
+            controllerFragmentDetalle.obtenerActoresSerie(new ResultListener<List<Actor>>() {
+                @Override
+                public void finish(List<Actor> resultado) {
+                    adapterActores.setListaActoresOriginales(resultado);
+                    adapterActores.notifyDataSetChanged();
+                }
+            }, id);
+        }
+        else{
+            controllerFragmentDetalle.obtenerActoresPelicula(new ResultListener<List<Actor>>() {
+                @Override
+                public void finish(List<Actor> resultado) {
+                    adapterActores.setListaActoresOriginales(resultado);
+                    adapterActores.notifyDataSetChanged();
+                }
+            }, id);
+        }
+
+
 
         TextView textonombre=(TextView)view.findViewById(R.id.tag_nombre2);
         TextView textoaño=(TextView)view.findViewById(R.id.tag_año2);

@@ -1,3 +1,8 @@
 como ordenar los resultados
 sacar los resultados con adult=false
 usar el metodo discover para traer resultados con filtros custom
+
+poner categorias en json
+incluir static para peliadultos
+asiganr peli / serie cuando bajo de inet?
+pedir mas resultados en el pager detalle?
