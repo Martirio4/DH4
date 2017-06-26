@@ -58,4 +58,12 @@ public class AdapterPagerFormato extends FragmentStatePagerAdapter {
         }
         notifyDataSetChanged();
     }
+
+    public void addListaFormatos(List<Formato> listaFormatos){
+        this.listaFormatos.addAll(listaFormatos);
+        for(Formato unFormato: listaFormatos){
+            listaFragments.add(FragmentDetalle.fragmentDetalleCreator(unFormato));
+        }
+        notifyDataSetChanged();
+    }
 }

@@ -87,7 +87,7 @@ public class FragmentSinConexion extends Fragment {
 
         final ControllerFormato controllerFormato = new ControllerFormato(view.getContext());
         lista1 =new ArrayList<>();
-
+        /*
         controllerFormato.obtenerFormatos(new ResultListener<List<Formato>>() {
             @Override
             public void finish(List<Formato> resultado) {
@@ -97,7 +97,7 @@ public class FragmentSinConexion extends Fragment {
                 unadapter1.notifyDataSetChanged();
             }
         }, null);
-
+*/
         unadapter1.setListaFormatosOriginales(lista1);
         unadapter1.notifyDataSetChanged();
 

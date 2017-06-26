@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +79,7 @@ public class FragmentDetalle extends Fragment {
     protected String posterId;
 
     private String urlString;
+    private ControllerFormato controllerFragmentDetalle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,21 +110,16 @@ public class FragmentDetalle extends Fragment {
         adapterActores= new AdapterActores();
         adapterActores.setContext(view.getContext());
         adapterActores.setListaActoresOriginales(new ArrayList());
-
         recyclerActores.setAdapter(adapterActores);
-        urlString=TMDBHelper.getCastMovie(id, TMDBHelper.language_SPANISH);
 
-        ControllerFormato controllerFormato= new ControllerFormato(view.getContext());
-        controllerFormato.obtenerActores(new ResultListener<List<Actor>>() {
+        controllerFragmentDetalle= new ControllerFormato(view.getContext());
+        controllerFragmentDetalle.obtenerActores(new ResultListener<List<Actor>>() {
             @Override
             public void finish(List<Actor> resultado) {
-              adapterActores.setListaActoresOriginales(resultado);
+                adapterActores.setListaActoresOriginales(resultado);
                 adapterActores.notifyDataSetChanged();
             }
-        }, urlString);
-
-
-
+        }, id);
 
         TextView textonombre=(TextView)view.findViewById(R.id.tag_nombre2);
         TextView textoaño=(TextView)view.findViewById(R.id.tag_año2);
@@ -270,7 +268,7 @@ public class FragmentDetalle extends Fragment {
                 watchTrailer.setLabelTextColor(ContextCompat.getColor(getActivity(),R.color.black));
 
 
-                        Toast.makeText(v.getContext(), "Ver el trailer", Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "Ver el trailer", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -288,12 +286,12 @@ public class FragmentDetalle extends Fragment {
             }
         });
         */
-    return view;
+        return view;
     }
 
     public interface FavoritableFav{
         ///corregir aca, usar un id de pelucula
-       public void recibirFormatoFavorito(Formato unFormato);
+        public void recibirFormatoFavorito(Formato unFormato);
         public void eliminarFormatoFavorito(Formato unFormato);
     }
 

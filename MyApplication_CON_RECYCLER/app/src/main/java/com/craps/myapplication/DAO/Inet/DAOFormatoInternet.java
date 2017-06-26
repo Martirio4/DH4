@@ -9,9 +9,12 @@ import com.craps.myapplication.Model.ContainerFormatos;
 import com.craps.myapplication.Model.Formato;
 import com.craps.myapplication.Utils.HTTPConnectionManager;
 import com.craps.myapplication.Utils.ResultListener;
+import com.craps.myapplication.Utils.TMDBHelper;
 import com.google.gson.Gson;
 
 import java.util.List;
+
+import static com.craps.myapplication.View.Activities.ActivityMain.idiomaDeLaSesion;
 
 /**
  * Created by digitalhouse on 03/06/17.
@@ -19,18 +22,184 @@ import java.util.List;
 
 public class DAOFormatoInternet {
 
-    private String queBuscoEnInet;
+    private String urlParaAsyncTask;
+
     private List<Formato> laListaFormatos;
     private List<Actor>laListaActores;
     private Formato elFormato;
     private Actor elActor;
-    
+
+    //PELICULAS POPULARES
+    public void obtenerPeliculasPopulares(ResultListener<List<Formato>> listenerFromController,Integer numeroPagina){
+
+        urlParaAsyncTask= TMDBHelper.getPopularMovies(idiomaDeLaSesion,numeroPagina);
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerListadoDeFormatosTask tarea = new ObtenerListadoDeFormatosTask();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+
+    //SERIES POPULARES
+    public void obtenerSeriesPopulares(ResultListener<List<Formato>> listenerFromController,Integer numeroPagina){
+
+        urlParaAsyncTask= TMDBHelper.getTVPopular(idiomaDeLaSesion,numeroPagina);
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerListadoDeFormatosTask tarea = new ObtenerListadoDeFormatosTask();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+
+    //PELICULAS EN CARTEL
+    public void obtenerPeliculasEnCartelInternet(ResultListener<List<Formato>> listenerFromController,Integer numeroPagina){
+
+        urlParaAsyncTask= TMDBHelper.getTVTopRated(idiomaDeLaSesion, numeroPagina);
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerListadoDeFormatosTask tarea = new ObtenerListadoDeFormatosTask();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+
+    //PELICULAS FILTRADAS POR GENERO
+    public void obtenerPeliculasPorGenero(ResultListener<List<Formato>> listenerFromController,String genero, Integer numeroPagina){
+
+        urlParaAsyncTask= TMDBHelper.getMoviesByGenre(genero, idiomaDeLaSesion, numeroPagina);
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerListadoDeFormatosTask tarea = new ObtenerListadoDeFormatosTask();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+
+    //SERIES FILTRADAS POR GENERO
+    public void obtenerSeriesPorGenero(ResultListener<List<Formato>> listenerFromController,String genero, Integer numeroPagina){
+
+        urlParaAsyncTask= TMDBHelper.getTVByGenre(genero, idiomaDeLaSesion, numeroPagina);
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerListadoDeFormatosTask tarea = new ObtenerListadoDeFormatosTask();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+
+    //SERIES MAS VALORADAS
+    public void obtenerSeriesMasValoradas(ResultListener<List<Formato>> listenerFromController, Integer numeroPagina){
+
+        urlParaAsyncTask= TMDBHelper.getTVTopRated( idiomaDeLaSesion, numeroPagina);
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerListadoDeFormatosTask tarea = new ObtenerListadoDeFormatosTask();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+
+    //SERIES "EN CARTEL"
+    public void obtenerSeriesEnCartel(ResultListener<List<Formato>> listenerFromController,Integer numeroPagina){
+
+        urlParaAsyncTask= TMDBHelper.getTVAiringToday(idiomaDeLaSesion, numeroPagina);
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerListadoDeFormatosTask tarea = new ObtenerListadoDeFormatosTask();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+
+    //BUSCAR PELICULA CON STRING
+    public void buscarPelicula(ResultListener<List<Formato>> listenerFromController,String stringABuscar, Integer numeroPagina){
+
+        urlParaAsyncTask= TMDBHelper.searchMovie(stringABuscar, idiomaDeLaSesion, numeroPagina);
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerListadoDeFormatosTask tarea = new ObtenerListadoDeFormatosTask();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+
+    //BUSCAR PELICULA CON STRING
+    public void buscarSerie(ResultListener<List<Formato>> listenerFromController,String stringABuscar, Integer numeroPagina){
+
+        urlParaAsyncTask= TMDBHelper.searchTv(stringABuscar, idiomaDeLaSesion, numeroPagina);
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerListadoDeFormatosTask tarea = new ObtenerListadoDeFormatosTask();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+
+    // OBTENER LISTADO DE ACTORES DE PELICULA
+    public void obtenerActoresPelicula(ResultListener<List<Actor>> listenerFromController,Integer idFormato){
+
+        this.urlParaAsyncTask =TMDBHelper.getCastMovie(idFormato, idiomaDeLaSesion);
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerListadoDeActoresTask tarea = new ObtenerListadoDeActoresTask();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+
+    /*// OBTENER LISTADO DE ACTORES DE SERIES
+    public void obtenerActoresSerie(ResultListener<List<Actor>> listenerFromController,Integer idFormato){
+
+        this.urlParaAsyncTask =TMDBHelper.getCastTv(idFormato, idiomaDeLaSesion);
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerListadoDeActoresTask tarea = new ObtenerListadoDeActoresTask();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }*/
+
+    //BUSCAR PELICULAS RELACIONADAS
+    public void ObtenerPeliculasRelacionadas(ResultListener<List<Formato>> listenerFromController,Integer idPelicula, Integer numeroPagina){
+
+        urlParaAsyncTask= TMDBHelper.getSimilarMovies(idPelicula,idiomaDeLaSesion,numeroPagina);
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerListadoDeFormatosTask tarea = new ObtenerListadoDeFormatosTask();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+
+    //BUSCAR PELICULAS RELACIONADAS
+    public void ObtenerSeriesRelacionadas(ResultListener<List<Formato>> listenerFromController,Integer idSerie, Integer numeroPagina){
+
+        urlParaAsyncTask= TMDBHelper.getSimilarMovies(idSerie,idiomaDeLaSesion,numeroPagina);
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerListadoDeFormatosTask tarea = new ObtenerListadoDeFormatosTask();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public void obtenerFormatosDesdeInternet(ResultListener<List<Formato>> listenerFromController,String queBuscoEnInet,Integer numeroPagina){
 
         //cargo el string de la busqueda con la que le pego al api
-        this.queBuscoEnInet=queBuscoEnInet;
+        this.urlParaAsyncTask =queBuscoEnInet;
 
         //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
         ObtenerListadoDeFormatosTask tarea = new ObtenerListadoDeFormatosTask();
@@ -52,7 +221,7 @@ public class DAOFormatoInternet {
             try {
                 //PEDIR A INTERNET USANDO UNA URL EL ARCHIVO JSON
                 HTTPConnectionManager httpConnectionManager = new HTTPConnectionManager();
-                String json = httpConnectionManager.getRequestString(queBuscoEnInet);
+                String json = httpConnectionManager.getRequestString(urlParaAsyncTask);
 
                 //USAR GSON PARA PARSEAR EL ARCHIVO Y CONVERTIRLO A LA LISTA DE NOTICIAS
                 Gson gson = new Gson();
@@ -82,7 +251,7 @@ public class DAOFormatoInternet {
     public void obtenerFormatoDesdeInternet(ResultListener<Formato> listenerFromController,String queBuscoEnInet){
 
         //cargo el string de la busqueda con la que le pego al api
-        this.queBuscoEnInet=queBuscoEnInet;
+        this.urlParaAsyncTask =queBuscoEnInet;
 
         //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
         ObtenerUnFormatoTask tarea = new ObtenerUnFormatoTask();
@@ -106,7 +275,7 @@ public class DAOFormatoInternet {
             try {
                 //PEDIR A INTERNET USANDO UNA URL EL ARCHIVO JSON
                 HTTPConnectionManager httpConnectionManager = new HTTPConnectionManager();
-                String json = httpConnectionManager.getRequestString(queBuscoEnInet);
+                String json = httpConnectionManager.getRequestString(urlParaAsyncTask);
 
                 //USAR GSON PARA PARSEAR EL ARCHIVO Y CONVERTIRLO A LA LISTA DE NOTICIAS
                 Gson gson = new Gson();
@@ -137,16 +306,6 @@ public class DAOFormatoInternet {
 
 
 
-    public void obtenerActoresInet(ResultListener<List<Actor>> listenerFromController,String queBuscoEnInet){
-
-        //cargo el string de la busqueda con la que le pego al api
-        this.queBuscoEnInet=queBuscoEnInet;
-
-        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
-        ObtenerListadoDeActoresTask tarea = new ObtenerListadoDeActoresTask();
-        tarea.setListenerFromController(listenerFromController);
-        tarea.execute();
-    }
 
     private class ObtenerListadoDeActoresTask extends AsyncTask<String,Void,List<Actor>>{
 
@@ -162,7 +321,7 @@ public class DAOFormatoInternet {
             try {
                 //PEDIR A INTERNET USANDO UNA URL EL ARCHIVO JSON
                 HTTPConnectionManager httpConnectionManager = new HTTPConnectionManager();
-                String json = httpConnectionManager.getRequestString(queBuscoEnInet);
+                String json = httpConnectionManager.getRequestString(urlParaAsyncTask);
 
                 //USAR GSON PARA PARSEAR EL ARCHIVO Y CONVERTIRLO A LA LISTA DE NOTICIAS
                 Gson gson = new Gson();

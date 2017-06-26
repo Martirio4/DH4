@@ -26,18 +26,19 @@ import java.util.List;
  */
 public class FragmentBusqueda extends Fragment {
 
-    private AdapterFormato unadapter1;
+    private AdapterFormato adapterBusquedaFormatos;
     private Notificable Notificable;
 
-    public static final String URLBUSQUEDA="URLBUSQUEDA";
+    public static final String QUEBUSCO="QUEBUSCO";
 
-    private String urlBusqueda;
-    private String urlString;
+    private String stringABuscar;
+    ControllerFormato controllerBusquedaFormatos;
+
 
 
     //DECLARO INTERFAZ
     public interface Notificable {
-        public void recibirFormatoClickeado(Formato formato, String url);
+        public void recibirFormatoClickeado(Formato formato, Integer pagina);
 
     }
 
@@ -51,43 +52,32 @@ public class FragmentBusqueda extends Fragment {
         //RECIBIR EL BUNDLE
 
         Bundle unbundle = getArguments();
-        urlBusqueda=unbundle.getString(URLBUSQUEDA);
+        stringABuscar = unbundle.getString(QUEBUSCO);
 
-
-        //SETEAR EL ADAPTER
+        //CASTEAR RECYCLER Y SETEAR ADAPTER
         final RecyclerView recycler1 = (RecyclerView) view.findViewById(R.id.recycler1);
-
         recycler1.setHasFixedSize(true);
         recycler1.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false));
+        adapterBusquedaFormatos = new AdapterFormato();
+        adapterBusquedaFormatos.setContext(view.getContext());
 
-        unadapter1 = new AdapterFormato();
-        unadapter1.setContext(view.getContext());
-
-        recycler1.setAdapter(unadapter1);
-        //cargar datos
-                    if (urlBusqueda.startsWith("https://")) {
-                urlString = urlBusqueda;
-            } else {
-                urlString = TMDBHelper.searchMovie(urlBusqueda, TMDBHelper.language_SPANISH);
-            }
-
-        //aca tengo que cambiar para que reconozca el string offline
-        ControllerFormato controllerFormato = new ControllerFormato(this.getContext());
-
-        controllerFormato.obtenerFormatos(new ResultListener<List<Formato>>() {
+        //CARGAR DATOS
+        adapterBusquedaFormatos.setListaFormatosOriginales(new ArrayList<Formato>());
+        controllerBusquedaFormatos= new ControllerFormato(view.getContext());
+        controllerBusquedaFormatos.buscarPelicula(new ResultListener<List<Formato>>() {
             @Override
             public void finish(List<Formato> resultado) {
                 if (resultado==null||resultado.size()<1){
                     noSeEncuentranResultados();
                 }
                 else {
-                    unadapter1.setListaFormatosOriginales(resultado);
-                    unadapter1.notifyDataSetChanged();
+                    adapterBusquedaFormatos.setListaFormatosOriginales(resultado);
+                    adapterBusquedaFormatos.notifyDataSetChanged();
                 }
             }
-        }, urlString);
+        },stringABuscar);
 
-        unadapter1.setListaFormatosOriginales(new ArrayList<Formato>());
+
 
         //AGREGO LISTENER DE CLICKEO DE PELICULAS
         View.OnClickListener listener1 = new View.OnClickListener() {
@@ -95,7 +85,7 @@ public class FragmentBusqueda extends Fragment {
             public void onClick(View view) {
                 //ESTO SE UTILIZA PARA OBTENER LA POSITION DE LO QUE FUE CLICKEADO.
                 Integer posicion = recycler1.getChildAdapterPosition(view);
-                List < Formato > listaFormatosOriginales = unadapter1.getListaFormatosOriginales();
+                List < Formato > listaFormatosOriginales = adapterBusquedaFormatos.getListaFormatosOriginales();
                 Formato formatoClickeado = listaFormatosOriginales.get(posicion);
                 String nombre=formatoClickeado.getTitle();
                 String tipoFormato;
@@ -105,10 +95,10 @@ public class FragmentBusqueda extends Fragment {
                 else{
                     tipoFormato="pelicula";
                 }
-                Notificable.recibirFormatoClickeado(formatoClickeado,urlString);
+                Notificable.recibirFormatoClickeado(formatoClickeado,controllerBusquedaFormatos.getNumeroPagina());
             }
         };
-        unadapter1.setListener(listener1);
+        adapterBusquedaFormatos.setListener(listener1);
 
         return view;
     }

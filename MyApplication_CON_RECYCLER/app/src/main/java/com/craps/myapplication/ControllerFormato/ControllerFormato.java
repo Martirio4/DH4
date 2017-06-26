@@ -28,9 +28,16 @@ import java.util.List;
 public class ControllerFormato {
 
     private Context context;
-    private Boolean terminarPaginacion;
-    private Integer numeroPagina;
+    private Boolean endPaging =false;
+    private Integer numeroPagina=1;
 
+    public Integer getNumeroPagina() {
+        return numeroPagina;
+    }
+
+    public void setNumeroPagina(Integer numeroPagina) {
+        this.numeroPagina = numeroPagina;
+    }
     /*  public void getNextPostPage(final ResultListener<List<Post>> listenerFromView, Context context) {
 
         PostDAO postDAO = new PostDAO();
@@ -60,6 +67,7 @@ public class ControllerFormato {
         this.context = context;
     }
 
+
     public List<String> recibirListaFormatos() {
         DAOArchivo DAOArchivo = new DAOArchivo();
         if (HTTPConnectionManager.isNetworkingOnline(context)){
@@ -75,7 +83,7 @@ public class ControllerFormato {
         return DAOArchivo.cargarCategorias();
     }
 
-    public void obtenerActores(final ResultListener<List<Actor>> listenerFromView, String queBuscoEnInet){
+    public void obtenerActores(final ResultListener<List<Actor>> listenerFromView, Integer id){
 
         if (HTTPConnectionManager.isNetworkingOnline(context)) {
 
@@ -83,12 +91,12 @@ public class ControllerFormato {
             //UTILIZO EL DAOPersonasInternet que es el encargado de realizar esa tarea.
 
             DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
-            daoFormatoInternet.obtenerActoresInet(new ResultListener<List<Actor>>() {
+            daoFormatoInternet.obtenerActoresPelicula(new ResultListener<List<Actor>>() {
                 @Override
                 public void finish(List<Actor> resultado) {
                     listenerFromView.finish(resultado);
                 }
-            },queBuscoEnInet);
+            },id);
         }
 
         else {
@@ -98,6 +106,327 @@ public class ControllerFormato {
     }
 
 
+
+
+
+
+    public void obtenerPeliculasPopulares(final ResultListener<List<Formato>> listenerFromView) {
+
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+            DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
+            daoFormatoInternet.obtenerPeliculasPopulares(new ResultListener<List<Formato>>() {
+                @Override
+                public void finish(List<Formato> unaPagina) {
+
+                    if (unaPagina == null || unaPagina.isEmpty()) {
+                        endPaging = true;
+                    } else {
+                        //TENGO QUE CAMBIAR EL OFFSET
+                        numeroPagina = numeroPagina + 1;
+
+                        //LE AVISO A LA VISTA
+                        listenerFromView.finish(unaPagina);
+                    }
+                }
+            }, numeroPagina);
+        }
+        else{
+            DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            listenerFromView.finish(listaFormatosOffline);
+        }
+    }
+
+    public void obtenerSeriesPopulares(final ResultListener<List<Formato>> listenerFromView) {
+
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+            DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
+            daoFormatoInternet.obtenerSeriesPopulares(new ResultListener<List<Formato>>() {
+                @Override
+                public void finish(List<Formato> unaPagina) {
+
+                    if (unaPagina == null || unaPagina.isEmpty()) {
+                        endPaging = true;
+                    } else {
+                        //TENGO QUE CAMBIAR EL OFFSET
+                        numeroPagina = numeroPagina + 1;
+
+                        //LE AVISO A LA VISTA
+                        listenerFromView.finish(unaPagina);
+                    }
+                }
+            }, numeroPagina);
+        }
+        else{
+            DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            listenerFromView.finish(listaFormatosOffline);
+        }
+    }
+
+    public void obtenerPeliculasEnCartel(final ResultListener<List<Formato>> listenerFromView) {
+
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+            DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
+            daoFormatoInternet.obtenerPeliculasEnCartelInternet(new ResultListener<List<Formato>>() {
+                @Override
+                public void finish(List<Formato> unaPagina) {
+
+                    if (unaPagina == null || unaPagina.isEmpty()) {
+                        endPaging = true;
+                    } else {
+                        //TENGO QUE CAMBIAR EL OFFSET
+                        numeroPagina = numeroPagina + 1;
+
+                        //LE AVISO A LA VISTA
+                        listenerFromView.finish(unaPagina);
+                    }
+                }
+            }, numeroPagina);
+        }
+        else{
+            DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            listenerFromView.finish(listaFormatosOffline);
+        }
+    }
+
+    public void obtenerPeliculasPorGenero(final ResultListener<List<Formato>> listenerFromView, String genero) {
+
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+            DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
+            daoFormatoInternet.obtenerPeliculasPorGenero(new ResultListener<List<Formato>>() {
+                @Override
+                public void finish(List<Formato> unaPagina) {
+
+                    if (unaPagina == null || unaPagina.isEmpty()) {
+                        endPaging = true;
+                    } else {
+                        //TENGO QUE CAMBIAR EL OFFSET
+                        numeroPagina = numeroPagina + 1;
+
+                        //LE AVISO A LA VISTA
+                        listenerFromView.finish(unaPagina);
+                    }
+                }
+            },genero, numeroPagina);
+        }
+        else{
+            DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            listenerFromView.finish(listaFormatosOffline);
+        }
+    }
+
+    public void obtenerSeriesPorGenero(final ResultListener<List<Formato>> listenerFromView, String genero) {
+
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+            DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
+            daoFormatoInternet.obtenerSeriesPorGenero(new ResultListener<List<Formato>>() {
+                @Override
+                public void finish(List<Formato> unaPagina) {
+
+                    if (unaPagina == null || unaPagina.isEmpty()) {
+                        endPaging = true;
+                    } else {
+                        //TENGO QUE CAMBIAR EL OFFSET
+                        numeroPagina = numeroPagina + 1;
+
+                        //LE AVISO A LA VISTA
+                        listenerFromView.finish(unaPagina);
+                    }
+                }
+            },genero, numeroPagina);
+        }
+        else{
+            DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            listenerFromView.finish(listaFormatosOffline);
+        }
+    }
+
+    public void obtenerSeriesMasValoradas(final ResultListener<List<Formato>> listenerFromView) {
+
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+            DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
+            daoFormatoInternet.obtenerSeriesMasValoradas(new ResultListener<List<Formato>>() {
+                @Override
+                public void finish(List<Formato> unaPagina) {
+
+                    if (unaPagina == null || unaPagina.isEmpty()) {
+                        endPaging = true;
+                    } else {
+                        //TENGO QUE CAMBIAR EL OFFSET
+                        numeroPagina = numeroPagina + 1;
+
+                        //LE AVISO A LA VISTA
+                        listenerFromView.finish(unaPagina);
+                    }
+                }
+            },numeroPagina);
+        }
+        else{
+            DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            listenerFromView.finish(listaFormatosOffline);
+        }
+    }
+
+    public void obtenerSeriesEnCartel(final ResultListener<List<Formato>> listenerFromView) {
+
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+            DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
+            daoFormatoInternet.obtenerSeriesEnCartel(new ResultListener<List<Formato>>() {
+                @Override
+                public void finish(List<Formato> unaPagina) {
+
+                    if (unaPagina == null || unaPagina.isEmpty()) {
+                        endPaging = true;
+                    } else {
+                        //TENGO QUE CAMBIAR EL OFFSET
+                        numeroPagina = numeroPagina + 1;
+
+                        //LE AVISO A LA VISTA
+                        listenerFromView.finish(unaPagina);
+                    }
+                }
+            },numeroPagina);
+        }
+        else{
+            DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            listenerFromView.finish(listaFormatosOffline);
+        }
+    }
+
+    public void buscarPelicula(final ResultListener<List<Formato>> listenerFromView, String stringABuscar) {
+
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+            DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
+            daoFormatoInternet.buscarPelicula(new ResultListener<List<Formato>>() {
+                @Override
+                public void finish(List<Formato> unaPagina) {
+
+                    if (unaPagina == null || unaPagina.isEmpty()) {
+                        endPaging = true;
+                    } else {
+                        //TENGO QUE CAMBIAR EL OFFSET
+                        numeroPagina = numeroPagina + 1;
+
+                        //LE AVISO A LA VISTA
+                        listenerFromView.finish(unaPagina);
+                    }
+                }
+            },stringABuscar, numeroPagina);
+        }
+        else{
+            DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            listenerFromView.finish(listaFormatosOffline);
+        }
+    }
+
+    public void buscarSerie(final ResultListener<List<Formato>> listenerFromView, String stringABuscar) {
+
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+            DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
+            daoFormatoInternet.buscarSerie(new ResultListener<List<Formato>>() {
+                @Override
+                public void finish(List<Formato> unaPagina) {
+
+                    if (unaPagina == null || unaPagina.isEmpty()) {
+                        endPaging = true;
+                    } else {
+                        //TENGO QUE CAMBIAR EL OFFSET
+                        numeroPagina = numeroPagina + 1;
+
+                        //LE AVISO A LA VISTA
+                        listenerFromView.finish(unaPagina);
+                    }
+                }
+            },stringABuscar, numeroPagina);
+        }
+        else{
+            DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            listenerFromView.finish(listaFormatosOffline);
+        }
+    }
+
+    public void obtenerPeliculasRelacionadas(final ResultListener<List<Formato>> listenerFromView, Integer id) {
+
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+            DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
+            daoFormatoInternet.ObtenerPeliculasRelacionadas(new ResultListener<List<Formato>>() {
+                @Override
+                public void finish(List<Formato> unaPagina) {
+
+                    if (unaPagina == null || unaPagina.isEmpty()) {
+                        endPaging = true;
+                    } else {
+                        //TENGO QUE CAMBIAR EL OFFSET
+                        numeroPagina = numeroPagina + 1;
+
+                        //LE AVISO A LA VISTA
+                        listenerFromView.finish(unaPagina);
+                    }
+                }
+            },id, numeroPagina);
+        }
+        else{
+            DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            listenerFromView.finish(listaFormatosOffline);
+        }
+    }
+
+    public void obtenerSeriesRelacionadas(final ResultListener<List<Formato>> listenerFromView, Integer id) {
+
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+            DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
+            daoFormatoInternet.ObtenerPeliculasRelacionadas(new ResultListener<List<Formato>>() {
+                @Override
+                public void finish(List<Formato> unaPagina) {
+
+                    if (unaPagina == null || unaPagina.isEmpty()) {
+                        endPaging = true;
+                    } else {
+                        //TENGO QUE CAMBIAR EL OFFSET
+                        numeroPagina = numeroPagina + 1;
+
+                        //LE AVISO A LA VISTA
+                        listenerFromView.finish(unaPagina);
+                    }
+                }
+            },id, numeroPagina);
+        }
+        else{
+            DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            listenerFromView.finish(listaFormatosOffline);
+        }
+    }
+
+    //HAY PAGINA DISPONIBLE
+    public Boolean isPageAvailable() {
+        return !endPaging;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
     public void obtenerFormatos(final ResultListener<List<Formato>> listenerFromView, String queBuscoEnInet) {
 
         if (HTTPConnectionManager.isNetworkingOnline(context)) {
@@ -128,7 +457,7 @@ public class ControllerFormato {
         }
 
 
-    }
+    }*/
 
     public void obtenerFavoritos(final ResultListener<List<Formato>> listenerFromView, String usuario) {
             //SI NO HAY CONEXION UTILIZO LOS DATOS ALMACENADOS EN LA BASE DE DATOS. Para pedir los datos almacenados en la

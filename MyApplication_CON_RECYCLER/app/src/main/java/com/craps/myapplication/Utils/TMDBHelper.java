@@ -25,23 +25,40 @@ package com.craps.myapplication.Utils;
         public static final String IMAGE_SIZE_H632 = "h632";
 
         public static final String MOVIE_GENRE_ACTION = "28";
+        public static final String MOVIE_GENRE_ACCION = "28";
         public static final String MOVIE_GENRE_ADVENTURE = "12";
+        public static final String MOVIE_GENRE_AVENTURA = "12";
         public static final String MOVIE_GENRE_ANIMATION = "16";
+        public static final String MOVIE_GENRE_ANIMACION = "16";
         public static final String MOVIE_GENRE_COMEDY = "35";
+        public static final String MOVIE_GENRE_COMEDIA = "35";
         public static final String MOVIE_GENRE_CRIME = "80";
+        public static final String MOVIE_GENRE_CRIMEN = "80";
         public static final String MOVIE_GENRE_DOCUMENTARY = "99";
+        public static final String MOVIE_GENRE_DOCUMENTAL = "99";
+
         public static final String MOVIE_GENRE_DRAMA = "18";
         public static final String MOVIE_GENRE_FAMILY = "10751";
+        public static final String MOVIE_GENRE_FAMILIA = "10751";
         public static final String MOVIE_GENRE_FANTASY = "14";
+        public static final String MOVIE_GENRE_FANTASIA = "14";
         public static final String MOVIE_GENRE_HISTORY = "36";
+        public static final String MOVIE_GENRE_HISTORIA= "36";
+
         public static final String MOVIE_GENRE_HORROR = "27";
         public static final String MOVIE_GENRE_MUSIC = "10402";
+        public static final String MOVIE_GENRE_MUSICA = "10402";
         public static final String MOVIE_GENRE_MYSTERY = "9648";
+        public static final String MOVIE_GENRE_MYSTERIO = "9648";
+
         public static final String MOVIE_GENRE_ROMANCE = "10749";
         public static final String MOVIE_GENRE_SCIENCE_FICTION = "878";
+        public static final String MOVIE_GENRE_SCIENCIA_FICCION = "878";
         public static final String MOVIE_GENRE_SCIENCE_TV_MOVIE = "10770";
         public static final String MOVIE_GENRE_SCIENCE_THRILLER = "53";
+
         public static final String MOVIE_GENRE_SCIENCE_WAR = "10752";
+
         public static final String MOVIE_GENRE_SCIENCE_WESTERN = "37";
 
         public static final String TV_GENRE_ACTION_AND_ADVENTURE = "10759";
@@ -154,11 +171,14 @@ package com.craps.myapplication.Utils;
         }
 
         public static String getMoviesByGenre(String genre,String language, Integer page){
-            return baseUrl + "/discover/movie?api_key=" +apiKey +"&language="+language+"&page="+page.toString()+"&sort_by=popularity.desc&include_adult=false&include_video=true&page=1&with_genres="+genre;
+            return baseUrl + "/discover/movie?api_key=" +apiKey +"&language="+language+"&sort_by=popularity.desc&include_adult=false&include_video=true&page="+page.toString()+"&with_genres="+genre;
         }
 
+
+
+
         public static String getTVByGenre(String genre,String language, Integer page){
-            return baseUrl + "/discover/tv?api_key=" +apiKey +"&language="+language+"&page="+page.toString()+"&sort_by=popularity.desc&include_adult=false&include_video=true&page=1&with_genres="+genre+"&include_null_first_air_dates=false";
+            return baseUrl + "/discover/tv?api_key=" +apiKey +"&language="+language+"&sort_by=popularity.desc&include_adult=false&include_video=true&page="+page.toString()+"&with_genres="+genre+"&include_null_first_air_dates=false";
         }
 
         public static String getTVShowDetail(Integer tvShow,String language){
@@ -193,9 +213,16 @@ package com.craps.myapplication.Utils;
 
         }
 
-        public static String searchMovie(String query, String languaje){
-            return baseUrl+ "/search/movie?api_key="+ apiKey +"&language="+languaje+"&query="+query;
+        public static String searchMovie(String query, String languaje, Integer page){
+            return baseUrl+ "/search/movie?api_key="+ apiKey +"&language="+languaje+"&query="+query+"&page=" +page.toString();
         }
+
+        public static String searchTv(String query, String languaje, Integer page){
+            return baseUrl+ "/search/tv/?api_key="+ apiKey +"&language="+languaje+"&query="+query+"&page=" +page.toString();
+        }
+
+
+
     }
 
 

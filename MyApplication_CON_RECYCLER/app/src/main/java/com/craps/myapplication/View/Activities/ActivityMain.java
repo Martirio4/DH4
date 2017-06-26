@@ -26,7 +26,6 @@ import android.widget.TextView;
 
 import com.craps.myapplication.ControllerFormato.ControllerFormato;
 import com.craps.myapplication.Model.Formato;
-import com.craps.myapplication.Model.Usuario;
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.HTTPConnectionManager;
 import com.craps.myapplication.Utils.TMDBHelper;
@@ -40,7 +39,7 @@ import com.craps.myapplication.View.Fragments.FragmentSinConexion;
 
 import java.util.List;
 
-public class ActivityMain extends AppCompatActivity implements FragmentMain.Notificable, FragmentBusqueda.Notificable, AdapterFormato.Favoritable, FragmentSinConexion.Notificable, FragmentFavoritos.Notificable {
+public class ActivityMain extends AppCompatActivity implements FragmentMain.Notificable{
 
     private FloatingActionButton floatingActionButton;
     private List<String> listaFragmentsMaestros;
@@ -58,10 +57,14 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
     public static final String TEXTOLOGIN = "textoLogin";
     public static final String IMAGENUSUARIO = "imagenUsuario";
     public static final String LOGIN = "login";
-    public static String usuario = null;
-    public static Boolean login = false;
     private String textoLogin = "LOGIN";
     private Integer imagenUsuario = R.drawable.icono;
+
+    //Variables de incio
+    public static String usuario = null;
+    public static Boolean login = false;
+    public static String idiomaDeLaSesion =TMDBHelper.language_SPANISH;
+
 
     //PABLO 1/4C
 
@@ -131,13 +134,13 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
 
                 if (HTTPConnectionManager.isNetworkingOnline(v.getContext())) {
                     if (editString == null || editString.isEmpty()) {
-                        realizarBusqueda(TMDBHelper.getPopularMovies(TMDBHelper.language_SPANISH,1));
+                        pedirListaBuscada(null);
                     } else {
-                        realizarBusqueda(editString);
+                        pedirListaBuscada(editString);
                     }
 
                 } else {
-                    cargarFragmentSinConexion();
+                        cargarFragmentSinConexion();
                 }
                 hideSoftKeyboard();
             }
@@ -157,10 +160,10 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
                         cargarOpcionMenu(TMDBHelper.getTVTopRated(TMDBHelper.language_SPANISH,1));
                     }
                     if (item.getItemId() == R.id.animacion) {
-                        cargarOpcionMenu(TMDBHelper.getMoviesByGenre(TMDBHelper.MOVIE_GENRE_ANIMATION, 1, TMDBHelper.language_SPANISH));
+                        cargarOpcionMenu(TMDBHelper.getMoviesByGenre(TMDBHelper.MOVIE_GENRE_ANIMATION, TMDBHelper.language_SPANISH, 1));
                     }
                     if (item.getItemId() == R.id.documentales) {
-                        cargarOpcionMenu(TMDBHelper.getTVByGenre(TMDBHelper.TV_GENRE_DOCUMENTARY, 1, TMDBHelper.language_SPANISH));
+                        cargarOpcionMenu(TMDBHelper.getTVByGenre(TMDBHelper.TV_GENRE_DOCUMENTARY,TMDBHelper.language_SPANISH, 1));
                     }
                     if (item.getItemId() == R.id.seriesHoy) {
                         cargarOpcionMenu(TMDBHelper.getTVAiringToday(TMDBHelper.language_SPANISH, 1));
@@ -215,11 +218,18 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
 
 
     //METODO PUBLICO ABRIR DETALLE CUANDO HAGO CLICK EN UNA PELI
-    public void clickFormato(Formato formato, String url) {
+    public void clickFormato(Formato formato, String origen, Integer numeroPagina) {
         Intent unIntent = new Intent(this, ActivitySegunda.class);
         Bundle unBundle = new Bundle();
-        unBundle.putString(ActivitySegunda.URLBUSQUEDA, url);
+        unBundle.putString(ActivitySegunda.ORIGEN, origen);
         unBundle.putInt(ActivitySegunda.IDFORMATO, formato.getId());
+        unBundle.putInt(ActivitySegunda.PAGINA, numeroPagina);
+        if (formato.getTitle()==null||formato.getTitle().isEmpty()){
+            unBundle.putString(ActivitySegunda.TIPOFORMATO, "series");
+        }
+        else{
+            unBundle.putString(ActivitySegunda.TIPOFORMATO, "peliculas");
+        }
         unIntent.putExtras(unBundle);
         startActivity(unIntent);
     }
@@ -231,11 +241,17 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-    public void realizarBusqueda(String queBuscar){
+    public void pedirListaBuscada(String queBuscar){
         //CARGO EL FRAGMENT
         FragmentBusqueda fragment_busqueda = new FragmentBusqueda();
         Bundle otroBundle = new Bundle();
-        otroBundle.putString(FragmentBusqueda.URLBUSQUEDA, queBuscar);
+
+        if (queBuscar==null||queBuscar.isEmpty()) {
+            otroBundle.putString(FragmentBusqueda.QUEBUSCO, null);
+        }
+        else{
+            otroBundle.putString(FragmentBusqueda.QUEBUSCO, queBuscar);
+        }
 
         //LE CARGO EL BUNDLE
         fragment_busqueda.setArguments(otroBundle);
@@ -254,44 +270,8 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
         }
     }
     public void cargarOpcionMenu(String urlBusqueda) {
-       realizarBusqueda(urlBusqueda);
+       pedirListaBuscada(urlBusqueda);
     }
-
-    @Override
-    public void recibirFormatoFavorito(Formato unFormato) {
-        controllerFormato= new ControllerFormato(this);
-        controllerFormato.agregarFavorito(unFormato, usuario);
-    }
-
-    @Override
-    public void recibirFavoritoClickeado(Formato formato) {
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(navigationView)) {
-            drawerLayout.closeDrawers();
-        }
-        else {
-            super.onBackPressed();
-        }
-    }
-
-    public void cargarFragmentSinConexion() {
-        FragmentSinConexion fragmentSinConexion = new FragmentSinConexion();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.contenedor_buscador, fragmentSinConexion);
-        fragmentTransaction.commit();
-    }
-
-    @Override
-    public void recibirFormatoClickeado(Formato formato, String url) {
-        clickFormato(formato, url);
-
-    }
-
 
     // PABLO 4/4A
     public void botonNavViewApretado (View view) {
@@ -307,6 +287,58 @@ public class ActivityMain extends AppCompatActivity implements FragmentMain.Noti
         Intent unIntent = new Intent(this, ActivityLogin.class);
         startActivity(unIntent);
     }
+
+    public void cargarFragmentSinConexion() {
+        FragmentSinConexion fragmentSinConexion = new FragmentSinConexion();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.contenedor_buscador, fragmentSinConexion);
+        fragmentTransaction.commit();
+    }
+/*
+    @Override
+    public void recibirFormatoFavorito(Formato unFormato) {
+        controllerFormato= new ControllerFormato(this);
+        controllerFormato.agregarFavorito(unFormato, usuario);
+    }
+    */
+
+
+
+
+    @Override
+    public void recibirFormatoClickeado(Formato formato,String origen, Integer pagina) {
+        clickFormato(formato,origen,pagina);
+
+
+    }
+
+
+
+    /*
+    @Override
+    public void recibirFavoritoClickeado(Formato formato) {
+    }
+    */
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(navigationView)) {
+            drawerLayout.closeDrawers();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
+
+    /*@Override
+    public void recibirFormatoClickeado(Formato formato, String url) {
+        clickFormato(formato, url);
+
+    }*/
+
+
+
 
     // GENERO EL METODO PARA CARGAR EL FRAGMENT LOGIN LUEGO DEL CLICK.
 

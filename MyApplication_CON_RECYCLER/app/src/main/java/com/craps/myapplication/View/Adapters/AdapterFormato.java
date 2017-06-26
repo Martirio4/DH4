@@ -47,6 +47,10 @@ public class AdapterFormato extends RecyclerView.Adapter implements View.OnClick
     public void setListaFormatosOriginales(List<Formato> listaFormatosOriginales) {
         this.listaFormatosOriginales = listaFormatosOriginales;
     }
+    public void addListaFormatosOriginales(List<Formato> listaFormatosOriginales) {
+        this.listaFormatosOriginales .addAll(listaFormatosOriginales);
+    }
+
 
     public List<Formato> getListaFormatosOriginales(){
         return listaFormatosOriginales;

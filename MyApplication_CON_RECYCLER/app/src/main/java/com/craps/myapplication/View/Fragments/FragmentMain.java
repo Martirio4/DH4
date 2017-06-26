@@ -19,7 +19,6 @@ import com.craps.myapplication.Model.Formato;
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.ResultListener;
 import com.craps.myapplication.Utils.TMDBHelper;
-import com.craps.myapplication.View.Activities.ActivityMain;
 import com.craps.myapplication.View.Adapters.AdapterFormato;
 
 import java.util.ArrayList;
@@ -32,10 +31,9 @@ import java.util.List;
 public class FragmentMain extends Fragment {
 
     private List < Formato > listaFormatos;
-    private AdapterFormato unadapter1;
-    private AdapterFormato unadapter2;
-    private AdapterFormato unadapter3;
+
     private Notificable notificable;
+    private Boolean isLoading=false;
 
 
     public static final String QUEFORMATOMUESTRO = "peliculas";
@@ -44,16 +42,29 @@ public class FragmentMain extends Fragment {
     public static final String QUEFILTROAPLICOR3 = "quefiltroaplicor3";
 
     private String formatoAMostrar;
-    private String filtroR1;
-    private String filtroR2;
-    private String filtroR3;
-    private List<Formato> lista1;
-    private List<Formato> lista2;
-    private List<Formato> lista3;
 
-    String stringUrl;
-    String stringUr2;
-    String stringUr3;
+    private String filtroRecyclerSuperior;
+    private String filtroRecyclerMedio;
+    private String filtroRecyclerInferior;
+
+    private AdapterFormato adapterRecyclerSuperior;
+    private AdapterFormato adapterRecyclerMedio;
+    private AdapterFormato adapterRecyclerInferior;
+
+    private RecyclerView recyclerSuperior;
+    private RecyclerView recyclerMedio;
+    private RecyclerView recyclerInferior;
+
+    private LinearLayoutManager layoutManagerSuperior;
+    private LinearLayoutManager layoutManagerMedio;
+    private LinearLayoutManager layoutManagerInferior;
+
+    private ControllerFormato controllerRecyclerSuperior;
+    private ControllerFormato controllerRecyclerMedio;
+    private ControllerFormato controllerRecyclerInferior;
+
+
+
 
 
 
@@ -61,9 +72,7 @@ public class FragmentMain extends Fragment {
 
     //DECLARO INTERFAZ
     public interface Notificable {
-        public void recibirFormatoClickeado(Formato formato, String url);
-        public void recibirFormatoFavorito(Formato unFormato);
-
+        public void recibirFormatoClickeado(Formato formato,String origen, Integer pagina);
     }
 
     //ON CREATE
@@ -81,174 +90,159 @@ public class FragmentMain extends Fragment {
         Bundle unbundle = getArguments();
 
         formatoAMostrar = unbundle.getString(QUEFORMATOMUESTRO);
-        filtroR3= unbundle.getString(QUEFILTROAPLICOR1);
-        filtroR2= unbundle.getString(QUEFILTROAPLICOR2);
-        filtroR1= unbundle.getString(QUEFILTROAPLICOR3);
+        filtroRecyclerInferior = unbundle.getString(QUEFILTROAPLICOR1);
+        filtroRecyclerMedio = unbundle.getString(QUEFILTROAPLICOR2);
+        filtroRecyclerSuperior = unbundle.getString(QUEFILTROAPLICOR3);
 
         //SETEAR EL ADAPTER
-        final RecyclerView recycler1 = (RecyclerView) view.findViewById(R.id.recycler1);
-        final RecyclerView recycler2 = (RecyclerView) view.findViewById(R.id.recycler2);
-        final RecyclerView recycler3 = (RecyclerView) view.findViewById(R.id.recycler3);
-
-        recycler1.setHasFixedSize(true);
-        recycler2.setHasFixedSize(true);
-        recycler3.setHasFixedSize(true);
-
-        recycler1.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        recycler2.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        recycler3.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
-
-        unadapter1 = new AdapterFormato();
-        unadapter2 = new AdapterFormato();
-        unadapter3 = new AdapterFormato();
-
-        unadapter1.setContext(view.getContext());
-        unadapter2.setContext(view.getContext());
-        unadapter3.setContext(view.getContext());
 
 
+        //-----------------//RECYCLER SUPERIOR//-------------------//
 
+        //DECLARO Y CASTEO EL RECYCLER
+        recyclerSuperior = (RecyclerView) view.findViewById(R.id.recycler1);
+        recyclerSuperior.setHasFixedSize(true);
+        layoutManagerSuperior=new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerSuperior.setLayoutManager(layoutManagerSuperior);
+        adapterRecyclerSuperior = new AdapterFormato();
+        adapterRecyclerSuperior.setContext(view.getContext());
+        adapterRecyclerSuperior.setListaFormatosOriginales(new ArrayList<Formato>());
 
         //AGREGO LISTENER DE CLICKEO DE PELICULAS
-        View.OnClickListener listener1 = new View.OnClickListener() {
+        View.OnClickListener listenerRecyclerSuperior = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //ESTO SE UTILIZA PARA OBTENER LA POSITION DE LO QUE FUE CLICKEADO.
-                Integer posicion = recycler1.getChildAdapterPosition(view);
-                List < Formato > listaPeliculasOriginales = unadapter1.getListaFormatosOriginales();
+                Integer posicion = recyclerSuperior.getChildAdapterPosition(view);
+                Integer numeroPagina= (int) Math.ceil(posicion/20.0);
+                List < Formato > listaPeliculasOriginales = adapterRecyclerSuperior.getListaFormatosOriginales();
                 Formato formatoClickeado = listaPeliculasOriginales.get(posicion);
-                notificable.recibirFormatoClickeado(formatoClickeado, stringUrl);
+                notificable.recibirFormatoClickeado(formatoClickeado, "superior", numeroPagina);
             }
         };
 
+        //CARGAR DATOS
+        adapterRecyclerSuperior.setListener(listenerRecyclerSuperior);
+        recyclerSuperior.setAdapter(adapterRecyclerSuperior);
+        controllerRecyclerSuperior= new ControllerFormato(view.getContext());
 
-        //AGREGO LISTENER DE CLICKEO DE PELICULAS
-        View.OnClickListener listener2 = new View.OnClickListener() {
+        pedirPaginaRecyclerSuperior();
+
+        recyclerSuperior.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onClick(View view) {
-                //ESTO SE UTILIZA PARA OBTENER LA POSITION DE LO QUE FUE CLICKEADO.
-                Integer posicion = recycler2.getChildAdapterPosition(view);
-                List < Formato > listaPeliculasOriginales = unadapter2.getListaFormatosOriginales();
-                Formato formatoClickeado = listaPeliculasOriginales.get(posicion);
-                notificable.recibirFormatoClickeado(formatoClickeado, stringUr2);
-            }
-        };
-
-
-
-        //AGREGO LISTENER DE CLICKEO DE PELICULAS
-        View.OnClickListener listener3 = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //ESTO SE UTILIZA PARA OBTENER LA POSITION DE LO QUE FUE CLICKEADO.
-                Integer posicion = recycler3.getChildAdapterPosition(view);
-                List < Formato > listaPeliculasOriginales = unadapter3.getListaFormatosOriginales();
-                Formato formatoClickeado = listaPeliculasOriginales.get(posicion);
-                notificable.recibirFormatoClickeado(formatoClickeado, stringUr3);
-            }
-        };
-
-
-
-        unadapter1.setListener(listener1);
-
-        unadapter2.setListener(listener2);
-
-        unadapter3.setListener(listener3);
-
-
-         recycler1.setAdapter(unadapter1);
-         recycler2.setAdapter(unadapter2);
-         recycler3.setAdapter(unadapter3);
-
-        //cargar datos
-
-
-        //aca tengo que cambiar para que tome datos de inet
-        final ControllerFormato controllerFormato = new ControllerFormato(view.getContext());
-
-
-        //cuales son las url que voy a pegar en el api
-
-        if (formatoAMostrar.toLowerCase().equals("peliculas")) {
-            stringUrl = TMDBHelper.getPopularMovies(TMDBHelper.language_SPANISH, 1);
-            stringUr2 = TMDBHelper.getMoviesByGenre(filtroR2, 1, TMDBHelper.language_SPANISH);
-            stringUr3 = TMDBHelper.getMoviesByGenre(filtroR3, 1, TMDBHelper.language_SPANISH);
-        }
-        else{
-            stringUrl= TMDBHelper.getTVPopular(TMDBHelper.language_SPANISH, 1);
-            stringUr2= TMDBHelper.getTVByGenre(filtroR2, 1, TMDBHelper.language_SPANISH);
-            stringUr3=TMDBHelper.getTVByGenre(filtroR3, 1, TMDBHelper.language_SPANISH);
-        }
-
-
-        lista1 =new ArrayList<>();
-        lista2 =new ArrayList<>();
-        lista3 =new ArrayList<>();
-
-
-        controllerFormato.obtenerFormatos(new ResultListener<List<Formato>>() {
-            @Override
-            public void finish(List<Formato> resultado) {
-
-                unadapter1.setListaFormatosOriginales(resultado);
-                lista1=resultado;
-                unadapter1.notifyDataSetChanged();
-            }
-        }, stringUrl);
-
-        controllerFormato.obtenerFormatos(new ResultListener<List<Formato>>() {
-                @Override
-                public void finish(List<Formato> resultado) {
-                    unadapter2.setListaFormatosOriginales(resultado);
-                    lista2=resultado;
-                    unadapter2.notifyDataSetChanged();
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Integer ultimaPosicionVisible=layoutManagerSuperior.findLastVisibleItemPosition();
+                Integer cantidadItems=layoutManagerSuperior.getItemCount();
+                if (!isLoading){
+                    if (ultimaPosicionVisible>= cantidadItems-2){
+                        pedirPaginaRecyclerSuperior();
+                    }
                 }
-        }, stringUr2);
+            }
+        });
 
-        controllerFormato.obtenerFormatos(new ResultListener<List<Formato>>() {
-                @Override
-                public void finish(List<Formato> resultado) {
 
-                    unadapter3.setListaFormatosOriginales(resultado);
-                    lista3=resultado;
-                    unadapter3.notifyDataSetChanged();
+        //-----------------//RECYCLER MEDIO//-------------------//
+
+        //DECLARO Y CASTEO EL RECYCLER
+        recyclerMedio = (RecyclerView) view.findViewById(R.id.recycler2);
+        recyclerMedio.setHasFixedSize(true);
+        layoutManagerMedio=new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerMedio.setLayoutManager(layoutManagerMedio);
+        adapterRecyclerMedio = new AdapterFormato();
+        adapterRecyclerMedio.setContext(view.getContext());
+        adapterRecyclerMedio.setListaFormatosOriginales(new ArrayList<Formato>());
+        //AGREGO LISTENER DE CLICKEO DE PELICULAS
+        View.OnClickListener listenerRecyclerMedio = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //ESTO SE UTILIZA PARA OBTENER LA POSITION DE LO QUE FUE CLICKEADO.
+                Integer posicion = recyclerMedio.getChildAdapterPosition(view);
+                List < Formato > listaPeliculasOriginales = adapterRecyclerMedio.getListaFormatosOriginales();
+                Formato formatoClickeado = listaPeliculasOriginales.get(posicion);
+                notificable.recibirFormatoClickeado(formatoClickeado, "medio", controllerRecyclerMedio.getNumeroPagina());
+            }
+        };
+        //CARGAR DATOS
+        adapterRecyclerMedio.setListener(listenerRecyclerMedio);
+        recyclerMedio.setAdapter(adapterRecyclerMedio);
+        controllerRecyclerMedio= new ControllerFormato(view.getContext());
+
+        pedirPaginaRecyclerMedio();
+
+        recyclerMedio.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Integer ultimaPosicionVisible=layoutManagerMedio.findLastVisibleItemPosition();
+                Integer cantidadItems=layoutManagerMedio.getItemCount();
+                if (!isLoading){
+                    if (ultimaPosicionVisible>= cantidadItems-2){
+                        pedirPaginaRecyclerMedio();
+                    }
                 }
-        }, stringUr3);
+            }
+        });
 
-        unadapter1.setListaFormatosOriginales(lista1);
-        unadapter2.setListaFormatosOriginales(lista2);
-        unadapter3.setListaFormatosOriginales(lista3);
 
-        unadapter1.notifyDataSetChanged();
-        unadapter2.notifyDataSetChanged();
-        unadapter3.notifyDataSetChanged();
+        //-----------------//RECYCLER INFERIOR//-------------------//
 
-        TextView tituloR1 = (TextView) view.findViewById(R.id.titulo_recycler_1);
-        TextView tituloR2 = (TextView) view.findViewById(R.id.titulo_recycler_2);
-        TextView tituloR3 = (TextView) view.findViewById(R.id.titulo_recycler_3);
+        //DECLARO Y CASTEO EL RECYCLER
+        recyclerInferior = (RecyclerView) view.findViewById(R.id.recycler3);
+        recyclerInferior.setHasFixedSize(true);
+        layoutManagerInferior=new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerInferior.setLayoutManager(layoutManagerInferior);
+        adapterRecyclerInferior = new AdapterFormato();
+        adapterRecyclerInferior.setContext(view.getContext());
+        adapterRecyclerInferior.setListaFormatosOriginales(new ArrayList<Formato>());
+        //AGREGO LISTENER DE CLICKEO DE PELICULAS
+        View.OnClickListener listenerRecyclerInferior = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //ESTO SE UTILIZA PARA OBTENER LA POSITION DE LO QUE FUE CLICKEADO.
+                Integer posicion = recyclerMedio.getChildAdapterPosition(view);
+                List < Formato > listaPeliculasOriginales = adapterRecyclerInferior.getListaFormatosOriginales();
+                Formato formatoClickeado = listaPeliculasOriginales.get(posicion);
+                notificable.recibirFormatoClickeado(formatoClickeado, "inferior",controllerRecyclerInferior.getNumeroPagina());
+            }
+        };
+        //CARGAR DATOS
+        adapterRecyclerInferior.setListener(listenerRecyclerInferior);
+        recyclerInferior.setAdapter(adapterRecyclerInferior);
+        controllerRecyclerInferior= new ControllerFormato(view.getContext());
+
+        pedirPaginaRecyclerInferior();
+
+        recyclerInferior.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Integer ultimaPosicionVisible=layoutManagerInferior.findLastVisibleItemPosition();
+                Integer cantidadItems=layoutManagerInferior.getItemCount();
+                if (!isLoading){
+                    if (ultimaPosicionVisible>= cantidadItems-2){
+                        pedirPaginaRecyclerInferior();
+                    }
+                }
+            }
+        });
+
+
+        TextView tituloRecyclerSuperior = (TextView) view.findViewById(R.id.titulo_recycler_1);
+        TextView tituloRecyclerMedio = (TextView) view.findViewById(R.id.titulo_recycler_2);
+        TextView tituloRecyclerInferior = (TextView) view.findViewById(R.id.titulo_recycler_3);
 
         Typeface roboto = Typeface.createFromAsset(getContext().getAssets(),"fonts/Roboto-Light.ttf");
-        tituloR1.setTypeface(roboto);
-        tituloR2.setTypeface(roboto);
-        tituloR3.setTypeface(roboto);
+        tituloRecyclerSuperior.setTypeface(roboto);
+        tituloRecyclerMedio.setTypeface(roboto);
+        tituloRecyclerInferior.setTypeface(roboto);
 
-
-
-        tituloR3.setText("DRAMA");
-        tituloR1.setText("POPULARES");
-        tituloR2.setText("COMEDIA");
-
-
+        tituloRecyclerSuperior.setText(filtroRecyclerSuperior);
+        tituloRecyclerMedio.setText(filtroRecyclerMedio);
+        tituloRecyclerInferior.setText(filtroRecyclerInferior);
 
         return view;
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.notificable = (Notificable) context;
     }
 
     public static FragmentMain crearFragmentMaestro(String queMostrar){
@@ -267,18 +261,99 @@ public class FragmentMain extends Fragment {
 
     }
 
+    public void pedirPaginaRecyclerSuperior(){
+        if (controllerRecyclerSuperior.isPageAvailable()) {
+            isLoading = true;
 
-    public void cargarLista1 (List<Formato> unaLista){
-        lista1=new ArrayList<>();
-        lista1=unaLista;
+            if (formatoAMostrar.equals("peliculas")) {
+                controllerRecyclerSuperior.obtenerPeliculasPopulares(new ResultListener<List<Formato>>() {
+                    @Override
+                    public void finish(List<Formato> resultado) {
+
+                        adapterRecyclerSuperior.addListaFormatosOriginales(resultado);
+                        adapterRecyclerSuperior.notifyDataSetChanged();
+                        isLoading = false;
+                    }
+                });
+            } else {
+                controllerRecyclerSuperior.obtenerSeriesPopulares(new ResultListener<List<Formato>>() {
+                    @Override
+                    public void finish(List<Formato> resultado) {
+
+                        adapterRecyclerSuperior.addListaFormatosOriginales(resultado);
+                        adapterRecyclerSuperior.notifyDataSetChanged();
+                        isLoading = false;
+
+                    }
+                });
+            }
+        }
     }
-    public void cargarLista2 (List<Formato> unaLista){
-        lista2=new ArrayList<>();
-        lista2=unaLista;
+
+    public void pedirPaginaRecyclerMedio(){
+        if (controllerRecyclerMedio.isPageAvailable()) {
+            isLoading = true;
+
+            if (formatoAMostrar.equals("peliculas")) {
+                controllerRecyclerMedio.obtenerPeliculasPorGenero(new ResultListener<List<Formato>>() {
+                    @Override
+                    public void finish(List<Formato> resultado) {
+
+                        adapterRecyclerMedio.addListaFormatosOriginales(resultado);
+                        adapterRecyclerMedio.notifyDataSetChanged();
+                        isLoading = false;
+                    }
+                }, filtroRecyclerMedio);
+            } else {
+                controllerRecyclerMedio.obtenerSeriesPorGenero(new ResultListener<List<Formato>>() {
+                    @Override
+                    public void finish(List<Formato> resultado) {
+
+                        adapterRecyclerMedio.addListaFormatosOriginales(resultado);
+                        adapterRecyclerMedio.notifyDataSetChanged();
+                        isLoading = false;
+                    }
+                }, TMDBHelper.MOVIE_GENRE_COMEDIA);
+            }
+        }
     }
-    public void cargarLista3 (List<Formato> unaLista){
-        lista3=new ArrayList<>();
-        lista3=unaLista;
+
+    public void pedirPaginaRecyclerInferior(){
+        if (controllerRecyclerInferior.isPageAvailable()) {
+            isLoading=true;
+            
+            if (formatoAMostrar.equals("peliculas")) {
+                controllerRecyclerInferior.obtenerPeliculasPorGenero(new ResultListener<List<Formato>>() {
+                    @Override
+                    public void finish(List<Formato> resultado) {
+
+                        adapterRecyclerInferior.addListaFormatosOriginales(resultado);
+                        adapterRecyclerInferior.notifyDataSetChanged();
+                        isLoading = false;
+
+                    }
+                }, filtroRecyclerInferior);
+            } else {
+                controllerRecyclerInferior.obtenerSeriesPorGenero(new ResultListener<List<Formato>>() {
+                    @Override
+                    public void finish(List<Formato> resultado) {
+
+                        adapterRecyclerInferior.addListaFormatosOriginales(resultado);
+                        adapterRecyclerInferior.notifyDataSetChanged();
+                        isLoading = false;
+
+                    }
+                }, TMDBHelper.MOVIE_GENRE_DRAMA);
+            }
+        }
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.notificable = (Notificable) context;
+    }
+
+
 
 }

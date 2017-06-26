@@ -6,8 +6,15 @@
     xmlns:fab="http://schemas.android.com/tools"
     android:id="@+id/detalle_ancla">
 
+
+
+
+
+
+
+
     <ScrollView android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:background="@color/paleta0">
 
@@ -40,57 +47,52 @@
                         android:src="@drawable/strange"
                         android:background="@color/paleta4"
                         android:scaleType="fitXY"
+
                         android:layout_gravity="center_horizontal|center_vertical"
-                    />
+                        />
                 </FrameLayout>
+
             </LinearLayout>
 
 
-
-
-
-
-
-            <TextView
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:src="@drawable/ic_star"
                 android:layout_below="@id/detalle_linear"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                android:textSize="25sp"
-                android:text="@string/detalle_nombre_peli"
-                android:id="@+id/tag_nombre2"
-                android:textAlignment="center"
-                android:textColor="@color/paleta4"
-                android:layout_marginBottom="8dp"
-            />
-
+                android:layout_marginTop="4dp"
+                android:background="@null"
+                android:layout_marginRight="@dimen/tabTexto"
+                android:layout_alignParentRight="true"
+                android:id="@+id/rating"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:maxLines="1"
                 android:layout_height="wrap_content"
                 android:text="sa"
                 android:id="@+id/textViewrating"
-                android:layout_marginTop="4dp"
                 android:textColor="@color/marfil"
-                android:layout_below="@id/tag_nombre2"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="8dp"
-                android:layout_marginLeft="8dp"
-                android:textAlignment="center"
-            />
+                android:layout_below="@+id/rating"
+                android:layout_marginRight="@dimen/tabTexto"
+                android:layout_alignStart="@id/rating"
+                android:textAlignment="center"/>
 
-            <ImageButton
+
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_star"
-                android:layout_below="@id/tag_nombre2"
-                android:background="@null"
-                android:layout_toStartOf="@id/textViewrating"
-                android:id="@+id/rating"
-            />
+                android:layout_below="@id/textViewrating"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="@dimen/tabTexto"
+                android:textSize="25sp"
+                android:text="@string/detalle_nombre_peli"
+                android:id="@+id/tag_nombre2"
 
-
+                android:textAlignment="center"
+                android:textColor="@color/paleta4"
+                android:layout_marginBottom="30dp"
+                />
 
 
 
@@ -104,7 +106,7 @@
                 android:textStyle="bold"
                 android:id="@+id/tag_año"
                 android:layout_marginLeft="@dimen/tabTexto"
-            />
+                />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -141,33 +143,31 @@
                 android:text="@string/detalle_nombre_peli"
                 android:id="@+id/tag_sinopsis2"
                 android:textColor="@color/marfil"
-                />
-
-            <TextView
+                android:layout_marginBottom="30sp"/>
+            <android.support.v7.widget.RecyclerView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/recycler_actores"
                 android:layout_below="@id/tag_sinopsis2"
-                android:textSize="15sp"
-                android:text="REPARTO:"
-                android:id="@+id/tag_reparto"
-                android:textColor="@color/paleta4"
-                android:textStyle="bold"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="4dp"
-                android:layout_marginLeft="@dimen/tabTexto"
-                />
+                android:layout_centerHorizontal="true">
+
+            </android.support.v7.widget.RecyclerView>
 
             <android.support.v7.widget.RecyclerView
                 android:layout_width="wrap_content"
-                android:layout_height="350dp"
-                android:layout_marginLeft="@dimen/tabTexto"
-                android:layout_marginRight="@dimen/tabTexto"
-                android:id="@+id/recycler_actores"
-                android:layout_below="@id/tag_reparto"
-                android:layout_marginBottom="16dp"
-                android:layout_centerHorizontal="true">
+                android:layout_below="@id/recycler_actores"
+                android:layout_height="wrap_content"
+                android:id="@+id/recycler_Similares"
+                >
+
             </android.support.v7.widget.RecyclerView>
+
+
         </RelativeLayout>
+
+
+
+
     </ScrollView>
 
     <com.github.clans.fab.FloatingActionMenu
@@ -241,5 +241,4 @@
 
 
     </com.github.clans.fab.FloatingActionMenu>
-
 </FrameLayout>
