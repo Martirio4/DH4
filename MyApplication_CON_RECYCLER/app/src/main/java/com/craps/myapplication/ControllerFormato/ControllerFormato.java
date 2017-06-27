@@ -20,6 +20,7 @@ import com.craps.myapplication.Utils.ResultListener;
 import com.craps.myapplication.View.Activities.ActivityMain;
 import com.craps.myapplication.View.Activities.ActivityRegister;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.craps.myapplication.R.id.peliMasVista;
@@ -587,6 +588,31 @@ public class ControllerFormato {
             case R.id.animacion:
             case R.id.documentales:
             case R.id.seriesHoy:
+        }
+    }
+
+    public void buscarFavoritos(final ResultListener<List<Formato>> listenerFromView,String unString){
+        if (ActivityMain.login) {
+            final DAOFavoritosDatabase daoFavoritosDatabase = new DAOFavoritosDatabase(context);
+            List<Formato> resultado =new ArrayList<>();
+            resultado= daoFavoritosDatabase.getFormatosConFiltro(unString, ActivityMain.usuario);
+            listenerFromView.finish(resultado);
+
+            }
+
+        else{
+            Activity unaActivity = (Activity) context;
+            View view = unaActivity.findViewById(R.id.contenedor_fragment_maestro);
+
+            Snackbar.make(view, "Funcion exclusiva para usuarios Registrados", Snackbar.LENGTH_SHORT)
+                    .setAction("Ir a Registro", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            registrable.solicitarRegistro();
+
+                        }
+                    })
+                    .show();
         }
     }
 

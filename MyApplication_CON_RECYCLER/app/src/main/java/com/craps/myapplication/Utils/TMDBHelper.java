@@ -217,7 +217,7 @@ package com.craps.myapplication.Utils;
         }
 
         public static String searchTv(String query, String languaje, Integer page){
-            return baseUrl+ "/search/tv/?api_key="+ apiKey +"&language="+languaje+"&query="+query+"&page=" +page.toString();
+            return baseUrl+ "/search/tv?api_key="+ apiKey +"&language="+languaje+"&query="+query+"&page=" +page.toString();
         }
 
 

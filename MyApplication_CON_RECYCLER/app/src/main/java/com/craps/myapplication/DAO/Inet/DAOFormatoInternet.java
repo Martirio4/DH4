@@ -109,7 +109,7 @@ public class DAOFormatoInternet {
         tarea.execute();
     }
 
-    //BUSCAR PELICULA CON STRING
+    //BUSCAR SERIE CON STRING
     public void buscarSerie(ResultListener<List<Formato>> listenerFromController,String stringABuscar, Integer numeroPagina){
 
         urlParaAsyncTask= TMDBHelper.searchTv(stringABuscar, idiomaDeLaSesion, numeroPagina);

@@ -134,12 +134,10 @@ public class DAOFavoritosDatabase extends DatabaseHelper {
         List<Formato> formatos  = new ArrayList<>();
         SQLiteDatabase database = getReadableDatabase();
 
-        if (queBuscoEnInet==null ||queBuscoEnInet.startsWith("https://")) {
-            select = "SELECT * FROM " + TABLE_FAVORITOS+" WHERE MAIL="+usuario;
-        }
-        else{
-            select = "SELECT * FROM " + TABLE_FAVORITOS+" WHERE MAIL="+usuario+"AND NAME="+queBuscoEnInet;
-        }
+
+
+        select = "SELECT * FROM " + TABLE_FAVORITOS+" WHERE MAIL="+usuario+"AND NAME LIKE "+queBuscoEnInet+"%";
+
 
 
         Cursor cursor = database.rawQuery(select, null);
@@ -225,4 +223,12 @@ public class DAOFavoritosDatabase extends DatabaseHelper {
         database.close();
 
     }
+
+
+
+
+
+
+
+
 }

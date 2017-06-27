@@ -39,7 +39,7 @@ import com.craps.myapplication.View.Fragments.FragmentSinConexion;
 
 import java.util.List;
 
-public class ActivityMain extends AppCompatActivity implements ControllerFormato.Registrable ,FragmentMain.Notificable,FragmentSinConexion.Notificable, FragmentFavoritos.Notificable{
+public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.Notificable,ControllerFormato.Registrable ,FragmentMain.Notificable,FragmentSinConexion.Notificable, FragmentFavoritos.Notificable{
 
     private FloatingActionButton floatingActionButton;
     private List<String> listaFragmentsMaestros;
@@ -134,13 +134,17 @@ public class ActivityMain extends AppCompatActivity implements ControllerFormato
 
                 if (HTTPConnectionManager.isNetworkingOnline(v.getContext())) {
                     if (editString == null || editString.isEmpty()) {
-                    } else {
-                        pedirListaBuscada(editString, null);
+                    }
+                    else {
+                            if (login==false && tabLayout.getSelectedTabPosition()==2) {
+                            }
+                        else{
+                            pedirListaBuscada(editString, 0);
+                        }
                     }
 
-                } else {
-                        cargarFragmentSinConexion();
                 }
+
                 hideSoftKeyboard();
             }
         });
@@ -155,7 +159,7 @@ public class ActivityMain extends AppCompatActivity implements ControllerFormato
                         cargarAboutUs();
                     }
                     else{
-                        pedirListaBuscada(null,item.getItemId());
+                        pedirListaBuscada("nulo",item.getItemId());
                     }
 
                 }
@@ -194,12 +198,18 @@ public class ActivityMain extends AppCompatActivity implements ControllerFormato
             }
         });
 
+
         //LISTA DE LOS FORMATOS A EXHIBIR
         listaFragmentsMaestros = controllerFormato.recibirListaFormatos();
         //LE SETEO EL ADAPTER AL VIEW PAGER, EL ADAPTER UTILIZA EL FRAGMENT MANAGER PARA CARGAR FRAGMENT Y LA LISTA DE PELICULAS PARA CREAR LOS FRAGMENTS CORRESPONDIENTES
         AdapterPagerMaestro adapterPagerMaestro = new AdapterPagerMaestro(getSupportFragmentManager(), listaFragmentsMaestros,this);
         adapterPagerMaestro.setContext(this);
         viewPager.setAdapter(adapterPagerMaestro);
+
+    }
+
+    public Integer obtenerTab(){
+        return tabLayout.getSelectedTabPosition();
 
     }
 
@@ -301,13 +311,16 @@ public class ActivityMain extends AppCompatActivity implements ControllerFormato
 
     }
 
+    @Override
+    public void recibirFormatoClickeado(Formato formato, Integer pagina) {
 
+    }
 
     /*
-    @Override
-    public void recibirFavoritoClickeado(Formato formato) {
-    }
-    */
+        @Override
+        public void recibirFavoritoClickeado(Formato formato) {
+        }
+        */
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(navigationView)) {
@@ -334,6 +347,8 @@ public class ActivityMain extends AppCompatActivity implements ControllerFormato
     public void recibirFavoritoClickeado(Formato formato) {
 
     }
+
+
     @Override
     public void solicitarRegistro() {
         Intent unIntent = new Intent(this, ActivityRegister.class);
