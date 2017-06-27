@@ -22,6 +22,7 @@ import com.craps.myapplication.View.Adapters.AdapterFormato;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.id;
 import static com.craps.myapplication.View.Activities.ActivityMain.login;
 
 
@@ -31,7 +32,7 @@ import static com.craps.myapplication.View.Activities.ActivityMain.login;
 public class FragmentBusqueda extends Fragment {
 
     private AdapterFormato adapterBusquedaFormatos;
-    private Notificable Notificable;
+    private Notificable notificable;
     private Context elContext;
 
     public static final String QUEBUSCO="QUEBUSCO";
@@ -49,7 +50,7 @@ public class FragmentBusqueda extends Fragment {
 
     //DECLARO INTERFAZ
     public interface Notificable {
-        public void recibirFormatoClickeado(Formato formato, Integer pagina);
+        public void recibirFormatoClickeado(Formato formato,String origen, Integer pagina, String StringABuscar, Integer drawerId);
 
     }
 
@@ -99,7 +100,13 @@ public class FragmentBusqueda extends Fragment {
                 } else {
                     tipoFormato = "pelicula";
                 }
-                Notificable.recibirFormatoClickeado(formatoClickeado, controllerBusquedaFormatos.getNumeroPagina());
+                Integer pagina= controllerBusquedaFormatos.getNumeroPagina();
+                if (drawerId==null || drawerId==0) {
+                    notificable.recibirFormatoClickeado(formatoClickeado, "busqueda", pagina, stringABuscar, 0);
+                }
+                else{
+                    notificable.recibirFormatoClickeado(formatoClickeado, "drawer", pagina, stringABuscar, drawerId);
+                }
             }
         };
 
@@ -172,13 +179,20 @@ public class FragmentBusqueda extends Fragment {
                 }
 
 
-
-            }
-            else {
-                controllerBusquedaFormatos.traerBusquedaDrawer(drawerId);
             }
         }
+        else {
+            controllerBusquedaFormatos.traerBusquedaDrawer(new ResultListener<List<Formato>>() {
+                @Override
+                public void finish(List<Formato> resultado) {
+                    adapterBusquedaFormatos.addListaFormatosOriginales(resultado);
+                    adapterBusquedaFormatos.notifyDataSetChanged();
+                    isLoading = false;
+                }
+            },drawerId);
+        }
     }
+
 
 
 
@@ -186,7 +200,7 @@ public class FragmentBusqueda extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.elContext=context;
-        this.Notificable = (Notificable) context;
+        this.notificable = (Notificable) context;
     }
 
     public void noSeEncuentranResultados() {

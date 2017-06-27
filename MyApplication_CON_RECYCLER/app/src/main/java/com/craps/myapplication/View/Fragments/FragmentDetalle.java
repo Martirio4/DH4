@@ -1,6 +1,7 @@
 package com.craps.myapplication.View.Fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -64,10 +65,17 @@ public class FragmentDetalle extends Fragment {
 
     private RecyclerView recyclerSimilares;
     private AdapterFormato adapterSimilares;
+    private LinearLayoutManager layoutManagerDetalle;
+
+    private ControllerFormato controllerFragmentDetalle;
 
     public FragmentDetalle() {
         // Required empty public constructor
     }
+
+    private Notificable notificable;
+
+    private Boolean isLoading=false;
 
     protected Integer id;
     protected String nombre;
@@ -78,13 +86,18 @@ public class FragmentDetalle extends Fragment {
     protected String sinopsis;
     protected String backdrop;
     protected String posterId;
+    private String formatoAMostrar;
 
-    private String urlString;
-    private ControllerFormato controllerFragmentDetalle;
+
+    //DECLARO INTERFAZ
+    public interface Notificable {
+        public void recibirFormatoClickeado(Formato formato,String origen, Integer pagina, String StringABuscar, Integer drawerId);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.onclick_detalle, container, false);
 
@@ -100,9 +113,13 @@ public class FragmentDetalle extends Fragment {
         backdrop=unBundle.getString(BACKDROP);
         posterId=unBundle.getString(POSTERID);
 
-
-
-
+        if (title==null ||title.isEmpty()){
+            formatoAMostrar="series";
+        }
+        else
+        {
+            formatoAMostrar="peliculas";
+        }
 
         //RECYCLER ACTORES
         recyclerActores=(RecyclerView)view.findViewById(R.id.recycler_actores);
@@ -110,12 +127,12 @@ public class FragmentDetalle extends Fragment {
 
         adapterActores= new AdapterActores();
         adapterActores.setContext(view.getContext());
-        adapterActores.setListaActoresOriginales(new ArrayList());
+        adapterActores.setListaActoresOriginales(new ArrayList<Actor>());
         recyclerActores.setAdapter(adapterActores);
 
         controllerFragmentDetalle= new ControllerFormato(view.getContext());
 
-        if (title==null||title.isEmpty()){
+        if (formatoAMostrar.equals("series")){
             controllerFragmentDetalle.obtenerActoresSerie(new ResultListener<List<Actor>>() {
                 @Override
                 public void finish(List<Actor> resultado) {
@@ -133,6 +150,48 @@ public class FragmentDetalle extends Fragment {
                 }
             }, id);
         }
+
+        //RECYCLER SIMILARES
+        recyclerSimilares=(RecyclerView) view.findViewById(R.id.recycler_Similares);
+        layoutManagerDetalle= new LinearLayoutManager(view.getContext(),LinearLayoutManager.HORIZONTAL,false);
+        recyclerSimilares.setLayoutManager(layoutManagerDetalle);
+
+        adapterSimilares= new AdapterFormato();
+        adapterSimilares.setContext(view.getContext());
+        adapterSimilares.setListaFormatosOriginales(new ArrayList<Formato>());
+        recyclerSimilares.setAdapter(adapterSimilares);
+        pedirPaginaSimilares();
+
+        //AGREGO LISTENER DE CLICKEO DE PELICULAS
+        View.OnClickListener listenerDetalle = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //ESTO SE UTILIZA PARA OBTENER LA POSITION DE LO QUE FUE CLICKEADO.
+                Integer posicion = recyclerSimilares.getChildAdapterPosition(view);
+                Integer numeroPagina= (int) Math.ceil((posicion+1)/20.0);
+                List < Formato > listaPeliculasOriginales = adapterSimilares.getListaFormatosOriginales();
+                Formato formatoClickeado = listaPeliculasOriginales.get(posicion);
+                Integer pagina=controllerFragmentDetalle.getNumeroPagina();
+                notificable.recibirFormatoClickeado(formatoClickeado, "self",pagina,"nulo",0);
+            }
+        };
+
+       recyclerSimilares.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Integer ultimaPosicionVisible=layoutManagerDetalle.findLastVisibleItemPosition();
+                Integer cantidadItems=layoutManagerDetalle.getItemCount();
+                if (!isLoading){
+                    if (ultimaPosicionVisible>= cantidadItems-2){
+                        pedirPaginaSimilares();
+                    }
+                }
+            }
+        });
+
+
+        //Datos
 
 
 
@@ -170,7 +229,7 @@ public class FragmentDetalle extends Fragment {
         });
         */
 
-        if (title==null||title.isEmpty()){
+        if (formatoAMostrar.equals("series")){
             textonombre.setText(nombre);
             textoaño.setText(firstAirDate);
         }
@@ -304,6 +363,37 @@ public class FragmentDetalle extends Fragment {
         return view;
     }
 
+
+    public void pedirPaginaSimilares(){
+
+
+        if (controllerFragmentDetalle.isPageAvailable()) {
+            isLoading = true;
+
+            if (formatoAMostrar.equals("peliculas")) {
+                controllerFragmentDetalle.obtenerPeliculasRelacionadas(new ResultListener<List<Formato>>() {
+                    @Override
+                    public void finish(List<Formato> resultado) {
+                        adapterSimilares.addListaFormatosOriginales(resultado);
+                        adapterSimilares.notifyDataSetChanged();
+                        isLoading = false;
+                    }
+                },id);
+
+            } else {
+                controllerFragmentDetalle.obtenerSeriesRelacionadas(new ResultListener<List<Formato>>() {
+                    @Override
+                    public void finish(List<Formato> resultado) {
+
+                        adapterSimilares.addListaFormatosOriginales(resultado);
+                        adapterSimilares.notifyDataSetChanged();
+                        isLoading = false;
+                    }
+                },id);
+            }
+        }
+    }
+
     public interface FavoritableFav{
         ///corregir aca, usar un id de pelucula
         public void recibirFormatoFavorito(Formato unFormato);
@@ -332,5 +422,9 @@ public class FragmentDetalle extends Fragment {
         return detalleFragment;
     }
 
-
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.notificable=(Notificable)context;
+    }
 }

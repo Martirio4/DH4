@@ -17,6 +17,7 @@ import com.craps.myapplication.Model.Formato;
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.HTTPConnectionManager;
 import com.craps.myapplication.Utils.ResultListener;
+import com.craps.myapplication.Utils.TMDBHelper;
 import com.craps.myapplication.View.Activities.ActivityMain;
 import com.craps.myapplication.View.Activities.ActivityRegister;
 
@@ -581,13 +582,18 @@ public class ControllerFormato {
         }
     }
 
-    public void traerBusquedaDrawer(Integer id){
+    public void traerBusquedaDrawer(final ResultListener<List<Formato>> listenerFromView, Integer id){
         switch (id){
             case R.id.peliMasVista:
+               obtenerPeliculasPopulares(listenerFromView);
             case R.id.serieMasVista:
+                obtenerSeriesMasValoradas(listenerFromView);
             case R.id.animacion:
+                obtenerPeliculasPorGenero(listenerFromView, TMDBHelper.MOVIE_GENRE_ANIMATION);
             case R.id.documentales:
+                obtenerSeriesPorGenero(listenerFromView,TMDBHelper.TV_GENRE_DOCUMENTARY);
             case R.id.seriesHoy:
+                obtenerSeriesEnCartel(listenerFromView);
         }
     }
 

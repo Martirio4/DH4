@@ -64,12 +64,9 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
     public static String usuario = null;
     public static Boolean login = false;
     public static String idiomaDeLaSesion =TMDBHelper.language_SPANISH;
-
+    public String buscarStringPublico;
 
     //PABLO 1/4C
-
-
-
 
     //Getter para los filtros iniciales
     public void setQueMostrar(String queMostrar) {
@@ -78,7 +75,6 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
     public String getQueMostrar() {
         return queMostrar;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +86,6 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
         // TRAIGO USUARIO.
         Intent unIntent = getIntent();
         Bundle unBundle = unIntent.getExtras();
-
 
         if(unBundle!=null) {
             if(unBundle.getString(USUARIO)!=null) {
@@ -131,6 +126,8 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
 
                 String editString=editBusqueda.getText().toString().toLowerCase();
                 editString = editString.replaceAll(" ", "%20");
+                //corregir aca?
+                buscarStringPublico=editString;
 
                 if (HTTPConnectionManager.isNetworkingOnline(v.getContext())) {
                     if (editString == null || editString.isEmpty()) {
@@ -142,7 +139,6 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
                             pedirListaBuscada(editString, 0);
                         }
                     }
-
                 }
 
                 hideSoftKeyboard();
@@ -215,12 +211,14 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
 
 
     //METODO PUBLICO ABRIR DETALLE CUANDO HAGO CLICK EN UNA PELI
-    public void clickFormato(Formato formato, String origen, Integer numeroPagina) {
+    public void clickFormato(Formato formato, String origen, Integer numeroPagina,String stringABuscar, Integer drawerId) {
         Intent unIntent = new Intent(this, ActivitySegunda.class);
         Bundle unBundle = new Bundle();
         unBundle.putString(ActivitySegunda.ORIGEN, origen);
         unBundle.putInt(ActivitySegunda.IDFORMATO, formato.getId());
         unBundle.putInt(ActivitySegunda.PAGINA, numeroPagina);
+        unBundle.putString(ActivitySegunda.STRINGBUSQUEDA, stringABuscar);
+        unBundle.putInt(ActivitySegunda.DRAWERID, drawerId);
         if (formato.getTitle()==null||formato.getTitle().isEmpty()){
             unBundle.putString(ActivitySegunda.TIPOFORMATO, "series");
         }
@@ -302,25 +300,16 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
     */
 
 
-
-
     @Override
-    public void recibirFormatoClickeado(Formato formato,String origen, Integer pagina) {
-        clickFormato(formato,origen,pagina);
-
-
-    }
-
-    @Override
-    public void recibirFormatoClickeado(Formato formato, Integer pagina) {
-
+    public void recibirFormatoClickeado(Formato formato, String origen, Integer pagina, String stringABuscar, Integer drawerId) {
+        clickFormato(formato, origen, pagina, stringABuscar, drawerId);
     }
 
     /*
-        @Override
-        public void recibirFavoritoClickeado(Formato formato) {
-        }
-        */
+            @Override
+            public void recibirFavoritoClickeado(Formato formato) {
+            }
+            */
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(navigationView)) {

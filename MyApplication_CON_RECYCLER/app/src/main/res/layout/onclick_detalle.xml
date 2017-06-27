@@ -160,6 +160,8 @@
                 android:layout_width="wrap_content"
                 android:layout_below="@id/recycler_actores"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/tabTexto"
+                android:layout_marginRight="@dimen/tabTexto"
                 android:id="@+id/recycler_Similares"
                 >
 

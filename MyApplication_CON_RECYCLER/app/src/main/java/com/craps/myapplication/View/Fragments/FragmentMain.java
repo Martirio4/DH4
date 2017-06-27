@@ -72,7 +72,7 @@ public class FragmentMain extends Fragment {
 
     //DECLARO INTERFAZ
     public interface Notificable {
-        public void recibirFormatoClickeado(Formato formato,String origen, Integer pagina);
+        public void recibirFormatoClickeado(Formato formato,String origen, Integer pagina, String StringABuscar, Integer drawerId);
     }
 
     //ON CREATE
@@ -123,7 +123,7 @@ public class FragmentMain extends Fragment {
                 Integer numeroPagina= (int) Math.ceil((posicion+1)/20.0);
                 List < Formato > listaPeliculasOriginales = adapterRecyclerSuperior.getListaFormatosOriginales();
                 Formato formatoClickeado = listaPeliculasOriginales.get(posicion);
-                notificable.recibirFormatoClickeado(formatoClickeado, "superior", numeroPagina);
+                notificable.recibirFormatoClickeado(formatoClickeado, "superior", numeroPagina,"nulo",0);
             }
         };
 
@@ -168,7 +168,7 @@ public class FragmentMain extends Fragment {
                 Integer numeroPagina= (int) Math.ceil((posicion+1)/20.0);
                 List < Formato > listaPeliculasOriginales = adapterRecyclerMedio.getListaFormatosOriginales();
                 Formato formatoClickeado = listaPeliculasOriginales.get(posicion);
-                notificable.recibirFormatoClickeado(formatoClickeado, "medio", numeroPagina);
+                notificable.recibirFormatoClickeado(formatoClickeado, "medio", numeroPagina,"nulo",0);
             }
         };
         //CARGAR DATOS
@@ -212,7 +212,7 @@ public class FragmentMain extends Fragment {
                 Integer numeroPagina= (int) Math.ceil((posicion+1)/20.0);
                 List < Formato > listaPeliculasOriginales = adapterRecyclerInferior.getListaFormatosOriginales();
                 Formato formatoClickeado = listaPeliculasOriginales.get(posicion);
-                notificable.recibirFormatoClickeado(formatoClickeado, "inferior",numeroPagina);
+                notificable.recibirFormatoClickeado(formatoClickeado, "inferior",numeroPagina,"nulo",0);
             }
         };
         //CARGAR DATOS
