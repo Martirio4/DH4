@@ -13,6 +13,7 @@ import com.craps.myapplication.DAO.Db.DAOFormatoDatabase;
 import com.craps.myapplication.DAO.Inet.DAOFormatoInternet;
 
 import com.craps.myapplication.Model.Actor;
+import com.craps.myapplication.Model.Creditos;
 import com.craps.myapplication.Model.Formato;
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.HTTPConnectionManager;
@@ -630,4 +631,41 @@ public class ControllerFormato {
         }
     }
 
+    public void traerDetallesPersona(final ResultListener<Actor> listenerFromView, Integer actorId){
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+            DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
+            daoFormatoInternet.obtenerdetalleActor (new ResultListener<Actor>() {
+                @Override
+                public void finish(Actor unaPagina) {
+
+                    if (unaPagina == null ) {
+
+                    } else {
+
+                        listenerFromView.finish(unaPagina);
+                    }
+                }
+            },actorId);
+        }
+        else{
+
+        }
+    }
+    public void traerCreditosPersona(final ResultListener<List<Creditos>> listenerFromView, Integer actorId){
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+            DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
+            daoFormatoInternet.obtenerCreditosActor (new ResultListener<List<Creditos>>() {
+                @Override
+                public void finish(List<Creditos> unaPagina) {
+
+
+                        listenerFromView.finish(unaPagina);
+
+                }
+            },actorId);
+        }
+        else{
+
+        }
+    }
 }

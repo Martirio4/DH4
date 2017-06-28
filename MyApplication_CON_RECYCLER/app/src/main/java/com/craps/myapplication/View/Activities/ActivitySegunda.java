@@ -6,19 +6,21 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.widget.Toast;
 import com.craps.myapplication.ControllerFormato.ControllerFormato;
+import com.craps.myapplication.Model.Actor;
 import com.craps.myapplication.Model.Formato;
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.ResultListener;
 import com.craps.myapplication.Utils.TMDBHelper;
 import com.craps.myapplication.View.Adapters.AdapterFormato;
 import com.craps.myapplication.View.Adapters.AdapterPagerFormato;
+import com.craps.myapplication.View.Fragments.FragmentActores;
 import com.craps.myapplication.View.Fragments.FragmentDetalle;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivitySegunda extends AppCompatActivity implements FragmentDetalle.Notificable,ControllerFormato.Registrable,AdapterFormato.Favoritable, FragmentDetalle.FavoritableFav {
+public class ActivitySegunda extends AppCompatActivity implements FragmentDetalle.Actorable,FragmentDetalle.Notificable,ControllerFormato.Registrable,AdapterFormato.Favoritable, FragmentDetalle.FavoritableFav {
 
     public static final String IDFORMATO = "IDFORMATO";
     public static final String ORIGEN = "ORIGEN";
@@ -486,5 +488,15 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
         pedirPaginaSimilarclickeado(formato, origen, pagina,unTipoDeFormato );
 
+    }
+
+    @Override
+    public void recibirActorClickeado(Actor unActor) {
+        Intent unIntent = new Intent(this, ActivityActores.class);
+        Bundle bundle= new Bundle();
+        bundle.putInt(ActivityActores.ACTORID, unActor.getId());
+
+        unIntent.putExtras(bundle);
+        startActivity(unIntent);
     }
 }

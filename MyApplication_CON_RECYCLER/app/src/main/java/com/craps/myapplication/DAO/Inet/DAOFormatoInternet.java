@@ -5,7 +5,9 @@ import android.os.AsyncTask;
 
 import com.craps.myapplication.Model.Actor;
 import com.craps.myapplication.Model.ContainerActores;
+import com.craps.myapplication.Model.ContainerCreditos;
 import com.craps.myapplication.Model.ContainerFormatos;
+import com.craps.myapplication.Model.Creditos;
 import com.craps.myapplication.Model.Formato;
 import com.craps.myapplication.Utils.HTTPConnectionManager;
 import com.craps.myapplication.Utils.ResultListener;
@@ -26,6 +28,7 @@ public class DAOFormatoInternet {
 
     private List<Formato> laListaFormatos;
     private List<Actor>laListaActores;
+    private List<Creditos>laListaCreditos;
     private Formato elFormato;
     private Actor elActor;
 
@@ -342,6 +345,111 @@ public class DAOFormatoInternet {
 
         @Override
         protected void onPostExecute(List<Actor> actores) {
+
+            //AVISARLE AL CONTROLLER QUE SU LISTA DE NOTICIAS ESTA CARGADA
+            listenerFromController.finish(actores);
+        }
+    }
+
+
+    public void obtenerdetalleActor(ResultListener<Actor> listenerFromController,Integer actorId){
+
+        //cargo el string de la busqueda con la que le pego al api
+        this.urlParaAsyncTask =TMDBHelper.getPerson(actorId, TMDBHelper.language_ENGLISH);
+
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerDetalleActor tarea = new ObtenerDetalleActor();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+    private class ObtenerDetalleActor extends AsyncTask<String,Void,Actor>{
+
+        private ResultListener<Actor> listenerFromController;
+
+        public void setListenerFromController(ResultListener<Actor> listenerFromController) {
+            this.listenerFromController = listenerFromController;
+        }
+
+        @Override
+        protected Actor doInBackground(String... params) {
+
+            Actor formatos = null;
+            try {
+                //PEDIR A INTERNET USANDO UNA URL EL ARCHIVO JSON
+                HTTPConnectionManager httpConnectionManager = new HTTPConnectionManager();
+                String json = httpConnectionManager.getRequestString(urlParaAsyncTask);
+
+                //USAR GSON PARA PARSEAR EL ARCHIVO Y CONVERTIRLO A LA LISTA DE NOTICIAS
+                Gson gson = new Gson();
+                Actor formato = gson.fromJson(json, Actor.class);
+                formatos = formato;
+                elActor=formatos;
+
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+            //DEVOLVER LA LISTA
+            return formatos;
+        }
+
+        @Override
+        protected void onPostExecute(Actor formatos) {
+
+            //AVISARLE AL CONTROLLER QUE SU LISTA DE NOTICIAS ESTA CARGADA
+            listenerFromController.finish(formatos);
+        }
+    }
+
+    public void obtenerCreditosActor(ResultListener <List<Creditos>> listenerFromController, Integer actorId){
+
+        //cargo el string de la busqueda con la que le pego al api
+        this.urlParaAsyncTask =TMDBHelper.getCredits(actorId, idiomaDeLaSesion);
+
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerCreditosParaPersona tarea = new ObtenerCreditosParaPersona();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+
+    private class ObtenerCreditosParaPersona extends AsyncTask<String,Void,List<Creditos>>{
+
+        private ResultListener<List<Creditos>> listenerFromController;
+        public void setListenerFromController(ResultListener<List<Creditos>> listenerFromController) {
+            this.listenerFromController = listenerFromController;
+        }
+
+        @Override
+        protected List<Creditos> doInBackground(String... params) {
+
+            List<Creditos> actores = null;
+            try {
+                //PEDIR A INTERNET USANDO UNA URL EL ARCHIVO JSON
+                HTTPConnectionManager httpConnectionManager = new HTTPConnectionManager();
+                String json = httpConnectionManager.getRequestString(urlParaAsyncTask);
+
+                //USAR GSON PARA PARSEAR EL ARCHIVO Y CONVERTIRLO A LA LISTA DE NOTICIAS
+                Gson gson = new Gson();
+                ContainerCreditos containerCreditos = gson.fromJson(json, ContainerCreditos.class);
+                actores = containerCreditos.getCreditosList();
+                laListaCreditos =actores;
+
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+            //DEVOLVER LA LISTA
+            return actores;
+        }
+
+        @Override
+        protected void onPostExecute(List<Creditos> actores) {
 
             //AVISARLE AL CONTROLLER QUE SU LISTA DE NOTICIAS ESTA CARGADA
             listenerFromController.finish(actores);

@@ -220,6 +220,9 @@ package com.craps.myapplication.Utils;
             return baseUrl+ "/search/tv?api_key="+ apiKey +"&language="+languaje+"&query="+query+"&page=" +page.toString();
         }
 
+        public static String getCredits(Integer personId, String languaje){
+            return baseUrl+ "/person/"+personId+"/combined_credits?api_key="+ apiKey +"&language="+languaje;
+        }
 
 
     }

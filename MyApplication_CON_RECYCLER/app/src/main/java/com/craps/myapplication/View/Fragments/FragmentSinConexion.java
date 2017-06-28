@@ -92,7 +92,7 @@ public class FragmentSinConexion extends Fragment {
             @Override
             public void finish(List<Formato> resultado) {
 
-                unadapter1.setListaFormatosOriginales(resultado);
+                unadapter1.setListaCreditosOriginales(resultado);
                 lista1=resultado;
                 unadapter1.notifyDataSetChanged();
             }

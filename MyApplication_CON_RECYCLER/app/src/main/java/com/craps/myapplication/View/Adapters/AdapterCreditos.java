@@ -3,6 +3,7 @@ package com.craps.myapplication.View.Adapters;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,23 +13,25 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import com.craps.myapplication.Model.Creditos;
 import com.craps.myapplication.Model.Formato;
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.TMDBHelper;
 import com.craps.myapplication.View.Fragments.FragmentBusqueda;
 import com.squareup.picasso.Picasso;
+
 import java.util.List;
-import android.support.v4.app.FragmentManager;
 
 /**
  * Created by elmar on 18/5/2017.
  */
 
-public class AdapterFormato extends RecyclerView.Adapter implements View.OnClickListener,View.OnLongClickListener {
+public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClickListener,View.OnLongClickListener {
 
     private Context context;
-    private List<Formato> listaFormatosOriginales;
-    private List<Formato> listaFormatosFavoritos;
+    private List<Creditos> listaCreditosOriginales;
+    private List<Creditos> listaCreditosFavoritos;
     private View.OnClickListener listener;
     private AdapterView.OnLongClickListener listenerLong;
     private Favoritable favoritable;
@@ -44,16 +47,16 @@ public class AdapterFormato extends RecyclerView.Adapter implements View.OnClick
         this.context = context;
     }
 
-    public void setListaFormatosOriginales(List<Formato> listaFormatosOriginales) {
-        this.listaFormatosOriginales = listaFormatosOriginales;
+    public void setListaCreditosOriginales(List<Creditos> listaCreditosOriginales) {
+        this.listaCreditosOriginales = listaCreditosOriginales;
     }
-    public void addListaFormatosOriginales(List<Formato> listaFormatosOriginales) {
-        this.listaFormatosOriginales .addAll(listaFormatosOriginales);
+    public void addListaCreditosOriginales(List<Creditos> listaCreditosOriginales) {
+        this.listaCreditosOriginales.addAll(listaCreditosOriginales);
     }
 
 
-    public List<Formato> getListaFormatosOriginales(){
-        return listaFormatosOriginales;
+    public List<Creditos> getListaCreditosOriginales(){
+        return listaCreditosOriginales;
     }
 
     //crear vista y viewholder
@@ -66,12 +69,9 @@ public class AdapterFormato extends RecyclerView.Adapter implements View.OnClick
         FragmentBusqueda fragmentBusqueda= (FragmentBusqueda) fragmentManager.findFragmentByTag("FragmentBuscador");
 
 
-        if (fragmentBusqueda != null && fragmentBusqueda.isVisible()) {
+
             viewCelda = layoutInflater.inflate(R.layout.detalle_celda_busqueda, parent, false);
-        }
-        else{
-            viewCelda = layoutInflater.inflate(R.layout.detalle_celda, parent, false);
-        }
+
         FormatoViewHolder peliculasViewHolder = new FormatoViewHolder(viewCelda);
         viewCelda.setOnClickListener(this);
 
@@ -80,22 +80,16 @@ public class AdapterFormato extends RecyclerView.Adapter implements View.OnClick
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        final Formato unFormato = listaFormatosOriginales.get(position);
-        FormatoViewHolder formatoViewHolder = (FormatoViewHolder) holder;
-        formatoViewHolder.cargarFormato(unFormato);
+        final Creditos unCredito = listaCreditosOriginales.get(position);
+        FormatoViewHolder creditoViewHolder = (FormatoViewHolder) holder;
+        creditoViewHolder.cargarFormato(unCredito);
 
-        formatoViewHolder.imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                favoritable=(Favoritable)v.getContext();
-                favoritable.recibirFormatoFavorito(unFormato);
-            }
-        });
+
     }
 
     @Override
     public int getItemCount() {
-        return listaFormatosOriginales.size();
+        return listaCreditosOriginales.size();
     }
 
     @Override
@@ -123,8 +117,10 @@ public class AdapterFormato extends RecyclerView.Adapter implements View.OnClick
         public FormatoViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.peli_img_celda);
-            imageButton=(ImageButton) itemView.findViewById(R.id.boton_favo);
-            ratingBar = (RatingBar) itemView.findViewById(R.id.ratingbar);
+            textViewTitulo =(TextView) itemView.findViewById(R.id.peli_texto_celda);
+            textViewDescripcion=(TextView) itemView.findViewById(R.id.detalleBusqueda);
+
+
 
             FragmentActivity unaActivity= (FragmentActivity) itemView.getContext();
             FragmentManager fragmentManager = (FragmentManager) unaActivity.getSupportFragmentManager();
@@ -140,23 +136,28 @@ public class AdapterFormato extends RecyclerView.Adapter implements View.OnClick
             }
         }
 
-        public void cargarFormato(Formato unFormato) {
+        public void cargarFormato(Creditos unCredito) {
 
-            ratingBar.setRating(unFormato.getVote_average()/2);
-            if (textViewTitulo !=null){
-                textViewDescripcion.setText(unFormato.getOverview());
-                if (unFormato.getTitle()==null){
-                    textViewTitulo.setText(unFormato.getName());
+
+                if (unCredito.getTitle()==null || unCredito.getTitle().isEmpty()) {
+                    if (unCredito.getOriginal_name() == null) {
+                    } else {
+                        textViewTitulo.setText(unCredito.getOriginal_name());
+                    }
                 }
-                else{
-                    textViewTitulo.setText(unFormato.getTitle());
-
+                else {
+                    if (unCredito.getOriginal_title() == null) {
+                    }
+                    else {
+                        textViewTitulo.setText(unCredito.getOriginal_title());
+                    }
                 }
+                textViewDescripcion.setText(unCredito.getCharacter());
 
-            }
+
 
             Picasso.with(imageView.getContext())
-                    .load(TMDBHelper.getImagePoster(TMDBHelper.IMAGE_SIZE_W92,unFormato.getPoster_path()))
+                    .load(TMDBHelper.getImagePoster(TMDBHelper.IMAGE_SIZE_W92,unCredito.getPoster_path()))
                     .placeholder(R.drawable.loading)
                     .error(R.drawable.noimagethumb)
                     .into(imageView);
@@ -166,6 +167,6 @@ public class AdapterFormato extends RecyclerView.Adapter implements View.OnClick
     }
 
     public interface Favoritable{
-        public void recibirFormatoFavorito(Formato unFormato);
+        public void recibirFormatoFavorito(Creditos unCredito);
     }
 }

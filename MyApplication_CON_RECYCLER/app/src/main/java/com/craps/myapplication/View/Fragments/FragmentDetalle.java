@@ -6,12 +6,10 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +32,6 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 /**
@@ -72,8 +69,8 @@ public class FragmentDetalle extends Fragment {
     public FragmentDetalle() {
         // Required empty public constructor
     }
-
     private Notificable notificable;
+    private Actorable actorable;
 
     private Boolean isLoading=false;
 
@@ -92,6 +89,9 @@ public class FragmentDetalle extends Fragment {
     //DECLARO INTERFAZ
     public interface Notificable {
         public void recibirFormatoClickeado(Formato formato,String origen, Integer pagina, String StringABuscar, Integer drawerId);
+    }
+    public interface Actorable{
+        public void recibirActorClickeado(Actor unActor);
     }
 
     @Override
@@ -151,6 +151,21 @@ public class FragmentDetalle extends Fragment {
             }, id);
         }
 
+        //listener clickeo actores
+        View.OnClickListener listenerActore= new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Integer posicion = recyclerActores.getChildAdapterPosition(v);
+                List < Actor > listaActoresOriginales = adapterActores.getListaActoresOriginales();
+                Actor actorClickeado = listaActoresOriginales.get(posicion);
+                actorable.recibirActorClickeado(actorClickeado);
+            }
+        };
+        adapterActores.setListener(listenerActore);
+
+
+
+
         //RECYCLER SIMILARES
         recyclerSimilares=(RecyclerView) view.findViewById(R.id.recycler_Similares);
         layoutManagerDetalle= new LinearLayoutManager(view.getContext(),LinearLayoutManager.HORIZONTAL,false);
@@ -194,8 +209,6 @@ public class FragmentDetalle extends Fragment {
 
         //Datos
 
-
-
         TextView textonombre=(TextView)view.findViewById(R.id.tag_nombre2);
         TextView textoaño=(TextView)view.findViewById(R.id.tag_año2);
         TextView textosinopsis=(TextView)view.findViewById(R.id.tag_sinopsis2);
@@ -209,7 +222,6 @@ public class FragmentDetalle extends Fragment {
                 .error(R.drawable.noimagedetalle)
                 .into(imageButton);
 
-
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,15 +232,6 @@ public class FragmentDetalle extends Fragment {
                 startActivity(intent);
             }
         });
-
-       /* FloatingActionButton floatingActionButton=(FloatingActionButton) view.findViewById(R.id.fab_trailer);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Ver el trailer", Toast.LENGTH_SHORT).show();
-            }
-        });
-        */
 
         if (formatoAMostrar.equals("series")){
             textonombre.setText(nombre);
@@ -295,8 +298,6 @@ public class FragmentDetalle extends Fragment {
                 unFormato.setVote_average(calificacion);
                 unFormato.setBackdrop_path(backdrop);
                 unFormato.setPoster_path(posterId);
-
-
                 favoritable.eliminarFormatoFavorito(unFormato);
             }
         });
@@ -364,13 +365,9 @@ public class FragmentDetalle extends Fragment {
         return view;
     }
 
-
     public void pedirPaginaSimilares(){
-
-
         if (controllerFragmentDetalle.isPageAvailable()) {
             isLoading = true;
-
             if (formatoAMostrar.equals("peliculas")) {
                 controllerFragmentDetalle.obtenerPeliculasRelacionadas(new ResultListener<List<Formato>>() {
                     @Override
@@ -380,12 +377,10 @@ public class FragmentDetalle extends Fragment {
                         isLoading = false;
                     }
                 },id);
-
             } else {
                 controllerFragmentDetalle.obtenerSeriesRelacionadas(new ResultListener<List<Formato>>() {
                     @Override
                     public void finish(List<Formato> resultado) {
-
                         adapterSimilares.addListaFormatosOriginales(resultado);
                         adapterSimilares.notifyDataSetChanged();
                         isLoading = false;
@@ -418,7 +413,6 @@ public class FragmentDetalle extends Fragment {
         unBundle.putString(POSTERID, unFormato.getPoster_path());
         unBundle.putFloat(CALIFICACION, unFormato.getVote_average());
         unBundle.putInt(ID, unFormato.getId());
-
         detalleFragment.setArguments(unBundle);
         return detalleFragment;
     }
@@ -427,5 +421,6 @@ public class FragmentDetalle extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.notificable=(Notificable)context;
+        this.actorable=(Actorable)context;
     }
 }
