@@ -1,9 +1,11 @@
 package com.craps.myapplication.View.Activities;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 import com.craps.myapplication.ControllerFormato.ControllerFormato;
 import com.craps.myapplication.Model.Actor;
@@ -48,6 +50,17 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_segunda);
+
+        // PABLO 1/1A
+        // CREO EL APPBAR.
+        Toolbar toolbar = (Toolbar) findViewById(R.id.ABappBar);
+        setSupportActionBar(toolbar);
+
+        // MUESTRO EL BOTON DE VOLVER ATRAS.
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        // PABLO 1/1C
 
         //RECIBO BUNDLE Y BUSCO PELICULA CLICKEADA
         Intent unIntent = getIntent();

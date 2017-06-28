@@ -8,15 +8,21 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -51,6 +57,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
     private ControllerFormato controllerFormato;
     //isLoading Paginacion
     private Boolean isLoading;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
     //PABLO 1/4A (VER LAYOUT HEADER Y ACTIVITY MAIN)
     public static final String USUARIO = "usuario";
@@ -109,14 +116,20 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
 
 
 
-        //LE DIGO LA ACTION BAR QUE USE EL LAYOUT CUSTOM
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.action_bar_layout_busqueda);
-        editBusqueda = (EditText) findViewById(R.id.edit_action_buscador);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.ABappBar);
+        setSupportActionBar(toolbar);
+
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
 
         // CASTEO EDITTEXT
 
-        editBusqueda.setTypeface(roboto);
+       /* editBusqueda.setTypeface(roboto);
 
         //CASTEO EL FAB Y AGREGO EL LISTENER
         floatingActionButton = (FloatingActionButton) findViewById(R.id.fab_action_buscador);
@@ -144,6 +157,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
                 hideSoftKeyboard();
             }
         });
+        */
 
         // LISTENER PARA EL NAVIGATION MENU
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -282,6 +296,42 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
         finish();
         Intent unIntent = new Intent(this, ActivityLogin.class);
         startActivity(unIntent);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String text) {
+                if (HTTPConnectionManager.isNetworkingOnline(ActivityMain.this)) {
+                    if (text.toLowerCase() == null || text.toLowerCase().isEmpty()) {
+                        //pedirListaBuscada(TMDBHelper.getPopularMovies(TMDBHelper.language_SPANISH, 1));
+                    } else {
+                        //pedirListaBuscada(text.toLowerCase());
+                        if (login == false && tabLayout.getSelectedTabPosition() == 2) {
+                        } else {
+                            pedirListaBuscada(text.toLowerCase(), 0);
+                        }
+                    }
+                }
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String text) {
+                return false;
+            }
+        });
+        return true;
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle.syncState();
     }
 
     public void cargarFragmentSinConexion() {
