@@ -100,7 +100,7 @@ public class FragmentBusqueda extends Fragment {
                 } else {
                     tipoFormato = "pelicula";
                 }
-                Integer pagina= controllerBusquedaFormatos.getNumeroPagina();
+                Integer pagina= (int) Math.ceil((posicion+1)/20.0);
                 if (drawerId==null || drawerId==0) {
                     notificable.recibirFormatoClickeado(formatoClickeado, "busqueda", pagina, stringABuscar, 0);
                 }
@@ -153,6 +153,7 @@ public class FragmentBusqueda extends Fragment {
                                 isLoading = false;
                             }
                         }, stringABuscar);
+                    break;
 
                     case 1:
                         controllerBusquedaFormatos.buscarSerie(new ResultListener<List<Formato>>() {
@@ -164,7 +165,7 @@ public class FragmentBusqueda extends Fragment {
                                 isLoading = false;
                             }
                         }, stringABuscar);
-
+                    break;
                     case 2:
                         controllerBusquedaFormatos.buscarFavoritos(new ResultListener<List<Formato>>() {
                             @Override
@@ -175,10 +176,8 @@ public class FragmentBusqueda extends Fragment {
 
                             }
                         }, stringABuscar);
-
+                    break;
                 }
-
-
             }
         }
         else {

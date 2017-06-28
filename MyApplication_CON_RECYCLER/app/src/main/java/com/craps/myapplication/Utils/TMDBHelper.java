@@ -184,8 +184,8 @@ package com.craps.myapplication.Utils;
             return baseUrl + "/tv/"+tvShow+"?api_key=" +apiKey +"&language="+language;
         }
 
-        public static String getTVShowRecomendedForTVShow(String tvShow,String language, Integer page){
-            return baseUrl + "/tv/"+tvShow+"/recomendations?api_key=" +apiKey +"&language="+language+"&page="+page.toString();
+        public static String getTVShowRecomendedForTVShow(Integer tvShow,String language, Integer page){
+            return baseUrl + "/tv/"+tvShow+"/similar?api_key=" +apiKey +"&language="+language+"&page="+page.toString();
         }
 
         public static String getTVPopular(String language, Integer page){

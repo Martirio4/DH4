@@ -175,8 +175,9 @@ public class FragmentDetalle extends Fragment {
                 notificable.recibirFormatoClickeado(formatoClickeado, "self",pagina,"nulo",0);
             }
         };
+       adapterSimilares.setListener(listenerDetalle);
 
-       recyclerSimilares.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerSimilares.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);

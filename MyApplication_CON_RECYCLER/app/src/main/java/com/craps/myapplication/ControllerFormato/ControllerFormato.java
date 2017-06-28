@@ -433,7 +433,7 @@ public class ControllerFormato {
 
         if (HTTPConnectionManager.isNetworkingOnline(context)) {
             DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
-            daoFormatoInternet.ObtenerPeliculasRelacionadas(new ResultListener<List<Formato>>() {
+            daoFormatoInternet.ObtenerSeriesRelacionadas(new ResultListener<List<Formato>>() {
                 @Override
                 public void finish(List<Formato> unaPagina) {
 
@@ -586,14 +586,19 @@ public class ControllerFormato {
         switch (id){
             case R.id.peliMasVista:
                obtenerPeliculasPopulares(listenerFromView);
+            break;
             case R.id.serieMasVista:
                 obtenerSeriesMasValoradas(listenerFromView);
+            break;
             case R.id.animacion:
                 obtenerPeliculasPorGenero(listenerFromView, TMDBHelper.MOVIE_GENRE_ANIMATION);
+            break;
             case R.id.documentales:
                 obtenerSeriesPorGenero(listenerFromView,TMDBHelper.TV_GENRE_DOCUMENTARY);
+            break;
             case R.id.seriesHoy:
                 obtenerSeriesEnCartel(listenerFromView);
+            break;
         }
     }
 

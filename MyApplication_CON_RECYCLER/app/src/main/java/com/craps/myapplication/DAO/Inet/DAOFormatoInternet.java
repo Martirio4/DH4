@@ -152,7 +152,7 @@ public class DAOFormatoInternet {
     //BUSCAR PELICULAS RELACIONADAS
     public void ObtenerSeriesRelacionadas(ResultListener<List<Formato>> listenerFromController,Integer idSerie, Integer numeroPagina){
 
-        urlParaAsyncTask= TMDBHelper.getSimilarMovies(idSerie,idiomaDeLaSesion,numeroPagina);
+        urlParaAsyncTask= TMDBHelper.getTVShowRecomendedForTVShow(idSerie,idiomaDeLaSesion,numeroPagina);
         //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
         ObtenerListadoDeFormatosTask tarea = new ObtenerListadoDeFormatosTask();
         tarea.setListenerFromController(listenerFromController);
