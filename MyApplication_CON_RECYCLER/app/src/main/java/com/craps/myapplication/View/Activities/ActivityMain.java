@@ -332,10 +332,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
 
     }
 
-    @Override
-    public void recibirFavoritoClickeado(Formato formato) {
 
-    }
 
 
     @Override

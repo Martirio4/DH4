@@ -82,12 +82,9 @@ public class ControllerFormato {
 
     public List<String> recibirListaFormatos() {
         DAOArchivo DAOArchivo = new DAOArchivo();
-        if (HTTPConnectionManager.isNetworkingOnline(context)){
+
             return DAOArchivo.cargarTipoFormato();
-        }
-        else {
-            return DAOArchivo.cargarTipoFormatoOffline();
-        }
+
     }
 
     public List<String> recibirCategorias() {
@@ -112,7 +109,10 @@ public class ControllerFormato {
         }
 
         else {
-            Toast.makeText(context, "no hay resultados", Toast.LENGTH_SHORT).show();
+            Activity unaActivity = (Activity) context;
+            View view = (View) unaActivity.findViewById(R.id.detalle_contenedor_fragment);
+            Snackbar.make(view, "No se encontraron actores, revise su conexión a internet", Snackbar.LENGTH_SHORT)
+                    .show();
         }
 
     }
@@ -133,7 +133,10 @@ public class ControllerFormato {
         }
 
         else {
-            Toast.makeText(context, "no hay resultados", Toast.LENGTH_SHORT).show();
+            Activity unaActivity = (Activity) context;
+            View view = (View) unaActivity.findViewById(R.id.detalle_contenedor_fragment);
+            Snackbar.make(view, "No se encontraron actores, revise su conexión a internet", Snackbar.LENGTH_SHORT)
+                    .show();
         }
 
     }
@@ -167,7 +170,7 @@ public class ControllerFormato {
         }
         else{
             DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.busquedaPorVotoPeliculas();
             listenerFromView.finish(listaFormatosOffline);
         }
     }
@@ -196,7 +199,7 @@ public class ControllerFormato {
         }
         else{
             DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.busquedaPorVotoSerie();
             listenerFromView.finish(listaFormatosOffline);
         }
     }
@@ -254,7 +257,7 @@ public class ControllerFormato {
         }
         else{
             DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.busquedaPorPresupuestoPeliculas();
             listenerFromView.finish(listaFormatosOffline);
         }
     }
@@ -283,7 +286,7 @@ public class ControllerFormato {
         }
         else{
             DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.busquedaPorPresupuestoSerie();
             listenerFromView.finish(listaFormatosOffline);
         }
     }
@@ -510,11 +513,11 @@ public class ControllerFormato {
 
     }*/
 
-    public void obtenerFavoritos(final ResultListener<List<Formato>> listenerFromView, String usuario) {
+    public void obtenerFavoritos(final ResultListener<List<Formato>> listenerFromView) {
             //SI NO HAY CONEXION UTILIZO LOS DATOS ALMACENADOS EN LA BASE DE DATOS. Para pedir los datos almacenados en la
             // Base de datos utilizo el DAOPersonDatabase.
             DAOFavoritosDatabase daoFavoritosDatabase = new DAOFavoritosDatabase(context);
-            List<Formato> formatos = daoFavoritosDatabase.getAllFormatos(usuario);
+            List<Formato> formatos = daoFavoritosDatabase.getAllFormatos(ActivityMain.usuario);
             listenerFromView.finish(formatos);
     }
 

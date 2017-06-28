@@ -86,10 +86,6 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                 adapterPagerDetalle.notifyDataSetChanged();
             }
         });
-
-
-
-
     }
 
     public void pedirListaSegunOrigen(){
@@ -112,8 +108,31 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
             case"self":
                 pedirPaginaSimilares();
                 break;
+            case "favoritos":
+                pedirPaginaFavoritos();
+                break;
         }
     }
+
+
+    public void pedirPaginaFavoritos(){
+        controllerDetalle.obtenerFavoritos(new ResultListener<List<Formato>>() {
+            @Override
+            public void finish(List<Formato> resultado) {
+                adapterPagerDetalle.setListaFormatos(resultado);
+                listaFormatos=resultado;
+                for (Formato unFormato:listaFormatos
+                     ) {
+                    if (unFormato.getId().equals(idFormato)){
+                        viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                    }
+
+                }
+
+            }
+        });
+    }
+
 
     public void pedirPaginaSimilares(){
         if (controllerDetalle.isPageAvailable()) {

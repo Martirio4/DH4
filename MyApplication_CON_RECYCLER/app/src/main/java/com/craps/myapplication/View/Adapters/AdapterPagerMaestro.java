@@ -41,7 +41,7 @@ public class AdapterPagerMaestro extends FragmentStatePagerAdapter {
 
         //LE CARGO LOS FRAGMENTS QUE QUIERO. UTILIZO LA LISTA DE PELICULAS Y SERIES PARA CREAR LOS FRAGMENTS.
 
-        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+        //if (HTTPConnectionManager.isNetworkingOnline(context)) {
             for (String unString : listaFragmentMain) {
                 if (unString.equals("favoritos")){
                     if (ActivityMain.login==true) {
@@ -55,11 +55,11 @@ public class AdapterPagerMaestro extends FragmentStatePagerAdapter {
                     listaContenedoresMaestros.add(FragmentMain.crearFragmentMaestro(unString));
                 }
             }
-        }
-        else{
-                listaContenedoresMaestros.add(FragmentSinConexion.crearFragmentMaestro());
-                listaContenedoresMaestros.add(FragmentFavoritos.crearFragmentMaestro());
-        }
+        //}
+        //else{
+               // listaContenedoresMaestros.add(FragmentSinConexion.crearFragmentMaestro());
+               // listaContenedoresMaestros.add(FragmentFavoritos.crearFragmentMaestro());
+        //}
 
         //LE AVISO AL ADAPTER QUE CAMBIO SU LISTA DE FRAGMENTS.
         notifyDataSetChanged();

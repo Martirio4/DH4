@@ -1,13 +1,9 @@
 package com.craps.myapplication.View.Fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,12 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.craps.myapplication.ControllerFormato.ControllerFormato;
 import com.craps.myapplication.Model.Formato;
 import com.craps.myapplication.R;
-import com.craps.myapplication.Utils.HTTPConnectionManager;
 import com.craps.myapplication.Utils.ResultListener;
 import com.craps.myapplication.View.Activities.ActivityMain;
 import com.craps.myapplication.View.Adapters.AdapterFormato;
@@ -31,14 +25,15 @@ import java.util.List;
 
 
 public class FragmentFavoritos extends Fragment {
-    private AdapterFormato unadapter1;
+    private AdapterFormato adapterFavoritos;
     private Notificable notificable;
     private List<Formato> lista1;
     private ControllerFormato controllerFormato;
     //DECLARO INTERFAZ
+
     public interface Notificable {
-        public void recibirFormatoClickeado(Formato formato, String url);
-        public void recibirFavoritoClickeado(Formato formato);
+        public void recibirFormatoClickeado(Formato formato,String origen, Integer pagina, String StringABuscar, Integer drawerId);
+
 
     }
 
@@ -62,8 +57,8 @@ public class FragmentFavoritos extends Fragment {
 
         recycler1.setHasFixedSize(true);
         recycler1.setLayoutManager(new GridLayoutManager(view.getContext(),3));
-        unadapter1 = new AdapterFormato();
-        unadapter1.setContext(view.getContext());
+        adapterFavoritos = new AdapterFormato();
+        adapterFavoritos.setContext(view.getContext());
 
         //AGREGO LISTENER DE CLICKEO DE PELICULAS
         View.OnClickListener listener1 = new View.OnClickListener() {
@@ -71,15 +66,15 @@ public class FragmentFavoritos extends Fragment {
             public void onClick(View view) {
                 //ESTO SE UTILIZA PARA OBTENER LA POSITION DE LO QUE FUE CLICKEADO.
                 Integer posicion = recycler1.getChildAdapterPosition(view);
-                List< Formato > listaPeliculasOriginales = unadapter1.getListaFormatosOriginales();
+                List< Formato > listaPeliculasOriginales = adapterFavoritos.getListaFormatosOriginales();
                 Formato formatoClickeado = listaPeliculasOriginales.get(posicion);
-                notificable.recibirFormatoClickeado(formatoClickeado, null);
+                notificable.recibirFormatoClickeado(formatoClickeado,"favoritos",1,"nulo", 0);
             }
         };
 
 
-        unadapter1.setListener(listener1);
-        recycler1.setAdapter(unadapter1);
+        adapterFavoritos.setListener(listener1);
+        recycler1.setAdapter(adapterFavoritos);
 
         //cargar datos
 
@@ -90,14 +85,14 @@ public class FragmentFavoritos extends Fragment {
             @Override
             public void finish(List<Formato> resultado) {
 
-                unadapter1.setListaFormatosOriginales(resultado);
+                adapterFavoritos.setListaFormatosOriginales(resultado);
                 lista1=resultado;
-                unadapter1.notifyDataSetChanged();
+                adapterFavoritos.notifyDataSetChanged();
             }
-        },ActivityMain.usuario);
+        });
 
-        unadapter1.setListaFormatosOriginales(lista1);
-        unadapter1.notifyDataSetChanged();
+        adapterFavoritos.setListaFormatosOriginales(lista1);
+        adapterFavoritos.notifyDataSetChanged();
 
 
         TextView tituloR1 = (TextView) view.findViewById(R.id.texto_titulo_sinconexion);
