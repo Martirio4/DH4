@@ -5,6 +5,7 @@ package com.craps.myapplication.Utils;
     public class TMDBHelper {
 
         private static String apiKey = "58258ed803227d3e65563dd938fa2677";
+        public static final String DEVELOPER_KEY="AIzaSyB5mPI-JcBDcyZlu40yG1dkPUq2V7ydqSo";
         private static String baseUrl = "https://api.themoviedb.org/3";
         private static String imgBaseUrl="http://image.tmdb.org/t/p/";
 

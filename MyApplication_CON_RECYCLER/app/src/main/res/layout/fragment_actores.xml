@@ -164,6 +164,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/tabTexto"
                 android:layout_marginRight="@dimen/tabTexto"
+                android:clickable="false"
                 android:id="@+id/recycler_participacion"
                 >
 

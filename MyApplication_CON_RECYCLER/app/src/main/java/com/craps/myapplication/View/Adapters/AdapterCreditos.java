@@ -94,7 +94,7 @@ public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClic
 
     @Override
     public void onClick(View view) {
-        listener.onClick(view);
+        //listener.onClick(view);
     }
 
     @Override

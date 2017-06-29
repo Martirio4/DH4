@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,9 @@ import com.craps.myapplication.Utils.TMDBHelper;
 import com.craps.myapplication.View.Activities.ActivityPoster;
 import com.craps.myapplication.View.Adapters.AdapterActores;
 import com.craps.myapplication.View.Adapters.AdapterFormato;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.squareup.picasso.Picasso;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -33,6 +37,8 @@ import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.craps.myapplication.Utils.TMDBHelper.DEVELOPER_KEY;
 
 /**
  *
@@ -86,6 +92,8 @@ public class FragmentDetalle extends Fragment {
     private String formatoAMostrar;
 
 
+
+
     //DECLARO INTERFAZ
     public interface Notificable {
         public void recibirFormatoClickeado(Formato formato,String origen, Integer pagina, String StringABuscar, Integer drawerId);
@@ -100,6 +108,8 @@ public class FragmentDetalle extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.onclick_detalle, container, false);
+
+        YouTubePlayerSupportFragment mYouTubeFragment = YouTubePlayerSupportFragment.newInstance();
 
 //    RECIBO EL BUNDLE Y SACVO LOS DATOS, LOS PONGO EN LOS TEXTVIEWS
         Bundle unBundle= getArguments();
@@ -221,6 +231,41 @@ public class FragmentDetalle extends Fragment {
                 .placeholder(R.drawable.loading2)
                 .error(R.drawable.noimagedetalle)
                 .into(imageButton);
+
+        android.support.v4.app.FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.youtubeplayercontainer,mYouTubeFragment).commit();
+
+        mYouTubeFragment.initialize(DEVELOPER_KEY, new YouTubePlayer.OnInitializedListener() {
+            @Override
+            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
+
+                if(!wasRestored){
+                    youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
+                    youTubePlayer.loadVideo("kR3GfBmZfgM");
+
+                    youTubePlayer.play();
+                }
+
+            }
+
+            @Override
+            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult errorReason) {
+
+                String errorMessage = errorReason.toString();
+                Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+                Log.d("errorMessage:", errorMessage);
+
+
+//                if(errorReason.isUserRecoverableError()){
+//            errorReason.getErrorDialog(ActivitySegunda.thi,RECOVERY_DIALOG_REQUEST).show();
+//        }else{
+//            String errorMessage = String.format(
+//                    "There was an error initializing the Youtube Player (%1$s)",
+//                    errorReason.toString());
+//            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override

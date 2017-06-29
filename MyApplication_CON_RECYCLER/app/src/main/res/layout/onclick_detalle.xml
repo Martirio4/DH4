@@ -144,6 +144,8 @@
                 android:id="@+id/tag_sinopsis2"
                 android:textColor="@color/marfil"
                 android:layout_marginBottom="30sp"/>
+
+
             <android.support.v7.widget.RecyclerView
                 android:layout_width="wrap_content"
                 android:layout_height="350dp"
@@ -156,9 +158,22 @@
 
             </android.support.v7.widget.RecyclerView>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recycler_actores"
+                android:textSize="@dimen/detalle_texto_tags"
+                android:text="RELACIONADOS"
+                android:textColor="@color/paleta4"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                android:id="@+id/titulo_similares"
+                android:layout_marginLeft="@dimen/tabTexto"
+                />
+
             <android.support.v7.widget.RecyclerView
                 android:layout_width="wrap_content"
-                android:layout_below="@id/recycler_actores"
+                android:layout_below="@id/titulo_similares"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/tabTexto"
                 android:layout_marginRight="@dimen/tabTexto"
@@ -166,6 +181,13 @@
                 >
 
             </android.support.v7.widget.RecyclerView>
+
+            <FrameLayout
+                android:id="@+id/youtubeplayercontainer"
+                android:layout_below="@id/recycler_Similares"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:orientation="vertical"/>
 
 
         </RelativeLayout>
