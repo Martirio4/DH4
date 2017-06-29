@@ -197,7 +197,7 @@ package com.craps.myapplication.Utils;
             return baseUrl + "/tv/on_the_air?api_key=" +apiKey +"&language="+language+"&page="+page.toString();
         }
 
-        public static String getTVShowVideo(String language, String tvShowId){
+        public static String getTVShowVideo(String language, Integer tvShowId){
             return baseUrl + "/tv/"+tvShowId+"/videos?api_key=" +apiKey +"&language="+language;
         }
 

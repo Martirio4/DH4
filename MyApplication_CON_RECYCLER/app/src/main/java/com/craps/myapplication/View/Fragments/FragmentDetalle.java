@@ -21,10 +21,12 @@ import android.widget.Toast;
 import com.craps.myapplication.ControllerFormato.ControllerFormato;
 import com.craps.myapplication.Model.Actor;
 import com.craps.myapplication.Model.Formato;
+import com.craps.myapplication.Model.Trailer;
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.ResultListener;
 import com.craps.myapplication.Utils.TMDBHelper;
 import com.craps.myapplication.View.Activities.ActivityPoster;
+import com.craps.myapplication.View.Activities.ActivitySegunda;
 import com.craps.myapplication.View.Adapters.AdapterActores;
 import com.craps.myapplication.View.Adapters.AdapterFormato;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -90,6 +92,7 @@ public class FragmentDetalle extends Fragment {
     protected String backdrop;
     protected String posterId;
     private String formatoAMostrar;
+    private YouTubePlayer youTubePlayerP;
 
 
 
@@ -99,7 +102,7 @@ public class FragmentDetalle extends Fragment {
         public void recibirFormatoClickeado(Formato formato,String origen, Integer pagina, String StringABuscar, Integer drawerId);
     }
     public interface Actorable{
-        public void recibirActorClickeado(Actor unActor);
+        public void recibirActorClickeado(Actor unActor, Integer idFormato, String queFormato);
     }
 
     @Override
@@ -110,6 +113,7 @@ public class FragmentDetalle extends Fragment {
         View view = inflater.inflate(R.layout.onclick_detalle, container, false);
 
         YouTubePlayerSupportFragment mYouTubeFragment = YouTubePlayerSupportFragment.newInstance();
+
 
 //    RECIBO EL BUNDLE Y SACVO LOS DATOS, LOS PONGO EN LOS TEXTVIEWS
         Bundle unBundle= getArguments();
@@ -168,13 +172,10 @@ public class FragmentDetalle extends Fragment {
                 Integer posicion = recyclerActores.getChildAdapterPosition(v);
                 List < Actor > listaActoresOriginales = adapterActores.getListaActoresOriginales();
                 Actor actorClickeado = listaActoresOriginales.get(posicion);
-                actorable.recibirActorClickeado(actorClickeado);
+                actorable.recibirActorClickeado(actorClickeado, id, formatoAMostrar);
             }
         };
         adapterActores.setListener(listenerActore);
-
-
-
 
         //RECYCLER SIMILARES
         recyclerSimilares=(RecyclerView) view.findViewById(R.id.recycler_Similares);
@@ -216,7 +217,6 @@ public class FragmentDetalle extends Fragment {
             }
         });
 
-
         //Datos
 
         TextView textonombre=(TextView)view.findViewById(R.id.tag_nombre2);
@@ -232,20 +232,26 @@ public class FragmentDetalle extends Fragment {
                 .error(R.drawable.noimagedetalle)
                 .into(imageButton);
 
-        android.support.v4.app.FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+       android.support.v4.app.FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.youtubeplayercontainer,mYouTubeFragment).commit();
-
         mYouTubeFragment.initialize(DEVELOPER_KEY, new YouTubePlayer.OnInitializedListener() {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
-
                 if(!wasRestored){
                     youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
-                    youTubePlayer.loadVideo("kR3GfBmZfgM");
+                    youTubePlayerP=youTubePlayer;
 
-                    youTubePlayer.play();
+                    controllerFragmentDetalle.traerTrailers(new ResultListener<List<Trailer>>() {
+                        @Override
+                        public void finish(List<Trailer> resultado) {
+                            youTubePlayerP.loadVideo(resultado.get(0).getClaveVideoYouTube());
+                            youTubePlayerP.play();
+
+                        }
+                    },id, formatoAMostrar);
+
+
                 }
-
             }
 
             @Override
@@ -265,7 +271,9 @@ public class FragmentDetalle extends Fragment {
 //            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
 
             }
+
         });
+
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override

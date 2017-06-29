@@ -30,21 +30,24 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
     public static final String TIPOFORMATO = "TIPOFORMATO";
     public static final String STRINGBUSQUEDA="STRINGBUSQUEDA";
     public static final String DRAWERID="DRAWERID";
+    public static final String CLAVEYOUTUBE="CLAVEYOUTUBE";
 
     private Boolean isLoading=false;
     private List<Formato> listaFormatos;
-
-
+    private Integer idActual;
     private String origenFormato;
     private Integer numeroPagina;
     private Integer idFormato;
     private String tipoFormato;
     private String stringABuscar;
     private Integer drawerId;
+    private String claveYoutube;
 
-    ViewPager viewPagerDetalle;
-    AdapterPagerFormato adapterPagerDetalle;
-    ControllerFormato controllerDetalle;
+    private ViewPager viewPagerDetalle;
+    private AdapterPagerFormato adapterPagerDetalle;
+    private ControllerFormato controllerDetalle;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +58,10 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
         // CREO EL APPBAR.
         Toolbar toolbar = (Toolbar) findViewById(R.id.ABappBar);
         setSupportActionBar(toolbar);
-
         // MUESTRO EL BOTON DE VOLVER ATRAS.
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
-
         // PABLO 1/1C
-
         //RECIBO BUNDLE Y BUSCO PELICULA CLICKEADA
         Intent unIntent = getIntent();
         Bundle unBundle = unIntent.getExtras();
@@ -71,6 +71,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
         tipoFormato=unBundle.getString(TIPOFORMATO);
         stringABuscar=unBundle.getString(STRINGBUSQUEDA);
         drawerId=unBundle.getInt(DRAWERID);
+        claveYoutube=unBundle.getString(CLAVEYOUTUBE);
 
         viewPagerDetalle = (ViewPager) findViewById(R.id.viewPagerDetalle);
         //LE SETEO EL ADAPTER AL VIEW PAGER, EL ADAPTER UTILIZA EL FRAGMENT MANAGER PARA CARGAR FRAGMENT Y LA LISTA DE PELICULAS PARA CREAR LOS FRAGMENTS CORRESPONDIENTES
@@ -81,6 +82,8 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
         controllerDetalle.setNumeroPagina(numeroPagina);
         pedirListaSegunOrigen();
+
+
 
         viewPagerDetalle.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -104,6 +107,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
     }
 
     public void pedirListaSegunOrigen(){
+
         switch (origenFormato){
             case "superior":
                 pedirPaginaRecyclerSuperior();
@@ -140,6 +144,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                      ) {
                     if (unFormato.getId().equals(idFormato)){
                         viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                       
                     }
 
                 }
@@ -163,6 +168,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
                             if (unFormato.getId().equals(idFormato)) {
                                 viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                               
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
@@ -181,6 +187,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
                             if (unFormato.getId().equals(idFormato)) {
                                 viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                               
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
@@ -207,6 +214,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                             if (formato.getId().equals(unFormato.getId())) {
 
                                 viewPagerDetalle.setCurrentItem(resultado.indexOf(unFormato)+(adapterPagerDetalle.getCount()-21));
+                               
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
@@ -226,6 +234,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                             if (formato.getId().equals(unFormato.getId())) {
 
                                 viewPagerDetalle.setCurrentItem(resultado.indexOf(unFormato)+(adapterPagerDetalle.getCount()-21));
+                               
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
@@ -251,6 +260,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
                             if (unFormato.getId().equals(idFormato)) {
                                 viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                               
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
@@ -267,6 +277,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
                             if (unFormato.getId().equals(idFormato)) {
                                 viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                               
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
@@ -291,6 +302,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
                             if (unFormato.getId().equals(idFormato)) {
                                 viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                               
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
@@ -307,6 +319,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
                             if (unFormato.getId().equals(idFormato)) {
                                 viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                               
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
@@ -331,6 +344,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
                             if (unFormato.getId().equals(idFormato)) {
                                 viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                               
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
@@ -347,6 +361,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
                             if (unFormato.getId().equals(idFormato)) {
                                 viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                               
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
@@ -371,6 +386,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
                        if (unFormato.getId().equals(idFormato)) {
                            viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                          
                        }
                    }
                    adapterPagerDetalle.notifyDataSetChanged();
@@ -397,6 +413,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
                                 if (unFormato.getId().equals(idFormato)) {
                                     viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                                   
                                 }
                             }
                             adapterPagerDetalle.notifyDataSetChanged();
@@ -416,6 +433,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
                                 if (unFormato.getId().equals(idFormato)) {
                                     viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                                   
                                 }
                             }
                             adapterPagerDetalle.notifyDataSetChanged();
@@ -433,6 +451,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
                                 if (unFormato.getId().equals(idFormato)) {
                                     viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                                   
                                 }
                             }
                             adapterPagerDetalle.notifyDataSetChanged();
@@ -443,25 +462,6 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                 break;
             }
         }
-    }
-
-
-    public void reemplazarFragmentDetalle(Formato formato, String origen, Integer numeroPagina,String stringABuscar, Integer drawerId) {
-        Intent unIntent = new Intent(this, ActivitySegunda.class);
-        Bundle unBundle = new Bundle();
-        unBundle.putString(ActivitySegunda.ORIGEN, origen);
-        unBundle.putInt(ActivitySegunda.IDFORMATO, formato.getId());
-        unBundle.putInt(ActivitySegunda.PAGINA, numeroPagina);
-        unBundle.putString(ActivitySegunda.STRINGBUSQUEDA, stringABuscar);
-        unBundle.putInt(ActivitySegunda.DRAWERID, drawerId);
-        if (formato.getTitle()==null||formato.getTitle().isEmpty()){
-            unBundle.putString(ActivitySegunda.TIPOFORMATO, "series");
-        }
-        else{
-            unBundle.putString(ActivitySegunda.TIPOFORMATO, "peliculas");
-        }
-        unIntent.putExtras(unBundle);
-        startActivity(unIntent);
     }
 
 
@@ -504,10 +504,13 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
     }
 
     @Override
-    public void recibirActorClickeado(Actor unActor) {
+    public void recibirActorClickeado(Actor unActor, Integer idFormato, String queFormato) {
         Intent unIntent = new Intent(this, ActivityActores.class);
         Bundle bundle= new Bundle();
+
         bundle.putInt(ActivityActores.ACTORID, unActor.getId());
+        bundle.putInt(ActivityActores.FORMATOID, idFormato);
+        bundle.putString(ActivityActores.QUEFORMATO, queFormato);
 
         unIntent.putExtras(bundle);
         startActivity(unIntent);

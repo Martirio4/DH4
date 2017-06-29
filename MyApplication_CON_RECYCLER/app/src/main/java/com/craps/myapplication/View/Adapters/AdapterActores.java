@@ -29,15 +29,12 @@ public class AdapterActores extends RecyclerView.Adapter implements View.OnClick
     private List<Actor> listaActoresOriginales;
     private View.OnClickListener listener;
     private Favoritable favoritable;
-    
     public void setListener(View.OnClickListener listener){
         this.listener=listener;
     }
-
     public void setContext(Context context) {
         this.context = context;
     }
-
     public void setListaActoresOriginales(List<Actor> listaActoresOriginales) {
         this.listaActoresOriginales = listaActoresOriginales;
     }
@@ -56,30 +53,22 @@ public class AdapterActores extends RecyclerView.Adapter implements View.OnClick
         //ACA AGREGO EL LONG CLICK?!=!=!"="?=!"
         return actoresViewHolder;
     }
-
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final Actor unActor = listaActoresOriginales.get(position);
         FormatoViewHolder formatoViewHolder = (FormatoViewHolder) holder;
         formatoViewHolder.cargarActor(unActor);
-
-
     }
-
     @Override
     public int getItemCount() {
         return listaActoresOriginales.size();
     }
-
     @Override
     public void onClick(View view) {
         listener.onClick(view);
     }
-
-
     //creo el viewholder que mantiene las referencias
     //de los elementos de la celda
-
     private static class FormatoViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
         //private TextView textViewTitulo;
@@ -94,14 +83,10 @@ public class AdapterActores extends RecyclerView.Adapter implements View.OnClick
             textViewNombreActor = (TextView) itemView.findViewById(R.id.peli_texto_celda);
             textViewNombrePersonaje = (TextView) itemView.findViewById(R.id.detalleBusqueda);
 
-
             Typeface roboto = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
             textViewNombreActor.setTypeface(roboto);
             textViewNombrePersonaje.setTypeface(roboto);
-
-
         }
-
         public void cargarActor(Actor unActor) {
 
             textViewNombreActor.setText(unActor.getNombreActor());
@@ -113,8 +98,6 @@ public class AdapterActores extends RecyclerView.Adapter implements View.OnClick
                     .error(R.drawable.noimagethumb)
                     .into(imageView);
         }
-
-
     }
 
     public interface Favoritable{

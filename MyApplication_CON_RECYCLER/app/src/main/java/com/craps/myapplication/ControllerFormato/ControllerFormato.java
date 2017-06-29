@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.support.v4.media.MediaBrowserServiceCompat;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import com.craps.myapplication.DAO.Inet.DAOFormatoInternet;
 import com.craps.myapplication.Model.Actor;
 import com.craps.myapplication.Model.Creditos;
 import com.craps.myapplication.Model.Formato;
+import com.craps.myapplication.Model.Trailer;
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.HTTPConnectionManager;
 import com.craps.myapplication.Utils.ResultListener;
@@ -668,4 +670,36 @@ public class ControllerFormato {
 
         }
     }
+
+    public void traerTrailers(final ResultListener<List<Trailer>> listenerFromView, Integer formatoId, String tipoFormato){
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+            DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
+            if (tipoFormato.equals("series")) {
+                daoFormatoInternet.obtenerTrailerPeliculas(new ResultListener<List<Trailer>>() {
+                    @Override
+                    public void finish(List<Trailer> unaPagina) {
+
+
+                        listenerFromView.finish(unaPagina);
+
+                    }
+                }, formatoId);
+            }
+            else{
+                daoFormatoInternet.obtenerTrailerPeliculas(new ResultListener<List<Trailer>>() {
+                    @Override
+                    public void finish(List<Trailer> unaPagina) {
+
+
+                        listenerFromView.finish(unaPagina);
+
+                    }
+                }, formatoId);
+            }
+        }
+        else{
+
+        }
+    }
+
 }

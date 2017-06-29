@@ -42,51 +42,37 @@ public class FragmentActores extends Fragment {
 
     public static final String ACTORID="ACTORID";
 
+
     private RecyclerView recyclerActores;
     private AdapterCreditos adapterCreditos;
-
-
     private LinearLayoutManager layoutManagerDetalle;
     private ControllerFormato controllerFragmentActores;
-
     public FragmentActores() {
-        // Required empty public constructor
     }
-
-
     private Boolean isLoading = false;
-
     private Integer actorid;
-
-    //ATRIBUTOS DEL ACTOR
+    private Integer formatoOrigenId;
     private String nombreActor;
     private String fechaNacimientoActor;
     private String biografiaActor;
     private String fotoActor;
     private Float popularidadActor;
-
-    TextView textonombre;
-    TextView textoaño;
-    TextView textosinopsis;
-    TextView textCalificacion;
-    Typeface roboto;
-    ImageButton imageButton;
-
+    private TextView textonombre;
+    private TextView textoaño;
+    private TextView textosinopsis;
+    private TextView textCalificacion;
+    private ImageButton imageButton;
     private Notificable notificable;
-    private Actorable actorable;
+
+
     //DECLARO INTERFAZ
     public interface Notificable {
         public void recibirFormatoClickeado(Formato formato, String origen, Integer pagina, String StringABuscar, Integer drawerId);
-    }
-    public interface Actorable{
-        public void recibirActorClickeado(Actor unActor);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_actores, container, false);
 
         imageButton=(ImageButton) view.findViewById(R.id.detalle_img);
@@ -94,8 +80,7 @@ public class FragmentActores extends Fragment {
         textoaño=(TextView)view.findViewById(R.id.tag_año2);
         textosinopsis=(TextView)view.findViewById(R.id.tag_sinopsis2);
         textCalificacion = (TextView) view.findViewById(R.id.textViewrating);
-
-//    RECIBO EL BUNDLE Y SACVO LOS DATOS, LOS PONGO EN LOS TEXTVIEWS
+        //RECIBO EL BUNDLE Y SACVO LOS DATOS, LOS PONGO EN LOS TEXTVIEWS
         Bundle unBundle= getArguments();
         if (unBundle==null || unBundle.isEmpty()){
             actorid=270;
@@ -103,6 +88,7 @@ public class FragmentActores extends Fragment {
         else{
             actorid=unBundle.getInt(ACTORID);
         }
+
 
         //Datos
         controllerFragmentActores= new ControllerFormato(view.getContext());
@@ -116,35 +102,14 @@ public class FragmentActores extends Fragment {
                 fotoActor=resultado.getFotoPerfilActor();
                 cargarDatosActor();
                 cargarDatosCreditos();
-
-
             }
         },actorid);
 
-
-
-        //Cargo la data
-
         Typeface roboto = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
-
-
-
-
-
-//        textCalificacion.setText(popularidadActor.toString());
 
         textonombre.setTypeface(roboto);
         textoaño.setTypeface(roboto);
         textosinopsis.setTypeface(roboto);
-        textCalificacion.setTypeface(roboto);
-
-
-        /*
-        addToFavorite = (FloatingActionButton)view.findViewById(R.id.addToFavorite);
-        watchTrailer = (FloatingActionButton) view.findViewById(R.id.watchTrailer);
-        */
-
-
 
 
         //RECYCLER CREDITOS
@@ -155,12 +120,7 @@ public class FragmentActores extends Fragment {
         adapterCreditos.setListaCreditosOriginales(new ArrayList<Creditos>());
         recyclerActores.setAdapter(adapterCreditos);
 
-        
-
-
-
-
-    /*
+        /*
         //listener clickeo actores
         View.OnClickListener listenerActore= new View.OnClickListener() {
             @Override
@@ -201,26 +161,30 @@ public class FragmentActores extends Fragment {
                 .placeholder(R.drawable.loading2)
                 .error(R.drawable.noimagedetalle)
                 .into(imageButton);
-        textCalificacion.setText(popularidadActor.toString());
+
     }
 
     public void cargarDatosCreditos(){
         controllerFragmentActores.traerCreditosPersona(new ResultListener<List<Creditos>>() {
             @Override
             public void finish(List<Creditos> resultado) {
-
                 adapterCreditos.setListaCreditosOriginales(resultado);
                 adapterCreditos.notifyDataSetChanged();
-
             }
         }, actorid);
     }
-
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         this.notificable=(Notificable)context;
-        this.actorable=(Actorable)context;
     }
+    public static FragmentActores fragmentActoresCreator(Integer unActorid){
+        FragmentActores fragmentActores = new FragmentActores();
+        Bundle unBundle= new Bundle();
+        unBundle.putInt(ACTORID, unActorid);
+        fragmentActores.setArguments(unBundle);
+        return fragmentActores;
+    }
+
 }

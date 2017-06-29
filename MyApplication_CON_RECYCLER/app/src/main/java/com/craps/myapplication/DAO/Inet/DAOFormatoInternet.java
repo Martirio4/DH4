@@ -7,8 +7,10 @@ import com.craps.myapplication.Model.Actor;
 import com.craps.myapplication.Model.ContainerActores;
 import com.craps.myapplication.Model.ContainerCreditos;
 import com.craps.myapplication.Model.ContainerFormatos;
+import com.craps.myapplication.Model.ContainerTrailer;
 import com.craps.myapplication.Model.Creditos;
 import com.craps.myapplication.Model.Formato;
+import com.craps.myapplication.Model.Trailer;
 import com.craps.myapplication.Utils.HTTPConnectionManager;
 import com.craps.myapplication.Utils.ResultListener;
 import com.craps.myapplication.Utils.TMDBHelper;
@@ -29,6 +31,7 @@ public class DAOFormatoInternet {
     private List<Formato> laListaFormatos;
     private List<Actor>laListaActores;
     private List<Creditos>laListaCreditos;
+    private List<Trailer> laListaTrailer;
     private Formato elFormato;
     private Actor elActor;
 
@@ -455,6 +458,68 @@ public class DAOFormatoInternet {
             listenerFromController.finish(actores);
         }
     }
+
+    //TRAER TRAILER PELICULAS
+    public void obtenerTrailerPeliculas(ResultListener<List<Trailer>> listenerFromController,Integer formatoId){
+
+        urlParaAsyncTask= TMDBHelper.getTrailerURL(formatoId,TMDBHelper.language_ENGLISH);
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerTrailersTask tarea = new ObtenerTrailersTask();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+
+    //TRAER TRAILER SERIES
+    public void obtenerTrailerSeries(ResultListener<List<Trailer>> listenerFromController,Integer formatoId){
+
+        urlParaAsyncTask= TMDBHelper.getTVShowVideo(TMDBHelper.language_ENGLISH,formatoId);
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerTrailersTask tarea = new ObtenerTrailersTask();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+
+    private class ObtenerTrailersTask extends AsyncTask<String,Void,List<Trailer>>{
+
+        private ResultListener<List<Trailer>> listenerFromController;
+        public void setListenerFromController(ResultListener<List<Trailer>> listenerFromController) {
+            this.listenerFromController = listenerFromController;
+        }
+
+        @Override
+        protected List<Trailer> doInBackground(String... params) {
+
+            List<Trailer> trailers = null;
+            try {
+                //PEDIR A INTERNET USANDO UNA URL EL ARCHIVO JSON
+                HTTPConnectionManager httpConnectionManager = new HTTPConnectionManager();
+                String json = httpConnectionManager.getRequestString(urlParaAsyncTask);
+
+                //USAR GSON PARA PARSEAR EL ARCHIVO Y CONVERTIRLO A LA LISTA DE NOTICIAS
+                Gson gson = new Gson();
+                ContainerTrailer containerTrailer = gson.fromJson(json, ContainerTrailer.class);
+                trailers = containerTrailer.getTrailerList();
+                laListaTrailer =trailers;
+
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+            //DEVOLVER LA LISTA
+            return trailers;
+        }
+
+        @Override
+        protected void onPostExecute(List<Trailer> trailers) {
+
+            //AVISARLE AL CONTROLLER QUE SU LISTA DE NOTICIAS ESTA CARGADA
+            listenerFromController.finish(trailers);
+        }
+    }
+
     
     
     
