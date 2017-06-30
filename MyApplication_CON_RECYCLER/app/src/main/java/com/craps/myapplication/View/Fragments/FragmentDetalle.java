@@ -137,7 +137,7 @@ public class FragmentDetalle extends Fragment {
 
         //RECYCLER ACTORES
         recyclerActores=(RecyclerView)view.findViewById(R.id.recycler_actores);
-        recyclerActores.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false));
+        recyclerActores.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         adapterActores= new AdapterActores();
         adapterActores.setContext(view.getContext());
@@ -232,47 +232,50 @@ public class FragmentDetalle extends Fragment {
                 .error(R.drawable.noimagedetalle)
                 .into(imageButton);
 
-       android.support.v4.app.FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.youtubeplayercontainer,mYouTubeFragment).commit();
-        mYouTubeFragment.initialize(DEVELOPER_KEY, new YouTubePlayer.OnInitializedListener() {
-            @Override
-            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
-                if(!wasRestored){
-                    youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
-                    youTubePlayerP=youTubePlayer;
+            ////YOUTUBE////////
+                /*
+               android.support.v4.app.FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+                transaction.replace(R.id.youtubeplayercontainer,mYouTubeFragment).commit();
+                mYouTubeFragment.initialize(DEVELOPER_KEY, new YouTubePlayer.OnInitializedListener() {
+                    @Override
+                    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
+                        if(!wasRestored){
+                            youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
+                            youTubePlayerP=youTubePlayer;
 
-                    controllerFragmentDetalle.traerTrailers(new ResultListener<List<Trailer>>() {
-                        @Override
-                        public void finish(List<Trailer> resultado) {
-                            youTubePlayerP.loadVideo(resultado.get(0).getClaveVideoYouTube());
-                            youTubePlayerP.play();
+                            controllerFragmentDetalle.traerTrailers(new ResultListener<List<Trailer>>() {
+                                @Override
+                                public void finish(List<Trailer> resultado) {
+                                    youTubePlayerP.loadVideo(resultado.get(0).getClaveVideoYouTube());
+                                    youTubePlayerP.play();
+
+                                }
+                            },id, formatoAMostrar);
+
 
                         }
-                    },id, formatoAMostrar);
+                    }
+
+                    @Override
+                    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult errorReason) {
+
+                        String errorMessage = errorReason.toString();
+                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+                        Log.d("errorMessage:", errorMessage);
 
 
-                }
-            }
+        //                if(errorReason.isUserRecoverableError()){
+        //            errorReason.getErrorDialog(ActivitySegunda.thi,RECOVERY_DIALOG_REQUEST).show();
+        //        }else{
+        //            String errorMessage = String.format(
+        //                    "There was an error initializing the Youtube Player (%1$s)",
+        //                    errorReason.toString());
+        //            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
 
-            @Override
-            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult errorReason) {
+                    }
 
-                String errorMessage = errorReason.toString();
-                Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
-                Log.d("errorMessage:", errorMessage);
-
-
-//                if(errorReason.isUserRecoverableError()){
-//            errorReason.getErrorDialog(ActivitySegunda.thi,RECOVERY_DIALOG_REQUEST).show();
-//        }else{
-//            String errorMessage = String.format(
-//                    "There was an error initializing the Youtube Player (%1$s)",
-//                    errorReason.toString());
-//            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
-
-            }
-
-        });
+            });
+            */
 
 
         imageButton.setOnClickListener(new View.OnClickListener() {

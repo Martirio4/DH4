@@ -28,7 +28,9 @@
         <activity android:name=".View.Activities.ActivityMain" />
         <activity
             android:name=".View.Activities.ActivityLogin"
-            android:noHistory="true"></activity>
+            android:noHistory="true">
+
+        </activity>
         <activity
             android:name=".View.Activities.ActivityRegister"
             android:noHistory="true"
@@ -42,6 +44,14 @@
             android:name=".View.Activities.ActivityOnBoarding"
             android:noHistory="true" />
         <activity android:name=".View.Activities.ActivityActores"></activity>
+        <receiver
+            android:name=".View.MyResultReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.twitter.sdk.android.tweetcomposer.UPLOAD_SUCCESS"/>
+                <action android:name="com.twitter.sdk.android.tweetcomposer.UPLOAD_FAILURE"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -53,56 +53,69 @@
                     </FrameLayout>
                 </LinearLayout>
 
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:id="@+id/linearTituloRating"
                     android:layout_below="@id/detalle_linear"
-                    android:layout_marginTop="4dp"
-                    android:background="@null"
-                    android:layout_marginRight="@dimen/tabTexto"
-                    android:layout_alignParentRight="true"
-                    android:id="@+id/rating"/>
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="90"
+                        android:layout_height="wrap_content"
+                        android:textSize="25sp"
+                        android:text="@string/detalle_nombre_peli"
+                        android:id="@+id/tag_nombre2"
+                        android:textColor="@color/paleta4"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="@dimen/tabTexto"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:orientation="vertical"
+                        android:layout_weight="10"
+                        android:layout_height="wrap_content">
+                        <ImageButton
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_star"
+                            android:layout_marginTop="4dp"
+                            android:background="@null"
+                            android:id="@+id/rating"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:maxLines="1"
+                            android:layout_height="wrap_content"
+                            android:text="sa"
+                            android:id="@+id/textViewrating"
+                            android:textColor="@color/marfil"
+                            android:layout_below="@+id/rating"
+                            android:layout_alignStart="@id/rating"
+                            android:textAlignment="center"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+
+
+
+
+
                 <TextView
                     android:layout_width="wrap_content"
-                    android:maxLines="1"
                     android:layout_height="wrap_content"
-                    android:text="sa"
-                    android:id="@+id/textViewrating"
-                    android:textColor="@color/marfil"
-                    android:layout_below="@+id/rating"
-                    android:layout_marginRight="@dimen/tabTexto"
-                    android:layout_alignStart="@id/rating"
-                    android:textAlignment="center"/>
-
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/textViewrating"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="@dimen/tabTexto"
-                    android:textSize="25sp"
-                    android:text="@string/detalle_nombre_peli"
-                    android:id="@+id/tag_nombre2"
-
-                    android:textAlignment="center"
-                    android:textColor="@color/paleta4"
-                    android:layout_marginBottom="30dp"
-                    />
-
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tag_nombre2"
+                    android:layout_below="@id/linearTituloRating"
                     android:textSize="@dimen/detalle_texto_tags"
                     android:text="@string/detalle_año_peli"
                     android:textColor="@color/paleta4"
-                    android:textStyle="bold"
+
                     android:id="@+id/tag_año"
                     android:layout_marginLeft="@dimen/tabTexto"
                     />
@@ -119,14 +132,41 @@
                     android:id="@+id/tag_año2"
                     android:textColor="@color/marfil" />
 
+
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
+                    android:textSize="@dimen/detalle_texto_tags"
+                    android:text="REPARTO"
+                    android:textColor="@color/paleta4"
                     android:layout_below="@id/tag_año2"
+                    android:layout_marginTop="12dp"
+                    android:id="@+id/reparto"
+                    android:layout_marginLeft="@dimen/tabTexto"
+                    />
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/tabTexto"
+                    android:layout_marginLeft="@dimen/tabTexto"
+                    android:id="@+id/recycler_actores"
+                    android:layout_below="@id/reparto"
+                    android:layout_marginTop="8dp"
+                    android:layout_centerHorizontal="true">
+
+                </android.support.v7.widget.RecyclerView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/recycler_actores"
                     android:textSize="@dimen/detalle_texto_tags"
                     android:text="@string/detalle_sinopsis_peli"
                     android:textColor="@color/paleta4"
-                    android:textStyle="bold"
                     android:layout_marginTop="12dp"
                     android:id="@+id/tag_sinopsis"
                     android:layout_marginLeft="@dimen/tabTexto"
@@ -142,25 +182,12 @@
                     android:text="@string/detalle_nombre_peli"
                     android:id="@+id/tag_sinopsis2"
                     android:textColor="@color/marfil"
-                    android:layout_marginBottom="30sp"/>
-
-
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="wrap_content"
-                    android:layout_height="350dp"
-                    android:layout_marginRight="@dimen/tabTexto"
-                    android:layout_marginLeft="@dimen/tabTexto"
-                    android:layout_marginBottom="50dp"
-                    android:id="@+id/recycler_actores"
-                    android:layout_below="@id/tag_sinopsis2"
-                    android:layout_centerHorizontal="true">
-
-                </android.support.v7.widget.RecyclerView>
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/recycler_actores"
+                    android:layout_below="@id/tag_sinopsis2"
                     android:textSize="@dimen/detalle_texto_tags"
                     android:text="RELACIONADOS"
                     android:textColor="@color/paleta4"

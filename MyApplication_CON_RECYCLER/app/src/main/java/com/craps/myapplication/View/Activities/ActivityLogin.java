@@ -1,5 +1,6 @@
 package com.craps.myapplication.View.Activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.design.widget.TextInputLayout;
@@ -8,22 +9,34 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.craps.myapplication.ControllerFormato.ControllerUsuario;
 import com.craps.myapplication.R;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.tweetcomposer.ComposerActivity;
 
 
 public class ActivityLogin extends AppCompatActivity {
 
 
-
-
+    private ImageButton loginBtn;
+    TwitterAuthClient twitterAuthClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Twitter.initialize(this);
        setContentView(R.layout.activity_login);
 
         TextView unTextview = (TextView) findViewById(R.id.textViewLogin);
@@ -101,6 +114,56 @@ public class ActivityLogin extends AppCompatActivity {
         });
 
 
+        twitterAuthClient = new TwitterAuthClient();
+        loginBtn = (ImageButton) findViewById(R.id.loginBtn);
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                twitterAuthClient.authorize(ActivityLogin.this, new Callback<TwitterSession>() {
+                    @Override
+                    public void success(Result<TwitterSession> result) {
+                        //success
+                        Intent unIntent = new Intent(v.getContext(), ActivityRegister.class);
+                        startActivity(unIntent);
+                        Toast.makeText(ActivityLogin.this, result.data.getUserName(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void failure(TwitterException exception) {
+                        //failure
+                        Toast.makeText(ActivityLogin.this, "Logeo fallido", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+            }
+        });
+
+
+
+
+
     }
 
+    public void composeTweet(View view){
+
+        final TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+        final Intent intent = new ComposerActivity.Builder(ActivityLogin.this)
+                .session(session)
+                .text("Love where you work")
+                .hashtags("#twitter")
+                .createIntent();
+        startActivity(intent);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Pass the activity result
+       twitterAuthClient.onActivityResult(requestCode, resultCode, data);
+    }
+
+
 }
+
