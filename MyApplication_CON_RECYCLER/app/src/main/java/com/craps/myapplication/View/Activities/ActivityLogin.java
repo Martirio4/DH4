@@ -19,6 +19,7 @@ import com.craps.myapplication.R;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
@@ -37,7 +38,19 @@ public class ActivityLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Twitter.initialize(this);
-       setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login);
+
+        twitterAuthClient = new TwitterAuthClient();
+
+        TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+
+        if(session != null){
+                Intent unIntent = new Intent(this, ActivityMain.class);
+                Bundle bundle=new Bundle();
+                bundle.putString(ActivityMain.USUARIO, session.getUserName());
+                unIntent.putExtras(bundle);
+                startActivity(unIntent);
+        }
 
         TextView unTextview = (TextView) findViewById(R.id.textViewLogin);
         Typeface roboto = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
@@ -81,16 +94,11 @@ public class ActivityLogin extends AppCompatActivity {
                 String contraseña = editTextPassword.getText().toString();
 
                 if (controllerUsuario.loguearUsuario(mail, contraseña)){
-                    Intent unIntent = new Intent(v.getContext(), ActivityMain.class);
-                    Bundle bundle=new Bundle();
-                    bundle.putString(ActivityMain.USUARIO, mail);
-                    unIntent.putExtras(bundle);
-                    startActivity(unIntent);
+                   ingresarLoguado(v, mail);
                 }
                 else{
                     editTextPassword.setText(null);
                     editTextUsuario.setText(null);
-
                 }
 
             }
@@ -114,7 +122,9 @@ public class ActivityLogin extends AppCompatActivity {
         });
 
 
-        twitterAuthClient = new TwitterAuthClient();
+
+
+
         loginBtn = (ImageButton) findViewById(R.id.loginBtn);
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,9 +133,7 @@ public class ActivityLogin extends AppCompatActivity {
                     @Override
                     public void success(Result<TwitterSession> result) {
                         //success
-                        Intent unIntent = new Intent(v.getContext(), ActivityRegister.class);
-                        startActivity(unIntent);
-                        Toast.makeText(ActivityLogin.this, result.data.getUserName(), Toast.LENGTH_SHORT).show();
+                        ingresarLoguado(v, result.data.getUserName());
                     }
 
                     @Override
@@ -137,13 +145,15 @@ public class ActivityLogin extends AppCompatActivity {
                 });
             }
         });
-
-
-
-
-
     }
 
+    public void ingresarLoguado(View view, String mail){
+        Intent unIntent = new Intent(view.getContext(), ActivityMain.class);
+        Bundle bundle=new Bundle();
+        bundle.putString(ActivityMain.USUARIO, mail);
+        unIntent.putExtras(bundle);
+        startActivity(unIntent);
+    }
     public void composeTweet(View view){
 
         final TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();

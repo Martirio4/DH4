@@ -28,7 +28,7 @@
         <activity android:name=".View.Activities.ActivityMain" />
         <activity
             android:name=".View.Activities.ActivityLogin"
-            android:noHistory="true">
+         >
 
         </activity>
         <activity
