@@ -154,7 +154,8 @@ public class ControllerFormato {
 
                     if (unaPagina == null || unaPagina.isEmpty()) {
                         endPaging = true;
-                    } else {
+                    }
+                    else {
                         DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
                         daoFormatoDatabase.addFormatos(unaPagina,"peliculas");
                         //TENGO QUE CAMBIAR EL OFFSET

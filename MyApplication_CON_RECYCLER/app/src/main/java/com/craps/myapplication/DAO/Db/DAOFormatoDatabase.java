@@ -86,7 +86,7 @@ public class DAOFormatoDatabase extends DatabaseHelper {
 
         List<Formato> formatos  = new ArrayList<>();
         SQLiteDatabase database = getReadableDatabase();
-        String select = "SELECT * FROM " + TABLE_FORMATOS+" WHERE TIPO_FORMATO = "+tipoFormato;
+        String select = "SELECT * FROM " + TABLE_FORMATOS+" WHERE TIPO_FORMATO = '"+tipoFormato+"'";
 
         Cursor cursor = database.rawQuery(select, null);
         while(cursor.moveToNext()){
@@ -130,7 +130,7 @@ public class DAOFormatoDatabase extends DatabaseHelper {
             select = "SELECT * FROM " + TABLE_FORMATOS;
         }
         else{
-            select = "SELECT * FROM " + TABLE_FORMATOS+" WHERE NAME LIKE '%"+queBuscoEnInet+"%' AND TIPO_FORMATO="+"'"+tipoFormato+"'";
+            select = "SELECT * FROM " + TABLE_FORMATOS+" WHERE NAME LIKE '%"+queBuscoEnInet+"%' AND TIPO_FORMATO LIKE "+"'%"+tipoFormato+"%'";
         }
 
 

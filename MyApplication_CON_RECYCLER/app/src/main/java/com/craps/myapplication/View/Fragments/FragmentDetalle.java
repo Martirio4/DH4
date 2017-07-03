@@ -196,8 +196,22 @@ public class FragmentDetalle extends Fragment {
             controllerFragmentDetalle.obtenerActoresPelicula(new ResultListener<List<Actor>>() {
                 @Override
                 public void finish(List<Actor> resultado) {
-                    List<Actor> listaFiltrada = new ArrayList<Actor>();
-                    for (int i=0;i<5;i++){
+                    cantActores=0;
+                    if (resultado.size()<cantActores){
+                        cantActores=resultado.size();
+                    }
+                    else{
+                        cantActores=5;
+                    }
+                    List<Actor> listaFiltrada=new ArrayList<Actor>();
+                    cantActores=0;
+                    if (resultado.size()<5){
+                        cantActores=resultado.size();
+                    }
+                    else{
+                        cantActores=5;
+                    }
+                    for (int i=0;i<cantActores;i++){
                         listaFiltrada.add(resultado.get(i));
                     }
                     adapterActores.setListaActoresOriginales(listaFiltrada);
