@@ -292,7 +292,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
         FragmentAboutUs aboutusFragment = new FragmentAboutUs();
         android.support.v4.app.FragmentManager fragmentManager= getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.contenedor_fragment_maestro,aboutusFragment );
+        fragmentTransaction.replace(R.id.contenedor_buscador,aboutusFragment );
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

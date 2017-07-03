@@ -320,7 +320,7 @@ public class FragmentMain extends Fragment {
                         adapterRecyclerMedio.notifyDataSetChanged();
                         isLoading = false;
                     }
-                }, filtroRecyclerMedio);
+                }, TMDBHelper.MOVIE_GENRE_COMEDY);
             } else {
                 controllerRecyclerMedio.obtenerSeriesPorGenero(new ResultListener<List<Formato>>() {
                     @Override
@@ -330,7 +330,7 @@ public class FragmentMain extends Fragment {
                         adapterRecyclerMedio.notifyDataSetChanged();
                         isLoading = false;
                     }
-                }, TMDBHelper.MOVIE_GENRE_COMEDIA);
+                }, TMDBHelper.TV_GENRE_COMEDY);
             }
         }
     }
@@ -349,7 +349,7 @@ public class FragmentMain extends Fragment {
                         isLoading = false;
 
                     }
-                }, filtroRecyclerInferior);
+                }, TMDBHelper.MOVIE_GENRE_DRAMA);
             } else {
                 controllerRecyclerInferior.obtenerSeriesPorGenero(new ResultListener<List<Formato>>() {
                     @Override
@@ -360,7 +360,7 @@ public class FragmentMain extends Fragment {
                         isLoading = false;
 
                     }
-                }, TMDBHelper.MOVIE_GENRE_DRAMA);
+                }, TMDBHelper.TV_GENRE_DRAMA);
             }
         }
     }

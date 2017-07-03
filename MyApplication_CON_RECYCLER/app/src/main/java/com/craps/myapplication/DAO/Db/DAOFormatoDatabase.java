@@ -42,7 +42,7 @@ public class DAOFormatoDatabase extends DatabaseHelper {
     }
 
 
-    public void addFormato (Formato unFormato){
+    public void addFormato (Formato unFormato, String tipoFormato){
 
         if(!checkIfExist(unFormato.getId())) {
 
@@ -54,7 +54,7 @@ public class DAOFormatoDatabase extends DatabaseHelper {
             row.put(RELEASE_DATE, unFormato.getRelease_date());
             row.put(OVERVIEW, unFormato.getOverview());
             row.put(VOTE_AVERAGE, unFormato.getVote_average());
-            row.put(TIPO_FORMATO, unFormato.getTipoFormato());
+            row.put(TIPO_FORMATO,tipoFormato);
             row.put(POSTER_PATH, unFormato.getPoster_path());
             row.put(ID, unFormato.getId());
             row.put(BACKDROP_PATH, unFormato.getBackdrop_path());
@@ -74,19 +74,19 @@ public class DAOFormatoDatabase extends DatabaseHelper {
         }
     }
 
-    public void addFormatos(List<Formato> formatosList){
+    public void addFormatos(List<Formato> formatosList,String tipoFormato){
 
         for(Formato unFormato : formatosList){
-            addFormato(unFormato);
+            addFormato(unFormato, tipoFormato);
         }
     }
 
 
-    public List<Formato> getAllFormatos(){
+    public List<Formato> getAllFormatosPorTipo(String tipoFormato){
 
         List<Formato> formatos  = new ArrayList<>();
         SQLiteDatabase database = getReadableDatabase();
-        String select = "SELECT * FROM " + TABLE_FORMATOS;
+        String select = "SELECT * FROM " + TABLE_FORMATOS+" WHERE TIPO_FORMATO = "+tipoFormato;
 
         Cursor cursor = database.rawQuery(select, null);
         while(cursor.moveToNext()){
@@ -120,7 +120,7 @@ public class DAOFormatoDatabase extends DatabaseHelper {
     }
 
 
-    public List<Formato> getFormatosConFiltro(String queBuscoEnInet){
+    public List<Formato> getFormatosConFiltro(String queBuscoEnInet, String tipoFormato){
         String select;
 
         List<Formato> formatos  = new ArrayList<>();
@@ -130,7 +130,7 @@ public class DAOFormatoDatabase extends DatabaseHelper {
             select = "SELECT * FROM " + TABLE_FORMATOS;
         }
         else{
-            select = "SELECT * FROM " + TABLE_FORMATOS+" WHERE NAME="+queBuscoEnInet;
+            select = "SELECT * FROM " + TABLE_FORMATOS+" WHERE NAME LIKE '%"+queBuscoEnInet+"%' AND TIPO_FORMATO="+"'"+tipoFormato+"'";
         }
 
 

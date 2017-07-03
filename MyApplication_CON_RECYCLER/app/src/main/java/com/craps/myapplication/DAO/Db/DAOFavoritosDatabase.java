@@ -136,7 +136,7 @@ public class DAOFavoritosDatabase extends DatabaseHelper {
 
 
 
-        select = "SELECT * FROM " + TABLE_FAVORITOS+" WHERE MAIL="+usuario+"AND NAME LIKE "+queBuscoEnInet+"%";
+        select = "SELECT * FROM " + TABLE_FAVORITOS+" WHERE MAIL="+"'"+usuario+"' AND NAME LIKE "+queBuscoEnInet+"%";
 
 
 

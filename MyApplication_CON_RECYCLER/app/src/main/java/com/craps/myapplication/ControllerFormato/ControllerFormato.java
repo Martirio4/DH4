@@ -2,9 +2,7 @@ package com.craps.myapplication.ControllerFormato;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.design.widget.Snackbar;
-import android.support.v4.media.MediaBrowserServiceCompat;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,12 +20,9 @@ import com.craps.myapplication.Utils.HTTPConnectionManager;
 import com.craps.myapplication.Utils.ResultListener;
 import com.craps.myapplication.Utils.TMDBHelper;
 import com.craps.myapplication.View.Activities.ActivityMain;
-import com.craps.myapplication.View.Activities.ActivityRegister;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.craps.myapplication.R.id.peliMasVista;
 
 
 /**
@@ -161,7 +156,7 @@ public class ControllerFormato {
                         endPaging = true;
                     } else {
                         DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-                        daoFormatoDatabase.addFormatos(unaPagina);
+                        daoFormatoDatabase.addFormatos(unaPagina,"peliculas");
                         //TENGO QUE CAMBIAR EL OFFSET
                         numeroPagina = numeroPagina + 1;
 
@@ -173,7 +168,7 @@ public class ControllerFormato {
         }
         else{
             DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-            List<Formato> listaFormatosOffline=daoFormatoDatabase.busquedaPorVotoPeliculas();
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getFormatosConFiltro("a","peliculas");
             listenerFromView.finish(listaFormatosOffline);
         }
     }
@@ -190,7 +185,7 @@ public class ControllerFormato {
                         endPaging = true;
                     } else {
                         DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-                        daoFormatoDatabase.addFormatos(unaPagina);
+                        daoFormatoDatabase.addFormatos(unaPagina,"series");
                         //TENGO QUE CAMBIAR EL OFFSET
                         numeroPagina = numeroPagina + 1;
 
@@ -202,7 +197,7 @@ public class ControllerFormato {
         }
         else{
             DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-            List<Formato> listaFormatosOffline=daoFormatoDatabase.busquedaPorVotoSerie();
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getFormatosConFiltro("a","series");
             listenerFromView.finish(listaFormatosOffline);
         }
     }
@@ -219,7 +214,7 @@ public class ControllerFormato {
                         endPaging = true;
                     } else {
                         DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-                        daoFormatoDatabase.addFormatos(unaPagina);
+                        daoFormatoDatabase.addFormatos(unaPagina,"peliculas");
                         //TENGO QUE CAMBIAR EL OFFSET
                         numeroPagina = numeroPagina + 1;
 
@@ -231,7 +226,7 @@ public class ControllerFormato {
         }
         else{
             DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatosPorTipo("peliculas");
             listenerFromView.finish(listaFormatosOffline);
         }
     }
@@ -248,7 +243,7 @@ public class ControllerFormato {
                         endPaging = true;
                     } else {
                         DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-                        daoFormatoDatabase.addFormatos(unaPagina);
+                        daoFormatoDatabase.addFormatos(unaPagina,"peliculas");
                         //TENGO QUE CAMBIAR EL OFFSET
                         numeroPagina = numeroPagina + 1;
 
@@ -260,7 +255,7 @@ public class ControllerFormato {
         }
         else{
             DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-            List<Formato> listaFormatosOffline=daoFormatoDatabase.busquedaPorPresupuestoPeliculas();
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getFormatosConFiltro("e","peliculas");
             listenerFromView.finish(listaFormatosOffline);
         }
     }
@@ -277,7 +272,7 @@ public class ControllerFormato {
                         endPaging = true;
                     } else {
                         DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-                        daoFormatoDatabase.addFormatos(unaPagina);
+                        daoFormatoDatabase.addFormatos(unaPagina,"series");
                         //TENGO QUE CAMBIAR EL OFFSET
                         numeroPagina = numeroPagina + 1;
 
@@ -289,7 +284,7 @@ public class ControllerFormato {
         }
         else{
             DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-            List<Formato> listaFormatosOffline=daoFormatoDatabase.busquedaPorPresupuestoSerie();
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getFormatosConFiltro("e","series");
             listenerFromView.finish(listaFormatosOffline);
         }
     }
@@ -306,7 +301,7 @@ public class ControllerFormato {
                         endPaging = true;
                     } else {
                         DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-                        daoFormatoDatabase.addFormatos(unaPagina);
+                        daoFormatoDatabase.addFormatos(unaPagina,"series");
                         //TENGO QUE CAMBIAR EL OFFSET
                         numeroPagina = numeroPagina + 1;
 
@@ -318,7 +313,7 @@ public class ControllerFormato {
         }
         else{
             DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.busquedaPorVotoSerie();
             listenerFromView.finish(listaFormatosOffline);
         }
     }
@@ -335,7 +330,7 @@ public class ControllerFormato {
                         endPaging = true;
                     } else {
                         DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-                        daoFormatoDatabase.addFormatos(unaPagina);
+                        daoFormatoDatabase.addFormatos(unaPagina,"series");
                         //TENGO QUE CAMBIAR EL OFFSET
                         numeroPagina = numeroPagina + 1;
 
@@ -347,7 +342,7 @@ public class ControllerFormato {
         }
         else{
             DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatosPorTipo("series");
             listenerFromView.finish(listaFormatosOffline);
         }
     }
@@ -374,7 +369,7 @@ public class ControllerFormato {
         }
         else{
             DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatosPorTipo("peliculas");
             listenerFromView.finish(listaFormatosOffline);
         }
     }
@@ -401,7 +396,7 @@ public class ControllerFormato {
         }
         else{
             DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatosPorTipo("series");
             listenerFromView.finish(listaFormatosOffline);
         }
     }
@@ -416,7 +411,7 @@ public class ControllerFormato {
 
                     if (unaPagina == null || unaPagina.isEmpty()) {
                         DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-                        daoFormatoDatabase.addFormatos(unaPagina);
+                        daoFormatoDatabase.addFormatos(unaPagina,"peliculas");
                         endPaging = true;
                     } else {
                         //TENGO QUE CAMBIAR EL OFFSET
@@ -430,7 +425,7 @@ public class ControllerFormato {
         }
         else{
             DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatosPorTipo("peliculas");
             listenerFromView.finish(listaFormatosOffline);
         }
     }
@@ -447,7 +442,7 @@ public class ControllerFormato {
                         endPaging = true;
                     } else {
                         DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-                        daoFormatoDatabase.addFormatos(unaPagina);
+                        daoFormatoDatabase.addFormatos(unaPagina,"series");
                         //TENGO QUE CAMBIAR EL OFFSET
                         numeroPagina = numeroPagina + 1;
 
@@ -459,7 +454,7 @@ public class ControllerFormato {
         }
         else{
             DAOFormatoDatabase daoFormatoDatabase = new DAOFormatoDatabase(context);
-            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatos();
+            List<Formato> listaFormatosOffline=daoFormatoDatabase.getAllFormatosPorTipo("series");
             listenerFromView.finish(listaFormatosOffline);
         }
     }

@@ -101,13 +101,6 @@
 
                 </LinearLayout>
 
-
-
-
-
-
-
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -115,7 +108,6 @@
                     android:textSize="@dimen/detalle_texto_tags"
                     android:text="@string/detalle_año_peli"
                     android:textColor="@color/paleta4"
-
                     android:id="@+id/tag_año"
                     android:layout_marginLeft="@dimen/tabTexto"
                     />
@@ -123,9 +115,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:layout_marginRight="@dimen/tabTexto"
-                    android:layout_below="@id/tag_año"
+                    android:layout_toRightOf="@id/tag_año"
+                    android:layout_alignBottom="@id/tag_año"
                     android:layout_marginLeft="@dimen/tabTexto"
                     android:textSize="18sp"
                     android:text="@string/detalle_nombre_peli"

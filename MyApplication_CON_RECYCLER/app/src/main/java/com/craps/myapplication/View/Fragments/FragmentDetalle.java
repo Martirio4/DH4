@@ -469,7 +469,7 @@ public class FragmentDetalle extends Fragment {
         addToFavorite.setImageResource(R.drawable.ic_favorite_black_24dp);
         menuDetalle.addMenuButton(addToFavorite);
 
-        addToFavorite.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
+        addToFavorite.setLabelColors(ContextCompat.getColor(getActivity(), R.color.color5),
                 ContextCompat.getColor(getActivity(), R.color.light_grey),
                 ContextCompat.getColor(getActivity(), R.color.white_transparent));
         addToFavorite.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
@@ -505,7 +505,7 @@ public class FragmentDetalle extends Fragment {
         watchTrailer.setImageResource(R.drawable.ic_camera_roll_black_24dp);
         menuDetalle.addMenuButton(watchTrailer);
 
-        watchTrailer.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
+        watchTrailer.setLabelColors(ContextCompat.getColor(getActivity(), R.color.color5),
                 ContextCompat.getColor(getActivity(), R.color.light_grey),
                 ContextCompat.getColor(getActivity(), R.color.white_transparent));
         watchTrailer.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
@@ -513,7 +513,7 @@ public class FragmentDetalle extends Fragment {
         watchTrailer.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick (View v){
-                watchTrailer.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
+                watchTrailer.setLabelColors(ContextCompat.getColor(getActivity(), R.color.color5),
                         ContextCompat.getColor(getActivity(), R.color.light_grey),
                         ContextCompat.getColor(getActivity(), R.color.white_transparent));
                 watchTrailer.setLabelTextColor(ContextCompat.getColor(getActivity(),R.color.black));
@@ -534,7 +534,7 @@ public class FragmentDetalle extends Fragment {
         deleteFav.setImageResource(R.drawable.ic_delete_black_24dp);
         menuDetalle.addMenuButton(deleteFav);
 
-        deleteFav.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
+        deleteFav.setLabelColors(ContextCompat.getColor(getActivity(), R.color.color5),
                 ContextCompat.getColor(getActivity(), R.color.light_grey),
                 ContextCompat.getColor(getActivity(), R.color.white_transparent));
         deleteFav.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
@@ -571,7 +571,7 @@ public class FragmentDetalle extends Fragment {
         watchTrailer.setImageResource(R.drawable.ic_camera_roll_black_24dp);
         menuDetalle.addMenuButton(watchTrailer);
 
-        watchTrailer.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
+        watchTrailer.setLabelColors(ContextCompat.getColor(getActivity(), R.color.color5),
                 ContextCompat.getColor(getActivity(), R.color.light_grey),
                 ContextCompat.getColor(getActivity(), R.color.white_transparent));
         watchTrailer.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
@@ -579,7 +579,7 @@ public class FragmentDetalle extends Fragment {
         watchTrailer.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick (View v){
-                watchTrailer.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
+                watchTrailer.setLabelColors(ContextCompat.getColor(getActivity(), R.color.color5),
                         ContextCompat.getColor(getActivity(), R.color.light_grey),
                         ContextCompat.getColor(getActivity(), R.color.white_transparent));
                 watchTrailer.setLabelTextColor(ContextCompat.getColor(getActivity(),R.color.black));
@@ -603,7 +603,7 @@ public class FragmentDetalle extends Fragment {
             compartir.setImageResource(R.drawable.ic_share_black_24dp);
             menuDetalle.addMenuButton(compartir);
 
-            compartir.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
+            compartir.setLabelColors(ContextCompat.getColor(getActivity(), R.color.color5),
                     ContextCompat.getColor(getActivity(), R.color.light_grey),
                     ContextCompat.getColor(getActivity(), R.color.white_transparent));
             compartir.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
@@ -626,7 +626,7 @@ public class FragmentDetalle extends Fragment {
             compartir.setImageResource(R.drawable.ic_share_black_24dp);
             menuDetalle.addMenuButton(compartir);
 
-            compartir.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
+            compartir.setLabelColors(ContextCompat.getColor(getActivity(), R.color.color5),
                     ContextCompat.getColor(getActivity(), R.color.light_grey),
                     ContextCompat.getColor(getActivity(), R.color.white_transparent));
             compartir.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));

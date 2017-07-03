@@ -25,8 +25,15 @@ public class Formato {
     private Integer number_of_episodes=null;
     private Integer budget=null;
     private Integer revenue=null;
+    private String genero="";
 
+    public String getGenero() {
+        return genero;
+    }
 
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
 
     public Integer getBudget() {
         return budget;

@@ -30,11 +30,15 @@ import com.facebook.share.widget.ShareButton;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterApiClient;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
+import com.twitter.sdk.android.core.models.User;
 import com.twitter.sdk.android.tweetcomposer.ComposerActivity;
+
+import retrofit2.Call;
 
 
 public class ActivityLogin extends AppCompatActivity {
@@ -42,6 +46,7 @@ public class ActivityLogin extends AppCompatActivity {
 
     private ImageButton loginBtn;
     TwitterAuthClient twitterAuthClient;
+    TwitterApiClient twitterApiClient;
 
     private CallbackManager callbackManager;
     private LoginButton loginButton;
@@ -60,11 +65,11 @@ public class ActivityLogin extends AppCompatActivity {
         TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
 
         if (estaLogueadoAFacebook()){
-            ingresarAFacebook();
+            ingresarConFacebook();
         }
 
         if(session != null){
-            ingresarLogueadoTwitter(ActivityLogin.this, session.getUserName());
+            ingresarConTwitter();
         }
 
         TextView unTextview = (TextView) findViewById(R.id.textViewLogin);
@@ -109,7 +114,7 @@ public class ActivityLogin extends AppCompatActivity {
                 String contraseña = editTextPassword.getText().toString();
 
                 if (controllerUsuario.loguearUsuario(mail, contraseña)){
-                   ingresarLogueadoTwitter(ActivityLogin.this, mail);
+                   ingresarLogueadoManual(ActivityLogin.this, mail);
                 }
                 else{
                     editTextPassword.setText(null);
@@ -132,6 +137,7 @@ public class ActivityLogin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent unIntent = new Intent(v.getContext(), ActivityMain.class);
+                finish();
                 startActivity(unIntent);
             }
         });
@@ -148,7 +154,29 @@ public class ActivityLogin extends AppCompatActivity {
                     @Override
                     public void success(Result<TwitterSession> result) {
                         //success
-                        ingresarLogueadoTwitter(ActivityLogin.this, result.data.getUserName());
+
+                        Call<User> user = TwitterCore.getInstance().getApiClient().getAccountService().verifyCredentials(true, false,true);
+                        user.enqueue(new Callback<User>() {
+                            @Override
+                            public void success(Result<User> result) {
+                                String nombreTwitter=result.data.name;
+                                String emailTwitter=result.data.email;
+                                String fotoTwitter=result.data.profileImageUrl.replace("_normal","");
+
+                                if (emailTwitter==null ||emailTwitter.isEmpty()){
+                                    ingresarLogueadoTwitter(ActivityLogin.this,nombreTwitter, fotoTwitter);
+                                }
+                                else{
+                                    ingresarLogueadoTwitter(ActivityLogin.this, emailTwitter, fotoTwitter);
+                                }
+                            }
+
+                            @Override
+                            public void failure(TwitterException exception) {
+
+                            }
+                        });
+
                     }
 
                     @Override
@@ -172,7 +200,7 @@ public class ActivityLogin extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
 
-                ingresarAFacebook();
+                ingresarConFacebook();
 
             }
 
@@ -202,11 +230,20 @@ public class ActivityLogin extends AppCompatActivity {
 
     }
 
-
-    public void ingresarLogueadoTwitter(Activity unaActivity, String mail){
+    public void ingresarLogueadoManual(Activity unaActivity, String mail){
         Intent unIntent = new Intent(unaActivity, ActivityMain.class);
         Bundle bundle=new Bundle();
         bundle.putString(ActivityMain.USUARIO, mail);
+        unIntent.putExtras(bundle);
+        finish();
+        startActivity(unIntent);
+    }
+
+    public void ingresarLogueadoTwitter(Activity unaActivity, String mail, String imagenUsuario){
+        Intent unIntent = new Intent(unaActivity, ActivityMain.class);
+        Bundle bundle=new Bundle();
+        bundle.putString(ActivityMain.USUARIO, mail);
+        bundle.putString(ActivityMain.IMAGENUSUARIO, imagenUsuario);
         unIntent.putExtras(bundle);
         finish();
         startActivity(unIntent);
@@ -249,7 +286,7 @@ public class ActivityLogin extends AppCompatActivity {
         return accessToken != null;
     }
 
-    public void ingresarAFacebook(){
+    public void ingresarConFacebook(){
         Profile unProf=Profile.getCurrentProfile();
         Profile profile = Profile.getCurrentProfile();
         if (profile != null) {
@@ -263,6 +300,33 @@ public class ActivityLogin extends AppCompatActivity {
 
         ingresarLogueadoFacebook(ActivityLogin.this, nombreCompletoFacebook, imagenFacebook);
     }
+
+    public void ingresarConTwitter(){
+        Call<User> user = TwitterCore.getInstance().getApiClient().getAccountService().verifyCredentials(true, false,true);
+        user.enqueue(new Callback<User>() {
+            @Override
+            public void success(Result<User> result) {
+                String nombreTwitter=result.data.name;
+                String emailTwitter=result.data.email;
+                String fotoTwitter=result.data.profileImageUrl.replace("_normal","");
+
+                if (emailTwitter==null ||emailTwitter.isEmpty()){
+                    ingresarLogueadoTwitter(ActivityLogin.this,nombreTwitter, fotoTwitter);
+                }
+                else{
+                    ingresarLogueadoTwitter(ActivityLogin.this, emailTwitter, fotoTwitter);
+                }
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                Toast.makeText(ActivityLogin.this, "ERROR! Intente nuevamente", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+
 
 
 
