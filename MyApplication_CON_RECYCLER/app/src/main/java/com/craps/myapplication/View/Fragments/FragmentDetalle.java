@@ -4,13 +4,13 @@ package com.craps.myapplication.View.Fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,26 +21,30 @@ import android.widget.Toast;
 import com.craps.myapplication.ControllerFormato.ControllerFormato;
 import com.craps.myapplication.Model.Actor;
 import com.craps.myapplication.Model.Formato;
-import com.craps.myapplication.Model.Trailer;
+
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.ResultListener;
 import com.craps.myapplication.Utils.TMDBHelper;
+import com.craps.myapplication.View.Activities.ActivityMain;
 import com.craps.myapplication.View.Activities.ActivityPoster;
-import com.craps.myapplication.View.Activities.ActivitySegunda;
 import com.craps.myapplication.View.Adapters.AdapterActores;
 import com.craps.myapplication.View.Adapters.AdapterFormato;
-import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.facebook.AccessToken;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareButton;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.squareup.picasso.Picasso;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.tweetcomposer.ComposerActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.craps.myapplication.Utils.TMDBHelper.DEVELOPER_KEY;
 
 /**
  *
@@ -62,7 +66,10 @@ public class FragmentDetalle extends Fragment {
     private FloatingActionMenu menuDetalle;
     // Creo cada elemento dentro del Clan
     private FloatingActionButton addToFavorite;
+    private FloatingActionButton deleteFav;
     private FloatingActionButton watchTrailer;
+    private FloatingActionButton compartir;
+
     private FavoritableFav favoritable;
 
     private RecyclerView recyclerActores;
@@ -73,6 +80,7 @@ public class FragmentDetalle extends Fragment {
     private LinearLayoutManager layoutManagerDetalle;
 
     private ControllerFormato controllerFragmentDetalle;
+    private Integer cantActores;
 
     public FragmentDetalle() {
         // Required empty public constructor
@@ -93,6 +101,11 @@ public class FragmentDetalle extends Fragment {
     protected String posterId;
     private String formatoAMostrar;
     private YouTubePlayer youTubePlayerP;
+    private Boolean existeEnFavoritos;
+    private String formatoAMostrarCompartir;
+    private String nombreAMostrarCompartir;
+    private ShareButton compartirFB;
+
 
 
 
@@ -108,7 +121,7 @@ public class FragmentDetalle extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        Twitter.initialize(this.getActivity());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.onclick_detalle, container, false);
 
@@ -127,30 +140,54 @@ public class FragmentDetalle extends Fragment {
         backdrop=unBundle.getString(BACKDROP);
         posterId=unBundle.getString(POSTERID);
 
+
         if (title==null ||title.isEmpty()){
             formatoAMostrar="series";
+            formatoAMostrarCompartir ="serie";
+            nombreAMostrarCompartir =nombre;
         }
         else
         {
             formatoAMostrar="peliculas";
+            formatoAMostrarCompartir ="pelicula";
+            nombreAMostrarCompartir =title;
         }
 
         //RECYCLER ACTORES
         recyclerActores=(RecyclerView)view.findViewById(R.id.recycler_actores);
         recyclerActores.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
 
+        //SETEAR EL ADAPTER
         adapterActores= new AdapterActores();
         adapterActores.setContext(view.getContext());
         adapterActores.setListaActoresOriginales(new ArrayList<Actor>());
         recyclerActores.setAdapter(adapterActores);
 
+        //LLAMAR AL CONTROLLER Y PEDIR DATOS
         controllerFragmentDetalle= new ControllerFormato(view.getContext());
-
         if (formatoAMostrar.equals("series")){
             controllerFragmentDetalle.obtenerActoresSerie(new ResultListener<List<Actor>>() {
                 @Override
                 public void finish(List<Actor> resultado) {
-                    adapterActores.setListaActoresOriginales(resultado);
+                    cantActores=0;
+                    if (resultado.size()<cantActores){
+                        cantActores=resultado.size();
+                    }
+                    else{
+                        cantActores=5;
+                    }
+                    List<Actor> listaFiltrada=new ArrayList<Actor>();
+                    cantActores=0;
+                    if (resultado.size()<5){
+                        cantActores=resultado.size();
+                    }
+                    else{
+                        cantActores=5;
+                    }
+                    for (int i=0;i<cantActores;i++){
+                        listaFiltrada.add(resultado.get(i));
+                    }
+                    adapterActores.setListaActoresOriginales(listaFiltrada);
                     adapterActores.notifyDataSetChanged();
                 }
             }, id);
@@ -159,13 +196,17 @@ public class FragmentDetalle extends Fragment {
             controllerFragmentDetalle.obtenerActoresPelicula(new ResultListener<List<Actor>>() {
                 @Override
                 public void finish(List<Actor> resultado) {
-                    adapterActores.setListaActoresOriginales(resultado);
+                    List<Actor> listaFiltrada = new ArrayList<Actor>();
+                    for (int i=0;i<5;i++){
+                        listaFiltrada.add(resultado.get(i));
+                    }
+                    adapterActores.setListaActoresOriginales(listaFiltrada);
                     adapterActores.notifyDataSetChanged();
                 }
             }, id);
         }
 
-        //listener clickeo actores
+        //LISTENER CLIC ACTORES
         View.OnClickListener listenerActore= new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,11 +218,12 @@ public class FragmentDetalle extends Fragment {
         };
         adapterActores.setListener(listenerActore);
 
-        //RECYCLER SIMILARES
+        //RECYCLER FORMATO SIMILARES
         recyclerSimilares=(RecyclerView) view.findViewById(R.id.recycler_Similares);
         layoutManagerDetalle= new LinearLayoutManager(view.getContext(),LinearLayoutManager.HORIZONTAL,false);
         recyclerSimilares.setLayoutManager(layoutManagerDetalle);
 
+        //SETEAR ADAPTER FORMATOS SIMILARES
         adapterSimilares= new AdapterFormato();
         adapterSimilares.setContext(view.getContext());
         adapterSimilares.setListaFormatosOriginales(new ArrayList<Formato>());
@@ -203,6 +245,7 @@ public class FragmentDetalle extends Fragment {
         };
        adapterSimilares.setListener(listenerDetalle);
 
+        //SCROLL LISTENER FORMATOS SIMILARES
         recyclerSimilares.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -217,7 +260,7 @@ public class FragmentDetalle extends Fragment {
             }
         });
 
-        //Datos
+        //CON LOS DATOS CASTEO LOS OBJETOS Y PONGO VALORES
 
         TextView textonombre=(TextView)view.findViewById(R.id.tag_nombre2);
         TextView textoaño=(TextView)view.findViewById(R.id.tag_año2);
@@ -226,13 +269,42 @@ public class FragmentDetalle extends Fragment {
         Typeface roboto = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
         ImageButton imageButton=(ImageButton) view.findViewById(R.id.detalle_img);
 
+
+
         Picasso.with(imageButton.getContext())
                 .load(TMDBHelper.getBackDropPoster(TMDBHelper.IMAGE_SIZE_W342,backdrop))
                 .placeholder(R.drawable.loading2)
                 .error(R.drawable.noimagedetalle)
                 .into(imageButton);
 
-            ////YOUTUBE////////
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ActivityPoster.class);
+                Bundle bundle= new Bundle();
+                bundle.putString(ActivityPoster.POSTERID, posterId);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        if (formatoAMostrar.equals("series")){
+            textonombre.setText(nombre);
+            textoaño.setText(firstAirDate);
+        }
+        else{
+            textonombre.setText(title);
+            textoaño.setText(releaseDate);
+        }
+        textosinopsis.setText(sinopsis);
+        textCalificacion.setText(calificacion.toString());
+
+        textonombre.setTypeface(roboto);
+        textoaño.setTypeface(roboto);
+        textosinopsis.setTypeface(roboto);
+        textCalificacion.setTypeface(roboto);
+
+        //CODIGO YOUTUBE
                 /*
                android.support.v4.app.FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 transaction.replace(R.id.youtubeplayercontainer,mYouTubeFragment).commit();
@@ -278,133 +350,40 @@ public class FragmentDetalle extends Fragment {
             */
 
 
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ActivityPoster.class);
-                Bundle bundle= new Bundle();
-                bundle.putString(ActivityPoster.POSTERID, posterId);
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
-
-        if (formatoAMostrar.equals("series")){
-            textonombre.setText(nombre);
-            textoaño.setText(firstAirDate);
-        }
-        else{
-            textonombre.setText(title);
-            textoaño.setText(releaseDate);
-        }
-        textosinopsis.setText(sinopsis);
-        textCalificacion.setText(calificacion.toString());
-
-        textonombre.setTypeface(roboto);
-        textoaño.setTypeface(roboto);
-        textosinopsis.setTypeface(roboto);
-        textCalificacion.setTypeface(roboto);
-
+        //ARMO LOS FLOATING ACTION BUTTON
         menuDetalle = (FloatingActionMenu) view.findViewById(R.id.menu);
+        compartirFB = (ShareButton) view.findViewById(R.id.botonFB) ;
+
+        ShareLinkContent content = new ShareLinkContent.Builder()
+            .setContentUrl(Uri.parse(TMDBHelper.getBackDropPoster(TMDBHelper.IMAGE_SIZE_W342,posterId)))
+                .setQuote("Les recomiendo esta "+ formatoAMostrarCompartir +" que encontre en ReelShot: "+"\n"+ nombreAMostrarCompartir )
+            .build();
+
+        //Asigno el content al share button
+        compartirFB.setShareContent(content);
+
+
+
+
         /*
         addToFavorite = (FloatingActionButton)view.findViewById(R.id.addToFavorite);
         watchTrailer = (FloatingActionButton) view.findViewById(R.id.watchTrailer);
         */
 
-
-        final FloatingActionButton addToFavorite = new FloatingActionButton(getActivity());
-        final FloatingActionButton watchTrailer = new FloatingActionButton(getActivity());
-        final FloatingActionButton deleteFav = new FloatingActionButton(getActivity());
-
-        deleteFav.setButtonSize(FloatingActionButton.SIZE_MINI);
-        deleteFav.setLabelText("Quitar de favoritos");
-        deleteFav.setImageResource(R.drawable.ic_delete_black_24dp);
-
-        addToFavorite.setButtonSize(FloatingActionButton.SIZE_MINI);
-        addToFavorite.setLabelText(getString(R.string.add_to_favorite));
-        addToFavorite.setImageResource(R.drawable.ic_favorite_black_24dp);
-
-        watchTrailer.setButtonSize(FloatingActionButton.SIZE_MINI);
-        watchTrailer.setLabelText(getString(R.string.watch_trailer));
-        watchTrailer.setImageResource(R.drawable.ic_camera_roll_black_24dp);
-
-        menuDetalle.addMenuButton(deleteFav);
-        deleteFav.setOnClickListener(new View.OnClickListener() {
+        agregarCompartir();
+        controllerFragmentDetalle.existeUnFavoritoDeterminado(new ResultListener<Boolean>() {
             @Override
-            public void onClick(View v) {
-                deleteFav.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
-                        ContextCompat.getColor(getActivity(), R.color.light_grey),
-                        ContextCompat.getColor(getActivity(), R.color.white_transparent));
-                deleteFav.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
-
-                favoritable= (FavoritableFav) v.getContext();
-
-                Formato unFormato = new Formato();
-
-                if (title==null||title.isEmpty()){
-                    unFormato.setName(nombre);
-                    unFormato.setFirst_air_date(firstAirDate);
-                }
-                else{
-                    unFormato.setTitle(title);
-                    unFormato.setRelease_date(releaseDate);
-                }
-                unFormato.setId(id);
-                unFormato.setOverview(sinopsis);
-                unFormato.setVote_average(calificacion);
-                unFormato.setBackdrop_path(backdrop);
-                unFormato.setPoster_path(posterId);
-                favoritable.eliminarFormatoFavorito(unFormato);
+            public void finish(Boolean resultado) {
+                existeEnFavoritos=resultado;
             }
-        });
+        }, id);
 
-        menuDetalle.addMenuButton(addToFavorite);
-        addToFavorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addToFavorite.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
-                        ContextCompat.getColor(getActivity(), R.color.light_grey),
-                        ContextCompat.getColor(getActivity(), R.color.white_transparent));
-                addToFavorite.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
-
-                favoritable= (FavoritableFav) v.getContext();
-                Formato unFormato = new Formato();
-
-                if (title==null||title.isEmpty()){
-                    unFormato.setName(nombre);
-                    unFormato.setFirst_air_date(firstAirDate);
-                }
-                else{
-                    unFormato.setTitle(title);
-                    unFormato.setRelease_date(releaseDate);
-                }
-                unFormato.setId(id);
-                unFormato.setOverview(sinopsis);
-                unFormato.setVote_average(calificacion);
-                unFormato.setBackdrop_path(backdrop);
-                unFormato.setPoster_path(posterId);
-
-
-                favoritable.recibirFormatoFavorito(unFormato);
-
-            }
-        });
-
-        menuDetalle.addMenuButton(watchTrailer);
-        watchTrailer.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick (View v){
-                watchTrailer.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
-                        ContextCompat.getColor(getActivity(), R.color.light_grey),
-                        ContextCompat.getColor(getActivity(), R.color.white_transparent));
-                watchTrailer.setLabelTextColor(ContextCompat.getColor(getActivity(),R.color.black));
-
-
-                Toast.makeText(v.getContext(), "Ver el trailer", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
+        if(!ActivityMain.login || !existeEnFavoritos){
+            fabAgregarFavoritoTrailer();
+        }
+        else{
+            fabQuitarFavoritoTrailer();
+        }
 
 
         /*ImageButton imagebuttonFAV= (ImageButton) view.findViewById(R.id.boton_favo_grande);
@@ -414,10 +393,11 @@ public class FragmentDetalle extends Fragment {
                 favoritable= (FavoritableFav) v.getContext();
 
                 favoritable.recibirFormatoFavorito(nombre);
-
             }
         });
         */
+
+
         return view;
     }
 
@@ -479,4 +459,215 @@ public class FragmentDetalle extends Fragment {
         this.notificable=(Notificable)context;
         this.actorable=(Actorable)context;
     }
+
+
+    public void fabAgregarFavoritoTrailer(){
+        addToFavorite = new FloatingActionButton(getActivity());
+
+        addToFavorite.setButtonSize(FloatingActionButton.SIZE_MINI);
+        addToFavorite.setLabelText(getString(R.string.add_to_favorite));
+        addToFavorite.setImageResource(R.drawable.ic_favorite_black_24dp);
+        menuDetalle.addMenuButton(addToFavorite);
+
+        addToFavorite.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
+                ContextCompat.getColor(getActivity(), R.color.light_grey),
+                ContextCompat.getColor(getActivity(), R.color.white_transparent));
+        addToFavorite.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+
+        addToFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                favoritable= (FavoritableFav) v.getContext();
+                Formato unFormato = new Formato();
+
+                if (title==null||title.isEmpty()){
+                    unFormato.setName(nombre);
+                    unFormato.setFirst_air_date(firstAirDate);
+                }
+                else{
+                    unFormato.setTitle(title);
+                    unFormato.setRelease_date(releaseDate);
+                }
+                unFormato.setId(id);
+                unFormato.setOverview(sinopsis);
+                unFormato.setVote_average(calificacion);
+                unFormato.setBackdrop_path(backdrop);
+                unFormato.setPoster_path(posterId);
+                favoritable.recibirFormatoFavorito(unFormato);
+
+            }
+        });
+
+        watchTrailer = new FloatingActionButton(getActivity());
+        watchTrailer.setButtonSize(FloatingActionButton.SIZE_MINI);
+        watchTrailer.setLabelText(getString(R.string.watch_trailer));
+        watchTrailer.setImageResource(R.drawable.ic_camera_roll_black_24dp);
+        menuDetalle.addMenuButton(watchTrailer);
+
+        watchTrailer.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
+                ContextCompat.getColor(getActivity(), R.color.light_grey),
+                ContextCompat.getColor(getActivity(), R.color.white_transparent));
+        watchTrailer.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+
+        watchTrailer.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick (View v){
+                watchTrailer.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
+                        ContextCompat.getColor(getActivity(), R.color.light_grey),
+                        ContextCompat.getColor(getActivity(), R.color.white_transparent));
+                watchTrailer.setLabelTextColor(ContextCompat.getColor(getActivity(),R.color.black));
+
+
+                Toast.makeText(v.getContext(), "Ver el trailer", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+    }
+
+    public void fabQuitarFavoritoTrailer(){
+        deleteFav = new FloatingActionButton(getActivity());
+        deleteFav.setButtonSize(FloatingActionButton.SIZE_MINI);
+        deleteFav.setLabelText(getString(R.string.remove_favorite));
+        deleteFav.setImageResource(R.drawable.ic_delete_black_24dp);
+        menuDetalle.addMenuButton(deleteFav);
+
+        deleteFav.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
+                ContextCompat.getColor(getActivity(), R.color.light_grey),
+                ContextCompat.getColor(getActivity(), R.color.white_transparent));
+        deleteFav.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+
+        deleteFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                favoritable= (FavoritableFav) v.getContext();
+
+                Formato unFormato = new Formato();
+
+                if (title==null||title.isEmpty()){
+                    unFormato.setName(nombre);
+                    unFormato.setFirst_air_date(firstAirDate);
+                }
+                else{
+                    unFormato.setTitle(title);
+                    unFormato.setRelease_date(releaseDate);
+                }
+                unFormato.setId(id);
+                unFormato.setOverview(sinopsis);
+                unFormato.setVote_average(calificacion);
+                unFormato.setBackdrop_path(backdrop);
+                unFormato.setPoster_path(posterId);
+                favoritable.eliminarFormatoFavorito(unFormato);
+            }
+        });
+
+
+        watchTrailer = new FloatingActionButton(getActivity());
+        watchTrailer.setButtonSize(FloatingActionButton.SIZE_MINI);
+        watchTrailer.setLabelText(getString(R.string.watch_trailer));
+        watchTrailer.setImageResource(R.drawable.ic_camera_roll_black_24dp);
+        menuDetalle.addMenuButton(watchTrailer);
+
+        watchTrailer.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
+                ContextCompat.getColor(getActivity(), R.color.light_grey),
+                ContextCompat.getColor(getActivity(), R.color.white_transparent));
+        watchTrailer.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+
+        watchTrailer.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick (View v){
+                watchTrailer.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
+                        ContextCompat.getColor(getActivity(), R.color.light_grey),
+                        ContextCompat.getColor(getActivity(), R.color.white_transparent));
+                watchTrailer.setLabelTextColor(ContextCompat.getColor(getActivity(),R.color.black));
+
+
+                Toast.makeText(v.getContext(), "Ver el trailer", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+
+    public void agregarCompartir() {
+
+        if (estaLogueadoAFacebook()) {
+
+            compartir = new FloatingActionButton(getActivity());
+
+            compartir.setButtonSize(FloatingActionButton.SIZE_MINI);
+            compartir.setLabelText(getString(R.string.share_Facebook));
+            compartir.setImageResource(R.drawable.ic_share_black_24dp);
+            menuDetalle.addMenuButton(compartir);
+
+            compartir.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
+                    ContextCompat.getColor(getActivity(), R.color.light_grey),
+                    ContextCompat.getColor(getActivity(), R.color.white_transparent));
+            compartir.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+
+            compartir.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    compartirFB.performClick();
+                }
+            });
+
+
+        }
+        if (estaLogueadoATwitter()){
+
+            compartir = new FloatingActionButton(getActivity());
+
+            compartir.setButtonSize(FloatingActionButton.SIZE_MINI);
+            compartir.setLabelText(getString(R.string.share_Twitter));
+            compartir.setImageResource(R.drawable.ic_share_black_24dp);
+            menuDetalle.addMenuButton(compartir);
+
+            compartir.setLabelColors(ContextCompat.getColor(getActivity(), R.color.paleta4),
+                    ContextCompat.getColor(getActivity(), R.color.light_grey),
+                    ContextCompat.getColor(getActivity(), R.color.white_transparent));
+            compartir.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+
+            compartir.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    composeTweet(v);
+                }
+            });
+        }
+    }
+
+
+
+    public void composeTweet(View view){
+        final TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+                final Intent intent = new ComposerActivity.Builder(this.getActivity())
+                .session(session)
+                .text("Les recomiendo esta "+ formatoAMostrarCompartir +" que encontre en ReelShot: "+"\n"+"\n"+nombreAMostrarCompartir +"\n"+"\n")
+                .hashtags("#Maraton #ReelShot")
+                .createIntent();
+        startActivity(intent);
+    }
+
+    public Boolean estaLogueadoAFacebook() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        return accessToken != null;
+    }
+
+    public Boolean estaLogueadoATwitter() {
+        TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+        return  (session != null);
+    }
+
+
+
+
+
+
+
+
+
 }

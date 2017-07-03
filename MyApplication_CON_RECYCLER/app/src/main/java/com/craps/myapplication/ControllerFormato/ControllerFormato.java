@@ -633,6 +633,23 @@ public class ControllerFormato {
         }
     }
 
+    public Boolean existeUnFavoritoDeterminado(final ResultListener<Boolean> listenerFromView,Integer unId) {
+        if (ActivityMain.login) {
+            final DAOFavoritosDatabase daoFavoritosDatabase = new DAOFavoritosDatabase(context);
+            if (daoFavoritosDatabase.checkIfExist(unId, ActivityMain.usuario)) {
+                listenerFromView.finish(true);
+                return true;
+            } else {
+                listenerFromView.finish(false);
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+    }
+
+
     public void traerDetallesPersona(final ResultListener<Actor> listenerFromView, Integer actorId){
         if (HTTPConnectionManager.isNetworkingOnline(context)) {
             DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();

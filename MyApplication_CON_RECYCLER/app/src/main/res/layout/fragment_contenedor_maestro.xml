@@ -37,8 +37,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/recycler1"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
+
                     android:dividerHeight="0dp"
                     android:divider="@null">
                 </android.support.v7.widget.RecyclerView>
@@ -61,8 +60,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/recycler2"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
+
                         android:dividerHeight="0dp"
                         android:divider="@null">
                     </android.support.v7.widget.RecyclerView>
@@ -87,8 +85,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/recycler3"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
+
                         android:dividerHeight="0dp"
                         android:divider="@null">
                     </android.support.v7.widget.RecyclerView>

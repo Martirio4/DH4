@@ -151,8 +151,6 @@
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/tabTexto"
-                    android:layout_marginLeft="@dimen/tabTexto"
                     android:id="@+id/recycler_actores"
                     android:layout_below="@id/reparto"
                     android:layout_marginTop="8dp"
@@ -201,8 +199,7 @@
                     android:layout_width="wrap_content"
                     android:layout_below="@id/titulo_similares"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/tabTexto"
-                    android:layout_marginRight="@dimen/tabTexto"
+
                     android:id="@+id/recycler_Similares">
                 </android.support.v7.widget.RecyclerView>
                 <LinearLayout
@@ -217,6 +214,13 @@
                         android:orientation="vertical"
                         />
                 </LinearLayout>
+
+                <com.facebook.share.widget.ShareButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/botonFB"
+                    android:visibility="gone"
+                    />
 
             </RelativeLayout>
         </ScrollView>

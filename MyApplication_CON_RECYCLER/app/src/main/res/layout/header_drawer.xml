@@ -2,53 +2,46 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    >
-    <TextView
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textoMailUsuario"
-        android:textAlignment="center"
-        android:textColor="@color/marfil"
-        android:background="@color/paleta0"/>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/HDfondo"
-        android:layout_below="@id/textoMailUsuario"
+        android:orientation="vertical"
         android:background="@color/paleta0"
+        android:layout_height="match_parent">
 
-        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textoMailUsuario"
+            android:layout_gravity="center_horizontal"
+            android:textSize="20sp"
+            android:text="nombre persona"
+            android:textColor="@color/marfil"
+            android:background="@color/paleta0"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/logofilm"
-        android:id="@+id/HDimagen"
-        android:background="@null"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="40dp"
-        android:layout_marginTop="10dp"
-        android:scaleX="0.8"
-        android:scaleY="0.8"
-
-        />
-
-    <Button
-        android:id="@+id/botonNavView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/boton"
-        android:onClick="botonNavViewApretado"
-        android:text=""
-        android:textColor="@color/marfil"
-        android:layout_centerHorizontal="true"
-        android:layout_alignBottom="@+id/HDfondo"
-        android:layout_marginBottom="5dp"
-        android:scaleY="0.8"
-        android:scaleX="0.8"
-        />
-
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/strange"
+                app:civ_border_color="@color/marfil"
+                app:civ_border_width="3dp"
+                android:id="@+id/HDimagen"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center"
+                />
+        </LinearLayout>
+            <Button
+                android:id="@+id/botonNavView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/boton"
+                android:text="boton"
+                android:textColor="@color/marfil"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="8dp"
+            />
 
 
 </RelativeLayout>

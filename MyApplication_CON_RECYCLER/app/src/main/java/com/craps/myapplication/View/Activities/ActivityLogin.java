@@ -1,6 +1,7 @@
 package com.craps.myapplication.View.Activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.design.widget.TextInputLayout;
@@ -13,18 +14,26 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+
 
 import com.craps.myapplication.ControllerFormato.ControllerUsuario;
 import com.craps.myapplication.R;
+import com.facebook.Profile;
+
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.facebook.share.widget.ShareButton;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.Twitter;
-import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
-import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import com.twitter.sdk.android.tweetcomposer.ComposerActivity;
 
 
@@ -34,6 +43,13 @@ public class ActivityLogin extends AppCompatActivity {
     private ImageButton loginBtn;
     TwitterAuthClient twitterAuthClient;
 
+    private CallbackManager callbackManager;
+    private LoginButton loginButton;
+    private ShareButton shareButton;
+    ProgressDialog progress;
+    private String idFacebook, nombreFacebook, nombreMedioFacebook, apellidoFacebook, sexoFacebook, imagenFacebook, nombreCompletoFacebook, emailFacebook;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,15 +57,14 @@ public class ActivityLogin extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         twitterAuthClient = new TwitterAuthClient();
-
         TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
 
+        if (estaLogueadoAFacebook()){
+            ingresarAFacebook();
+        }
+
         if(session != null){
-                Intent unIntent = new Intent(this, ActivityMain.class);
-                Bundle bundle=new Bundle();
-                bundle.putString(ActivityMain.USUARIO, session.getUserName());
-                unIntent.putExtras(bundle);
-                startActivity(unIntent);
+            ingresarLogueadoTwitter(ActivityLogin.this, session.getUserName());
         }
 
         TextView unTextview = (TextView) findViewById(R.id.textViewLogin);
@@ -94,7 +109,7 @@ public class ActivityLogin extends AppCompatActivity {
                 String contraseña = editTextPassword.getText().toString();
 
                 if (controllerUsuario.loguearUsuario(mail, contraseña)){
-                   ingresarLoguado(v, mail);
+                   ingresarLogueadoTwitter(ActivityLogin.this, mail);
                 }
                 else{
                     editTextPassword.setText(null);
@@ -133,7 +148,7 @@ public class ActivityLogin extends AppCompatActivity {
                     @Override
                     public void success(Result<TwitterSession> result) {
                         //success
-                        ingresarLoguado(v, result.data.getUserName());
+                        ingresarLogueadoTwitter(ActivityLogin.this, result.data.getUserName());
                     }
 
                     @Override
@@ -145,15 +160,68 @@ public class ActivityLogin extends AppCompatActivity {
                 });
             }
         });
+
+        idFacebook = nombreFacebook = nombreMedioFacebook = apellidoFacebook = sexoFacebook = nombreCompletoFacebook = emailFacebook ="";
+        imagenFacebook="nada";
+
+        //for facebook
+        //FACEBOOK
+        callbackManager = CallbackManager.Factory.create();
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+
+                ingresarAFacebook();
+
+            }
+
+            @Override
+            public void onCancel() {
+
+                Toast.makeText(ActivityLogin.this, "Cancelado", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Toast.makeText(ActivityLogin.this, "Hubo un Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //shareButton = (ShareButton) findViewById(R.id.shareButton);
+
+       /* ShareLinkContent content = new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse("https://www.digitalasdfasdfasdfhouse.com/?gclid=QaAp7m8P8HAQ"))
+                .build();
+
+        //Asigno el content al share button
+        shareButton.setShareContent(content);
+*/
+
+
     }
 
-    public void ingresarLoguado(View view, String mail){
-        Intent unIntent = new Intent(view.getContext(), ActivityMain.class);
+
+    public void ingresarLogueadoTwitter(Activity unaActivity, String mail){
+        Intent unIntent = new Intent(unaActivity, ActivityMain.class);
         Bundle bundle=new Bundle();
         bundle.putString(ActivityMain.USUARIO, mail);
         unIntent.putExtras(bundle);
+        finish();
         startActivity(unIntent);
     }
+
+    public void ingresarLogueadoFacebook(Activity unaActivity, String mail, String imagenUsuario){
+        Intent unIntent = new Intent(unaActivity, ActivityMain.class);
+        Bundle bundle=new Bundle();
+        bundle.putString(ActivityMain.USUARIO, mail);
+        bundle.putString(ActivityMain.IMAGENUSUARIO, imagenUsuario);
+        unIntent.putExtras(bundle);
+        finish();
+        startActivity(unIntent);
+    }
+
     public void composeTweet(View view){
 
         final TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
@@ -162,6 +230,7 @@ public class ActivityLogin extends AppCompatActivity {
                 .text("Love where you work")
                 .hashtags("#twitter")
                 .createIntent();
+
         startActivity(intent);
     }
 
@@ -172,7 +241,29 @@ public class ActivityLogin extends AppCompatActivity {
 
         // Pass the activity result
        twitterAuthClient.onActivityResult(requestCode, resultCode, data);
+       callbackManager.onActivityResult(requestCode, resultCode, data);
     }
+
+    public boolean estaLogueadoAFacebook() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        return accessToken != null;
+    }
+
+    public void ingresarAFacebook(){
+        Profile unProf=Profile.getCurrentProfile();
+        Profile profile = Profile.getCurrentProfile();
+        if (profile != null) {
+            idFacebook =profile.getId();
+            nombreFacebook =profile.getFirstName();
+            nombreMedioFacebook =profile.getMiddleName();
+            apellidoFacebook =profile.getLastName();
+            nombreCompletoFacebook =profile.getName();
+            imagenFacebook =profile.getProfilePictureUri(400, 400).toString();
+        }
+
+        ingresarLogueadoFacebook(ActivityLogin.this, nombreCompletoFacebook, imagenFacebook);
+    }
+
 
 
 }

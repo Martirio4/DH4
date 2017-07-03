@@ -115,23 +115,65 @@
             android:elevation="10dp"
             android:layout_centerHorizontal="true"/>
     </RelativeLayout>
-    <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:scaleType="centerInside"
-        android:id="@+id/loginBtn"
-        android:layout_marginTop="20dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/twitterlogin"
-        android:layout_below="@id/contenedorBotones"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_below="@id/loginBtn"
-        android:layout_centerHorizontal="true"
-        android:textColor="#5ea8dc"
-        android:text="Twitter login"
-        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp"
+        android:layout_below="@id/contenedorBotones"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_weight="40"
+            android:layout_marginLeft="8dp"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:id="@+id/loginBtn"
+                android:scaleX=".5"
+                android:scaleY=".5"
+
+                android:background="@android:color/transparent"
+                android:src="@drawable/twitterlogin"
+                android:layout_below="@id/contenedorBotones"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_below="@id/loginBtn"
+                android:layout_gravity="center"
+                android:textColor="#5ea8dc"
+                android:text="Twitter login"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="60"
+            android:orientation="vertical">
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+
+
 
 
 

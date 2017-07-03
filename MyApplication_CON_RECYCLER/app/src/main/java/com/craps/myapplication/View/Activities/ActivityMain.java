@@ -6,6 +6,7 @@ package com.craps.myapplication.View.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,8 +27,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.craps.myapplication.ControllerFormato.ControllerFormato;
@@ -42,8 +46,15 @@ import com.craps.myapplication.View.Fragments.FragmentBusqueda;
 import com.craps.myapplication.View.Fragments.FragmentFavoritos;
 import com.craps.myapplication.View.Fragments.FragmentMain;
 import com.craps.myapplication.View.Fragments.FragmentSinConexion;
+import com.facebook.FacebookActivity;
+import com.facebook.login.LoginManager;
+import com.squareup.picasso.Picasso;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterSession;
 
 import java.util.List;
+import java.util.logging.MemoryHandler;
 
 public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.Notificable,ControllerFormato.Registrable ,FragmentMain.Notificable,FragmentSinConexion.Notificable, FragmentFavoritos.Notificable{
 
@@ -58,6 +69,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
     //isLoading Paginacion
     private Boolean isLoading;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    private Button botonNavViewApretado;
 
     //PABLO 1/4A (VER LAYOUT HEADER Y ACTIVITY MAIN)
     public static final String USUARIO = "usuario";
@@ -65,13 +77,16 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
     public static final String IMAGENUSUARIO = "imagenUsuario";
     public static final String LOGIN = "login";
     private String textoLogin = "LOGIN";
-    private Integer imagenUsuario = R.drawable.icono;
+    private String imagenUsuario;
+
+    private LoginManager facebookLoginManager;
 
     //Variables de incio
     public static String usuario = null;
     public static Boolean login = false;
     public static String idiomaDeLaSesion =TMDBHelper.language_SPANISH;
-    public String buscarStringPublico;
+
+
 
     //PABLO 1/4C
 
@@ -90,15 +105,15 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
         drawerLayout = (DrawerLayout) findViewById(R.id.elDrawer);
         navigationView = (NavigationView) findViewById(R.id.naview);
 
-        // TRAIGO USUARIO.
+
+        //TRAIGO USUARIO.
         Intent unIntent = getIntent();
         Bundle unBundle = unIntent.getExtras();
 
         if(unBundle!=null) {
             if(unBundle.getString(USUARIO)!=null) {
                 usuario = unBundle.getString(USUARIO);
-                //usuario.setImagen(R.drawable.user);
-                //imagenUsuario = usuario.getImagen();
+                imagenUsuario=unBundle.getString(IMAGENUSUARIO);
                 login=true;
                 textoLogin = "LOGOUT";
             }
@@ -107,11 +122,20 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
         Typeface roboto = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
 
         View headerLayout = navigationView.getHeaderView(0);
+
         Button botonLogin = (Button) headerLayout.findViewById(R.id.botonNavView);
         botonLogin.setText(textoLogin);
         TextView textView = (TextView) headerLayout.findViewById(R.id.textoMailUsuario);
         textView.setText(usuario);
         textView.setTypeface(roboto);
+        ImageView fotoUsuario=(ImageView)headerLayout.findViewById(R.id.HDimagen);
+
+
+        Picasso.with(this)
+                .load(imagenUsuario)
+                .placeholder(R.drawable.logofilm)
+                .error(R.drawable.logofilm)
+                .into(fotoUsuario);
 
 
 
@@ -125,7 +149,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
         }
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
-        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
         // CASTEO EDITTEXT
 
@@ -210,6 +234,28 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
 
 
         //LISTA DE LOS FORMATOS A EXHIBIR
+
+        View headerview = navigationView.getHeaderView(0);
+        botonNavViewApretado=(Button) headerview.findViewById(R.id.botonNavView);
+        botonNavViewApretado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (login == true) {
+                    usuario = null;
+                    //usuario.setImagen(R.drawable.icono);
+                    //imagenUsuario = usuario.getImagen();
+                    login = false;
+                    textoLogin = "LOGIN";
+                    logoutTwitter();
+                    logoutFacebook();
+                }
+                finish();
+                Intent unIntent = new Intent(v.getContext(), ActivityLogin.class);
+                startActivity(unIntent);
+            }
+        });
+
+
         listaFragmentsMaestros = controllerFormato.recibirListaFormatos();
         //LE SETEO EL ADAPTER AL VIEW PAGER, EL ADAPTER UTILIZA EL FRAGMENT MANAGER PARA CARGAR FRAGMENT Y LA LISTA DE PELICULAS PARA CREAR LOS FRAGMENTS CORRESPONDIENTES
         AdapterPagerMaestro adapterPagerMaestro = new AdapterPagerMaestro(getSupportFragmentManager(), listaFragmentsMaestros,this);
@@ -284,7 +330,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
     }
 */
     // PABLO 4/4A
-    public void botonNavViewApretado (View view) {
+    /*public void botonNavViewApretado (View view) {
 
         if (login == true) {
             usuario = null;
@@ -296,7 +342,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
         finish();
         Intent unIntent = new Intent(this, ActivityLogin.class);
         startActivity(unIntent);
-    }
+    }*/
 
 
     @Override
@@ -398,4 +444,25 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
 
 
     // GENERO EL METODO PARA CARGAR EL FRAGMENT REGISTER 1 LUEGO DEL CLICK.
+    public void logoutTwitter() {
+        TwitterSession twitterSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
+        if (twitterSession != null) {
+            ClearCookies(getApplicationContext());
+            TwitterCore.getInstance().getSessionManager().clearActiveSession();
+        }
+    }
+
+    public void logoutFacebook(){
+        facebookLoginManager = LoginManager.getInstance();
+        ClearCookies(getApplicationContext());
+        facebookLoginManager.logOut();
+    }
+
+    public static void ClearCookies(Context context) {
+            CookieManager.getInstance().removeAllCookies(null);
+            CookieManager.getInstance().flush();
+
+    }
+
+
 }
