@@ -48,6 +48,7 @@ import com.craps.myapplication.View.Fragments.FragmentMain;
 import com.craps.myapplication.View.Fragments.FragmentSinConexion;
 import com.facebook.FacebookActivity;
 import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterCore;
@@ -248,6 +249,8 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
                     textoLogin = "LOGIN";
                     logoutTwitter();
                     logoutFacebook();
+                    logoutFirebase();
+
                 }
                 finish();
                 Intent unIntent = new Intent(v.getContext(), ActivityLogin.class);
@@ -462,6 +465,11 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
             CookieManager.getInstance().removeAllCookies(null);
             CookieManager.getInstance().flush();
 
+    }
+
+    public void logoutFirebase(){
+        ClearCookies(getApplicationContext());
+        FirebaseAuth.getInstance().signOut();
     }
 
 

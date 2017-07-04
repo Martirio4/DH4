@@ -30,6 +30,12 @@ public class ControllerUsuario {
         }
     }
 
+    public Boolean existeUsuario(Usuario unUsuario){
+        DAOUsuarioDatabase daoUsuarioDatabase = new DAOUsuarioDatabase(context);
+        return daoUsuarioDatabase.checkIfUserExist(unUsuario);
+
+    }
+
     public Boolean loguearUsuario(String mail, String contraseña){
         DAOUsuarioDatabase daoUsuarioDatabase= new DAOUsuarioDatabase(context);
         Usuario unUsuario = new Usuario();

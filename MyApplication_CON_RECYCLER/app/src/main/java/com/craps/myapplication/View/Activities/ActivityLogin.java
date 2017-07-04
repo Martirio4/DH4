@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +28,13 @@ import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.share.widget.ShareButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.TwitterAuthProvider;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.Twitter;
@@ -54,12 +62,38 @@ public class ActivityLogin extends AppCompatActivity {
     ProgressDialog progress;
     private String idFacebook, nombreFacebook, nombreMedioFacebook, apellidoFacebook, sexoFacebook, imagenFacebook, nombreCompletoFacebook, emailFacebook;
 
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //INICIALIZO TWITTER
         Twitter.initialize(this);
         setContentView(R.layout.activity_login);
+        //INICIALIZAR FIREBASE
+        mAuth= FirebaseAuth.getInstance();
+
+        mAuthListener=new FirebaseAuth.AuthStateListener(){
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user= firebaseAuth.getCurrentUser();
+                if (user!=null){
+                    Toast.makeText(ActivityLogin.this, "Bienvenido! "+user.getEmail(), Toast.LENGTH_SHORT).show();
+                    String mail;
+                    String foto;
+                    if (user.getEmail() == null||user.getEmail().isEmpty()){mail=user.getUid();}
+                    else{mail=user.getEmail();}
+
+                    if (user.getPhotoUrl()==null){foto="sinFoto";}
+                    else{foto=user.getPhotoUrl().toString();}
+
+                    ingresarLogueadoTwitter(ActivityLogin.this, mail, foto);
+                }
+                else{
+
+                }
+            }
+        };
 
         twitterAuthClient = new TwitterAuthClient();
         TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
@@ -68,9 +102,6 @@ public class ActivityLogin extends AppCompatActivity {
             ingresarConFacebook();
         }
 
-        if(session != null){
-            ingresarConTwitter();
-        }
 
         TextView unTextview = (TextView) findViewById(R.id.textViewLogin);
         Typeface roboto = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
@@ -114,6 +145,7 @@ public class ActivityLogin extends AppCompatActivity {
                 String contraseña = editTextPassword.getText().toString();
 
                 if (controllerUsuario.loguearUsuario(mail, contraseña)){
+                    loguearFirebaseManual(mail, contraseña);
                    ingresarLogueadoManual(ActivityLogin.this, mail);
                 }
                 else{
@@ -128,6 +160,7 @@ public class ActivityLogin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent unIntent = new Intent(v.getContext(), ActivityRegister.class);
+                finish();
                 startActivity(unIntent);
 
             }
@@ -154,28 +187,7 @@ public class ActivityLogin extends AppCompatActivity {
                     @Override
                     public void success(Result<TwitterSession> result) {
                         //success
-
-                        Call<User> user = TwitterCore.getInstance().getApiClient().getAccountService().verifyCredentials(true, false,true);
-                        user.enqueue(new Callback<User>() {
-                            @Override
-                            public void success(Result<User> result) {
-                                String nombreTwitter=result.data.name;
-                                String emailTwitter=result.data.email;
-                                String fotoTwitter=result.data.profileImageUrl.replace("_normal","");
-
-                                if (emailTwitter==null ||emailTwitter.isEmpty()){
-                                    ingresarLogueadoTwitter(ActivityLogin.this,nombreTwitter, fotoTwitter);
-                                }
-                                else{
-                                    ingresarLogueadoTwitter(ActivityLogin.this, emailTwitter, fotoTwitter);
-                                }
-                            }
-
-                            @Override
-                            public void failure(TwitterException exception) {
-
-                            }
-                        });
+                        handleTwitterSession(result.data);
 
                     }
 
@@ -326,8 +338,75 @@ public class ActivityLogin extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mAuthListener!=null){
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
+    private void handleTwitterSession(TwitterSession session) {
+
+        AuthCredential credential = TwitterAuthProvider.getCredential(
+                session.getAuthToken().token,
+                session.getAuthToken().secret);
+
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            String mail;
+                            if (user.getEmail() == null||user.getEmail().isEmpty()){
+                                mail=user.getUid();
+                            }
+                            else{
+                                mail=user.getEmail();
+                            }
+
+                            //HAGO ALGO EN CASO DE QUE EL USUARIO SE HAYA CREADO EN FIREBASE CORRECTAMENTE
+                            ingresarLogueadoTwitter(ActivityLogin.this, mail, user.getPhotoUrl().toString());
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(ActivityLogin.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
+    }
+
+    public void LogoutFirebase(){
+        FirebaseAuth.getInstance().signOut();
+    }
+
+    public void loguearFirebaseManual(String usuario, String pass){
+        mAuth.signInWithEmailAndPassword(usuario, pass)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
 
 
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+
+                        }
+
+                        // ...
+                    }
+                });
+    }
 
 
 }
