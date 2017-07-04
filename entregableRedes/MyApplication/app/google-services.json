@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "184296626301",
+    "firebase_url": "https://twitteralocado.firebaseio.com",
+    "project_id": "twitteralocado",
+    "storage_bucket": "twitteralocado.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184296626301:android:06918b39bc2c3235",
+        "android_client_info": {
+          "package_name": "com.example.dh3.firebaseentregable"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "184296626301-rc2phgbadbrktav33uvh3odmtj2bq6nd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dh3.firebaseentregable",
+            "certificate_hash": "55e585ee89075e4fa872073991230cf3938bf4dd"
+          }
+        },
+        {
+          "client_id": "184296626301-qufs5rvdrtimdecv2dphomuvqtgp00na.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLBjqCBY9wENr5-Df8MHPokGapNjQ5MvE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "184296626301-qufs5rvdrtimdecv2dphomuvqtgp00na.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
