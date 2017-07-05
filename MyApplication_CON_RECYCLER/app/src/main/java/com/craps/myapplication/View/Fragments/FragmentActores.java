@@ -80,6 +80,7 @@ public class FragmentActores extends Fragment {
         textoaño=(TextView)view.findViewById(R.id.tag_año2);
         textosinopsis=(TextView)view.findViewById(R.id.tag_sinopsis2);
         textCalificacion = (TextView) view.findViewById(R.id.textViewrating);
+
         //RECIBO EL BUNDLE Y SACVO LOS DATOS, LOS PONGO EN LOS TEXTVIEWS
         Bundle unBundle= getArguments();
         if (unBundle==null || unBundle.isEmpty()){
@@ -114,11 +115,12 @@ public class FragmentActores extends Fragment {
 
         //RECYCLER CREDITOS
         recyclerActores=(RecyclerView)view.findViewById(R.id.recycler_participacion);
-        recyclerActores.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false));
+        recyclerActores.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
         adapterCreditos= new AdapterCreditos();
         adapterCreditos.setContext(view.getContext());
         adapterCreditos.setListaCreditosOriginales(new ArrayList<Creditos>());
         recyclerActores.setAdapter(adapterCreditos);
+
 
         /*
         //listener clickeo actores

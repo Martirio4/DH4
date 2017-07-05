@@ -2,7 +2,6 @@ package com.craps.myapplication.ControllerFormato;
 
 import android.content.Context;
 import android.widget.Toast;
-
 import com.craps.myapplication.DAO.Db.DAOUsuarioDatabase;
 import com.craps.myapplication.Model.Usuario;
 
@@ -33,7 +32,6 @@ public class ControllerUsuario {
     public Boolean existeUsuario(Usuario unUsuario){
         DAOUsuarioDatabase daoUsuarioDatabase = new DAOUsuarioDatabase(context);
         return daoUsuarioDatabase.checkIfUserExist(unUsuario);
-
     }
 
     public Boolean loguearUsuario(String mail, String contraseña){

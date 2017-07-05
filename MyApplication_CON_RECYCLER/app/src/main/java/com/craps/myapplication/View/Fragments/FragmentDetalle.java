@@ -470,6 +470,7 @@ public class FragmentDetalle extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        this.favoritable=(FavoritableFav)context;
         this.notificable=(Notificable)context;
         this.actorable=(Actorable)context;
     }
@@ -492,7 +493,6 @@ public class FragmentDetalle extends Fragment {
             @Override
             public void onClick(View v) {
 
-                favoritable= (FavoritableFav) v.getContext();
                 Formato unFormato = new Formato();
 
                 if (title==null||title.isEmpty()){
@@ -557,7 +557,7 @@ public class FragmentDetalle extends Fragment {
             @Override
             public void onClick(View v) {
 
-                favoritable= (FavoritableFav) v.getContext();
+
 
                 Formato unFormato = new Formato();
 

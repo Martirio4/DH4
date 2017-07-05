@@ -202,7 +202,7 @@
                         android:id="@+id/youtubeplayercontainer"
                         android:layout_below="@id/recycler_Similares"
                         android:layout_width="match_parent"
-                        android:layout_height="250dp"
+                        android:layout_height="20dp"
                         android:orientation="vertical"
                         />
                 </LinearLayout>

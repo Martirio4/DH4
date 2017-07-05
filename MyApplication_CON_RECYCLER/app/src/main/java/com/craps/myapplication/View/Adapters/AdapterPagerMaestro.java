@@ -52,7 +52,12 @@ public class AdapterPagerMaestro extends FragmentStatePagerAdapter {
                     }
                 }
                 else {
-                    listaContenedoresMaestros.add(FragmentMain.crearFragmentMaestro(unString));
+                    if (HTTPConnectionManager.isNetworkingOnline(context)) {
+                        listaContenedoresMaestros.add(FragmentMain.crearFragmentMaestro(unString));
+                    }
+                    else{
+                        listaContenedoresMaestros.add(FragmentSinConexion.crearFragmentMaestro());
+                    }
                 }
             }
         //}

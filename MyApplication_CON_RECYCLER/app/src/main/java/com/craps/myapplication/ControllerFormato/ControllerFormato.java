@@ -81,7 +81,14 @@ public class ControllerFormato {
     public List<String> recibirListaFormatos() {
         DAOArchivo DAOArchivo = new DAOArchivo();
 
-            return DAOArchivo.cargarTipoFormato();
+            if (HTTPConnectionManager.isNetworkingOnline(context)){
+                return DAOArchivo.cargarTipoFormato();
+            }
+            else{
+                return DAOArchivo.cargarTipoFormatoOffline();
+            }
+
+
 
     }
 

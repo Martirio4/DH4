@@ -65,8 +65,6 @@ public class DAOFormatoDatabase extends DatabaseHelper {
             row.put(NUMBER_OF_EPISODES, unFormato.getNumber_of_episodes());
             row.put(BUDGET, unFormato.getBudget());
             row.put(REVENUE, unFormato.getRevenue());
-
-
             //LE DIGO A LA BD QUE CARGUE LA FILA EN LA TABLA
             database.insert(TABLE_FORMATOS, null, row);
 
@@ -108,10 +106,8 @@ public class DAOFormatoDatabase extends DatabaseHelper {
             unFormato.setNumber_of_episodes(cursor.getInt(cursor.getColumnIndex(NUMBER_OF_EPISODES)));
             unFormato.setBudget(cursor.getInt(cursor.getColumnIndex(BUDGET)));
             unFormato.setRevenue(cursor.getInt(cursor.getColumnIndex(REVENUE)));
-
             formatos.add(unFormato);
         }
-
         //CERRAR
         cursor.close();
         database.close();
@@ -133,7 +129,6 @@ public class DAOFormatoDatabase extends DatabaseHelper {
             select = "SELECT * FROM " + TABLE_FORMATOS+" WHERE NAME LIKE '%"+queBuscoEnInet+"%' AND TIPO_FORMATO LIKE "+"'%"+tipoFormato+"%'";
         }
 
-
         Cursor cursor = database.rawQuery(select, null);
         while(cursor.moveToNext()){
 
@@ -154,7 +149,6 @@ public class DAOFormatoDatabase extends DatabaseHelper {
             unFormato.setNumber_of_episodes(cursor.getInt(cursor.getColumnIndex(NUMBER_OF_EPISODES)));
             unFormato.setBudget(cursor.getInt(cursor.getColumnIndex(BUDGET)));
             unFormato.setRevenue(cursor.getInt(cursor.getColumnIndex(REVENUE)));
-
             formatos.add(unFormato);
         }
 

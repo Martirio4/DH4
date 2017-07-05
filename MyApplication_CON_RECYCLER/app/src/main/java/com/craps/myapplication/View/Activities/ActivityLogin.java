@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.craps.myapplication.Utils.HTTPConnectionManager;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -32,11 +34,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.TwitterAuthProvider;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.Session;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterApiClient;
 import com.twitter.sdk.android.core.TwitterCore;
@@ -69,39 +73,38 @@ public class ActivityLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //INICIALIZO TWITTER
         Twitter.initialize(this);
-        setContentView(R.layout.activity_login);
-        //INICIALIZAR FIREBASE
         mAuth= FirebaseAuth.getInstance();
+        setContentView(R.layout.activity_login);
 
+        //chequeo si hay internet
+        if (!HTTPConnectionManager.isNetworkingOnline(this)){
+            TextView unText=(TextView)findViewById(R.id.texto_sin_conexion);
+            unText.setVisibility(View.VISIBLE);
+        }
+
+
+        //INICIALIZAR FIREBASE
+        twitterAuthClient = new TwitterAuthClient();
         mAuthListener=new FirebaseAuth.AuthStateListener(){
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user= firebaseAuth.getCurrentUser();
                 if (user!=null){
-                    Toast.makeText(ActivityLogin.this, "Bienvenido! "+user.getEmail(), Toast.LENGTH_SHORT).show();
                     String mail;
                     String foto;
-                    if (user.getEmail() == null||user.getEmail().isEmpty()){mail=user.getUid();}
+                    if (user.getEmail() == null||user.getEmail().isEmpty()){mail=user.getDisplayName();}
                     else{mail=user.getEmail();}
-
                     if (user.getPhotoUrl()==null){foto="sinFoto";}
                     else{foto=user.getPhotoUrl().toString();}
-
-                    ingresarLogueadoTwitter(ActivityLogin.this, mail, foto);
+                    Toast.makeText(ActivityLogin.this, "Bienvenido! "+mail, Toast.LENGTH_SHORT).show();
+                    ingresarLogueado(ActivityLogin.this, mail, foto);
+                    user.getEmail();
                 }
                 else{
 
                 }
             }
         };
-
-        twitterAuthClient = new TwitterAuthClient();
-        TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
-
-        if (estaLogueadoAFacebook()){
-            ingresarConFacebook();
-        }
-
 
         TextView unTextview = (TextView) findViewById(R.id.textViewLogin);
         Typeface roboto = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
@@ -110,7 +113,6 @@ public class ActivityLogin extends AppCompatActivity {
         final TextInputLayout textInputLayout1 = (TextInputLayout) findViewById(R.id.inputLayout1);
         final TextInputLayout textInputLayout2 = (TextInputLayout) findViewById(R.id.inputLayout2);
 
-
         Button botonLogin = (Button) findViewById(R.id.buttonLogin);
         Button botonRegistro = (Button) findViewById(R.id.buttonRegister);
         Button botonLuego = (Button) findViewById(R.id.buttonDespues);
@@ -118,9 +120,7 @@ public class ActivityLogin extends AppCompatActivity {
         final EditText editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         editTextUsuario.setTypeface(roboto);
 
-
         //COMPROBAR SI COINCIDE USUARIO Y CONTRASEÑA
-
         botonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,13 +146,12 @@ public class ActivityLogin extends AppCompatActivity {
 
                 if (controllerUsuario.loguearUsuario(mail, contraseña)){
                     loguearFirebaseManual(mail, contraseña);
-                   ingresarLogueadoManual(ActivityLogin.this, mail);
+                    ingresarLogueadoManual(ActivityLogin.this, mail);
                 }
                 else{
                     editTextPassword.setText(null);
                     editTextUsuario.setText(null);
                 }
-
             }
         });
 
@@ -206,29 +205,30 @@ public class ActivityLogin extends AppCompatActivity {
 
         //for facebook
         //FACEBOOK
+
+        // Initialize Facebook Login button
         callbackManager = CallbackManager.Factory.create();
-        loginButton = (LoginButton) findViewById(R.id.login_button);
+        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
-                ingresarConFacebook();
-
+                Log.d("error", "facebook:onSuccess:" + loginResult);
+                handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
             @Override
             public void onCancel() {
-
-                Toast.makeText(ActivityLogin.this, "Cancelado", Toast.LENGTH_SHORT).show();
-
+                Log.d("error", "facebook:onCancel");
+                // ...
             }
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(ActivityLogin.this, "Hubo un Error", Toast.LENGTH_SHORT).show();
+                Log.d("error", "facebook:onError", error);
+                // ...
             }
         });
-
         //shareButton = (ShareButton) findViewById(R.id.shareButton);
 
        /* ShareLinkContent content = new ShareLinkContent.Builder()
@@ -238,8 +238,6 @@ public class ActivityLogin extends AppCompatActivity {
         //Asigno el content al share button
         shareButton.setShareContent(content);
 */
-
-
     }
 
     public void ingresarLogueadoManual(Activity unaActivity, String mail){
@@ -250,8 +248,9 @@ public class ActivityLogin extends AppCompatActivity {
         finish();
         startActivity(unIntent);
     }
+    
 
-    public void ingresarLogueadoTwitter(Activity unaActivity, String mail, String imagenUsuario){
+    public void ingresarLogueado(Activity unaActivity, String mail, String imagenUsuario){
         Intent unIntent = new Intent(unaActivity, ActivityMain.class);
         Bundle bundle=new Bundle();
         bundle.putString(ActivityMain.USUARIO, mail);
@@ -261,82 +260,17 @@ public class ActivityLogin extends AppCompatActivity {
         startActivity(unIntent);
     }
 
-    public void ingresarLogueadoFacebook(Activity unaActivity, String mail, String imagenUsuario){
-        Intent unIntent = new Intent(unaActivity, ActivityMain.class);
-        Bundle bundle=new Bundle();
-        bundle.putString(ActivityMain.USUARIO, mail);
-        bundle.putString(ActivityMain.IMAGENUSUARIO, imagenUsuario);
-        unIntent.putExtras(bundle);
-        finish();
-        startActivity(unIntent);
-    }
-
-    public void composeTweet(View view){
-
-        final TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
-        final Intent intent = new ComposerActivity.Builder(ActivityLogin.this)
-                .session(session)
-                .text("Love where you work")
-                .hashtags("#twitter")
-                .createIntent();
-
-        startActivity(intent);
-    }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // Pass the activity result
-       twitterAuthClient.onActivityResult(requestCode, resultCode, data);
-       callbackManager.onActivityResult(requestCode, resultCode, data);
+        twitterAuthClient.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    public boolean estaLogueadoAFacebook() {
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        return accessToken != null;
-    }
 
-    public void ingresarConFacebook(){
-        Profile unProf=Profile.getCurrentProfile();
-        Profile profile = Profile.getCurrentProfile();
-        if (profile != null) {
-            idFacebook =profile.getId();
-            nombreFacebook =profile.getFirstName();
-            nombreMedioFacebook =profile.getMiddleName();
-            apellidoFacebook =profile.getLastName();
-            nombreCompletoFacebook =profile.getName();
-            imagenFacebook =profile.getProfilePictureUri(400, 400).toString();
-        }
-
-        ingresarLogueadoFacebook(ActivityLogin.this, nombreCompletoFacebook, imagenFacebook);
-    }
-
-    public void ingresarConTwitter(){
-        Call<User> user = TwitterCore.getInstance().getApiClient().getAccountService().verifyCredentials(true, false,true);
-        user.enqueue(new Callback<User>() {
-            @Override
-            public void success(Result<User> result) {
-                String nombreTwitter=result.data.name;
-                String emailTwitter=result.data.email;
-                String fotoTwitter=result.data.profileImageUrl.replace("_normal","");
-
-                if (emailTwitter==null ||emailTwitter.isEmpty()){
-                    ingresarLogueadoTwitter(ActivityLogin.this,nombreTwitter, fotoTwitter);
-                }
-                else{
-                    ingresarLogueadoTwitter(ActivityLogin.this, emailTwitter, fotoTwitter);
-                }
-            }
-
-            @Override
-            public void failure(TwitterException exception) {
-                Toast.makeText(ActivityLogin.this, "ERROR! Intente nuevamente", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
 
     @Override
     protected void onStart() {
@@ -356,27 +290,14 @@ public class ActivityLogin extends AppCompatActivity {
         AuthCredential credential = TwitterAuthProvider.getCredential(
                 session.getAuthToken().token,
                 session.getAuthToken().secret);
-
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
+                        if (!task.isSuccessful()) {
 
-                            String mail;
-                            if (user.getEmail() == null||user.getEmail().isEmpty()){
-                                mail=user.getUid();
-                            }
-                            else{
-                                mail=user.getEmail();
-                            }
 
-                            //HAGO ALGO EN CASO DE QUE EL USUARIO SE HAYA CREADO EN FIREBASE CORRECTAMENTE
-                            ingresarLogueadoTwitter(ActivityLogin.this, mail, user.getPhotoUrl().toString());
 
-                        } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(ActivityLogin.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
 
@@ -396,11 +317,12 @@ public class ActivityLogin extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
 
+
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-
+                            Toast.makeText(ActivityLogin.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
 
                         // ...
@@ -409,5 +331,44 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
 
-}
+
+    private void handleFacebookAccessToken(AccessToken token) {
+        Log.d("tag1", "handleFacebookAccessToken:" + token);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d("tag2", "signInWithCredential:onComplete:" + task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Log.w("tag3", "signInWithCredential", task.getException());
+                            Toast.makeText(ActivityLogin.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
+    private boolean estaLogueadoEnFacebook(){
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        return accessToken != null;
+    }
+    private boolean estaLogueadoEnTwitter(){
+        Session activeSession =TwitterCore.getInstance().getSessionManager().getActiveSession();
+        return activeSession!=null;
+    }
+
+
+
+
+    }
+
+
 

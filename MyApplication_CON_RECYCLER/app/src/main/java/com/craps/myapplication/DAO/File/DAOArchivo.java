@@ -34,10 +34,12 @@ public class DAOArchivo {
          return listaFragmentsMain;
     }
 
+
     public List<String> cargarTipoFormatoOffline(){
         List<String> listaFragmentsMain = new ArrayList<>();
-        listaFragmentsMain.add("Peliculas y Series");
         listaFragmentsMain.add("favoritos");
+        listaFragmentsMain.add("peliculas");
+        listaFragmentsMain.add("series");
         return listaFragmentsMain;
     }
 

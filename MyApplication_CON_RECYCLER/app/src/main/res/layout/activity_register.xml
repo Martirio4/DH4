@@ -7,6 +7,7 @@
     android:focusableInTouchMode="true"
     tools:context="com.craps.myapplication.View.Activities.ActivityRegister"
     android:background="@color/paleta0">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -86,7 +87,7 @@
             android:id="@+id/editTextPassword"
             android:textColor="@color/marfil"
             android:textAlignment="center"
-            android:hint="Password"
+            android:hint="Password (6 caracteres o mas)"
             />
     </android.support.design.widget.TextInputLayout>
 

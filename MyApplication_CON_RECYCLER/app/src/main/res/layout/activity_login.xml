@@ -21,6 +21,17 @@
         android:layout_centerHorizontal="true"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/texto_sin_conexion"
+        android:layout_below="@id/textViewLogin"
+        android:text="(Sin acceso a internet, revise su conexion)"
+        android:textColor="@color/marfil"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        />
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -94,6 +94,10 @@ public class ActivityRegister extends AppCompatActivity {
                     textInputLayout3.setError("Por favor ingrese una contraseña valida");
                     control = control + 1;
                 }
+                if (editTextPassword.getText().toString().length()<6){
+                    textInputLayout3.setError("La contraseña debe tener al menos 6 caracteres");
+                    control=control+1;
+                }
 
                 if (control > 0) {
                     return;
@@ -115,16 +119,12 @@ public class ActivityRegister extends AppCompatActivity {
                     }
                     else  {
                         crearCuentaFirebase(editTextMail.getText().toString().toLowerCase(), editTextPassword.getText().toString());
-
                     }
-
                 }
                 else {
                     textInputLayout3.setError("Las contraseñas ingresadas no coinciden");
                     editTextPassRepe.setText("");
                 }
-
-
             };
 
         });
@@ -145,14 +145,13 @@ public class ActivityRegister extends AppCompatActivity {
                            startActivity(unIntent);
                        }
 
-
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
 
                         //creo usuario en mi base de datos
-                            Toast.makeText(ActivityRegister.this, "La cuenta no fue creada", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ActivityRegister.this, "Sin Conexion, intente mas tarde.", Toast.LENGTH_SHORT).show();
                         }
 
                         // ...

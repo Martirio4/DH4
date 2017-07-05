@@ -70,7 +70,7 @@ public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClic
 
 
 
-            viewCelda = layoutInflater.inflate(R.layout.detalle_celda_busqueda, parent, false);
+            viewCelda = layoutInflater.inflate(R.layout.detalle_celda_actores, parent, false);
 
         FormatoViewHolder peliculasViewHolder = new FormatoViewHolder(viewCelda);
         viewCelda.setOnClickListener(this);
@@ -119,6 +119,9 @@ public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClic
             imageView = (ImageView) itemView.findViewById(R.id.peli_img_celda);
             textViewTitulo =(TextView) itemView.findViewById(R.id.peli_texto_celda);
             textViewDescripcion=(TextView) itemView.findViewById(R.id.detalleBusqueda);
+            Typeface roboto = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
+            textViewTitulo.setTypeface(roboto);
+            textViewDescripcion.setTypeface(roboto);
 
 
 
@@ -126,7 +129,7 @@ public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClic
             FragmentManager fragmentManager = (FragmentManager) unaActivity.getSupportFragmentManager();
             FragmentBusqueda fragmentBusqueda= (FragmentBusqueda) fragmentManager.findFragmentByTag("FragmentBuscador");
 
-            Typeface roboto = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
+
 
             if (fragmentBusqueda != null && fragmentBusqueda.isVisible()) {
                 textViewTitulo =(TextView) itemView.findViewById(R.id.peli_texto_celda);
