@@ -2,6 +2,7 @@ package com.craps.myapplication.View;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import com.craps.myapplication.R;
@@ -40,15 +41,36 @@ public class Splash extends Activity {
         super.onCreate(splash);
         setContentView(R.layout.splash_layout);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent mainIntent = new Intent(Splash.this, ActivityLogin.class);
-                Splash.this.startActivity(mainIntent);
-                Splash.this.finish();
-            }
-        }, SPLASH_DISPLAY_LENGHT);
-    }
+       new Handler().postDelayed(new Runnable() {
+           @Override
+           public void run() {
 
+               SharedPreferences settings=getSharedPreferences("prefs",0);
+               boolean firstRun=settings.getBoolean("firstRun",false);
+               if(firstRun==false)//if running for first time
+               //Splash will load for first time
+               {
+                   SharedPreferences.Editor editor=settings.edit();
+                   editor.putBoolean("firstRun",true);
+                   editor.commit();
+
+                   Intent mainIntent = new Intent(Splash.this, ActivityOnBoarding.class);
+                   Splash.this.startActivity(mainIntent);
+                   Splash.this.finish();
+               }        else
+               {
+
+                   Intent mainIntent = new Intent(Splash.this, ActivityLogin.class);
+                   Splash.this.startActivity(mainIntent);
+                   Splash.this.finish();
+               }
+
+           }
+       }, SPLASH_DISPLAY_LENGHT);
+
+   }
 
 }
+
+
+

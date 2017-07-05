@@ -1,6 +1,8 @@
 package com.craps.myapplication.View.Activities;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -60,7 +62,11 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
         setSupportActionBar(toolbar);
         // MUESTRO EL BOTON DE VOLVER ATRAS.
         ActionBar ab = getSupportActionBar();
+
         ab.setDisplayHomeAsUpEnabled(true);
+        final Drawable upArrow =getResources().getDrawable(R.drawable.ic_arrow_back_black_24dp);
+        upArrow.setColorFilter(getResources().getColor(R.color.marfil), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
         // PABLO 1/1C
         //RECIBO BUNDLE Y BUSCO PELICULA CLICKEADA
         Intent unIntent = getIntent();

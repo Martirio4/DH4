@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.craps.myapplication.View.Activities.ActivityPoster">
-
+    <include layout="@layout/app_bar"/>
 
     <ImageView
         android:layout_width="match_parent"

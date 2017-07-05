@@ -27,6 +27,7 @@ import com.craps.myapplication.Utils.ResultListener;
 import com.craps.myapplication.Utils.TMDBHelper;
 import com.craps.myapplication.View.Activities.ActivityMain;
 import com.craps.myapplication.View.Activities.ActivityPoster;
+import com.craps.myapplication.View.Activities.ActivityYouTube;
 import com.craps.myapplication.View.Adapters.AdapterActores;
 import com.craps.myapplication.View.Adapters.AdapterFormato;
 import com.facebook.AccessToken;
@@ -533,7 +534,17 @@ public class FragmentDetalle extends Fragment {
                 watchTrailer.setLabelTextColor(ContextCompat.getColor(getActivity(),R.color.black));
 
 
-                Toast.makeText(v.getContext(), "Ver el trailer", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(v.getContext(), ActivityYouTube.class);
+                Bundle bundle= new Bundle();
+                bundle.putString(ActivityYouTube.DEVELOPERKEY, TMDBHelper.DEVELOPER_KEY);
+                bundle.putString(ActivityYouTube.FORMATOAMOSTRAR,formatoAMostrar);
+
+                bundle.putInt(ActivityYouTube.ID,id);
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+
+
             }
         });
 
@@ -599,7 +610,20 @@ public class FragmentDetalle extends Fragment {
                 watchTrailer.setLabelTextColor(ContextCompat.getColor(getActivity(),R.color.black));
 
 
-                Toast.makeText(v.getContext(), "Ver el trailer", Toast.LENGTH_SHORT).show();
+                watchTrailer.setLabelColors(ContextCompat.getColor(getActivity(), R.color.color5),
+                        ContextCompat.getColor(getActivity(), R.color.light_grey),
+                        ContextCompat.getColor(getActivity(), R.color.white_transparent));
+                watchTrailer.setLabelTextColor(ContextCompat.getColor(getActivity(),R.color.black));
+
+
+                Intent intent = new Intent(v.getContext(), ActivityYouTube.class);
+                Bundle bundle= new Bundle();
+                bundle.putString(ActivityYouTube.DEVELOPERKEY, TMDBHelper.DEVELOPER_KEY);
+                bundle.putString(ActivityYouTube.FORMATOAMOSTRAR,formatoAMostrar);
+
+                bundle.putInt(ActivityYouTube.ID,id);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
 

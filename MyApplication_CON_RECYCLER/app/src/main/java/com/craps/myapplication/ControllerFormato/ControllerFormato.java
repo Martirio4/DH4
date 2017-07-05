@@ -695,7 +695,7 @@ public class ControllerFormato {
         if (HTTPConnectionManager.isNetworkingOnline(context)) {
             DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
             if (tipoFormato.equals("series")) {
-                daoFormatoInternet.obtenerTrailerPeliculas(new ResultListener<List<Trailer>>() {
+                daoFormatoInternet.obtenerTrailerSeries(new ResultListener<List<Trailer>>() {
                     @Override
                     public void finish(List<Trailer> unaPagina) {
 

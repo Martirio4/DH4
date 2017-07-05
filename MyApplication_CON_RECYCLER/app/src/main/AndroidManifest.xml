@@ -5,6 +5,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <provider
+        android:name="com.facebook.FacebookContentProvider"
+        android:authorities="com.facebook.app.FacebookContentProvider835511146603634"
+        android:exported="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,9 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
         <activity
             android:name=".View.Splash"
@@ -27,14 +32,10 @@
         </activity>
         <activity
             android:name=".View.Activities.ActivitySegunda"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".View.Activities.ActivityMain"/>
+            android:parentActivityName=".View.Activities.ActivityMain"
+            android:screenOrientation="portrait" />
         <activity android:name=".View.Activities.ActivityMain" />
-        <activity
-            android:name=".View.Activities.ActivityLogin"
-         >
-
-        </activity>
+        <activity android:name=".View.Activities.ActivityLogin" />
         <activity
             android:name=".View.Activities.ActivityRegister"
             android:noHistory="true"
@@ -43,43 +44,42 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".View.Activities.ActivityMain" />
         </activity>
-        <activity android:name=".View.Activities.ActivityPoster" />
+        <activity android:name=".View.Activities.ActivityPoster"
+            android:parentActivityName=".View.Activities.ActivitySegunda"
+            />
         <activity
             android:name=".View.Activities.ActivityOnBoarding"
             android:noHistory="true" />
-        <activity android:name=".View.Activities.ActivityActores"></activity>
-
-
-
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        <activity android:name=".View.Activities.ActivityActores"
+            android:parentActivityName=".View.Activities.ActivitySegunda"
+            />
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
-
 
         <receiver
             android:name=".View.MyResultReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.twitter.sdk.android.tweetcomposer.UPLOAD_SUCCESS"/>
-                <action android:name="com.twitter.sdk.android.tweetcomposer.UPLOAD_FAILURE"/>
+                <action android:name="com.twitter.sdk.android.tweetcomposer.UPLOAD_SUCCESS" />
+                <action android:name="com.twitter.sdk.android.tweetcomposer.UPLOAD_FAILURE" />
             </intent-filter>
         </receiver>
-    </application>
 
-    <provider android:authorities="com.facebook.app.FacebookContentProvider835511146603634"
-        android:name="com.facebook.FacebookContentProvider"
-        android:exported="true"/>
+        <activity android:name=".View.Activities.ActivityYouTube" />
+    </application>
 
 </manifest>

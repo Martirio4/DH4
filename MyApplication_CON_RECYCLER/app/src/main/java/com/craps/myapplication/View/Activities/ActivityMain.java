@@ -150,6 +150,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
         }
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+        actionBarDrawerToggle.getDrawerArrowDrawable().setColor(getColor(R.color.marfil));
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
         // CASTEO EDITTEXT

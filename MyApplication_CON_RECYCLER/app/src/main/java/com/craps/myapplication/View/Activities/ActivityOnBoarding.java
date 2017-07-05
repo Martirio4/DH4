@@ -8,10 +8,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.craps.myapplication.R;
+import com.craps.myapplication.View.Fragments.FragmentOB1;
+import com.craps.myapplication.View.Fragments.FragmentOB2;
+import com.craps.myapplication.View.Fragments.FragmentOB3;
+import com.craps.myapplication.View.Fragments.FragmentOB4;
+import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntro2Fragment;
 
-public class ActivityOnBoarding extends AppIntro2 {
+public class ActivityOnBoarding extends AppIntro {
     private Bundle bundle;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -19,10 +24,11 @@ public class ActivityOnBoarding extends AppIntro2 {
         Intent unIntent = getIntent();
         bundle= unIntent.getExtras();
 
-        addSlide(AppIntro2Fragment.newInstance("", "BIENVENIDO A REELSHOT", R.drawable.ob_splash, getColor(R.color.paleta4)));
-        addSlide(AppIntro2Fragment.newInstance("", "REGISTRATE PARA DISFRUTAR AL MAXIMO DE TU EXPERIENCIA", R.drawable.ob_login, getColor(R.color.paleta4)));
-        addSlide(AppIntro2Fragment.newInstance("", "BUSCA Y SELECCIONA TUS PELICULAS Y SERIES FAVORITAS", R.drawable.ob_home, getColor(R.color.paleta4)));
-        addSlide(AppIntro2Fragment.newInstance("", "ACCEDE AL TRAILER Y TODA LA INFORMACION QUE TE INTERESA", R.drawable.ob_detalle, getColor(R.color.paleta4)));
+        addSlide(new FragmentOB1());
+        addSlide(new FragmentOB2());
+        addSlide(new FragmentOB3());
+        addSlide(new FragmentOB4());
+
 
         setBarColor(getColor(R.color.paleta0));
 
@@ -32,8 +38,8 @@ public class ActivityOnBoarding extends AppIntro2 {
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
 
-        Intent unItent = new Intent(this, ActivityMain.class);
-        unItent.putExtras(bundle);
+        Intent unItent = new Intent(this, ActivityLogin.class);
+
         startActivity(unItent);
 
     }
@@ -41,8 +47,8 @@ public class ActivityOnBoarding extends AppIntro2 {
     @Override
     public void onSkipPressed(Fragment currentFragment) {
         super.onSkipPressed(currentFragment);
-        Intent unItent = new Intent(this, ActivityMain.class);
-        unItent.putExtras(bundle);
+        Intent unItent = new Intent(this, ActivityLogin.class);
+
         startActivity(unItent);
 
     }
