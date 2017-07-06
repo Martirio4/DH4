@@ -526,73 +526,19 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
     }
 
     public void pedirSimilaresCreditoActor(){
-            listaFormatos=new ArrayList<>();
-            if (controllerDetalle.isPageAvailable()) {
-                isLoading = true;
-
-                if (tipoFormato.equals("peliculas")) {
-                    controllerDetalle.traerUnFormato(new ResultListener<Formato>() {
-                        @Override
-                        public void finish(Formato resultado1) {
-                            listaFormatos.add(resultado1);
-
-                            controllerDetalle.obtenerPeliculasRelacionadas(new ResultListener<List<Formato>>() {
-                                @Override
-                                public void finish(List<Formato> resultado) {
+        listaFormatos=new ArrayList<>();
+        isLoading = true;
+        controllerDetalle.traerUnFormato(new ResultListener<Formato>() {
+            @Override
+            public void finish(Formato resultado1) {
+                listaFormatos.add(resultado1);
+                adapterPagerDetalle.setListaFormatos(listaFormatos);
+                adapterPagerDetalle.notifyDataSetChanged();
+                isLoading = false;
 
 
-                                    listaFormatos.addAll(resultado);
-
-                                    adapterPagerDetalle.addListaFormatos(listaFormatos);
-                                    for (final Formato unFormato : listaFormatos) {
-
-                                        if (unFormato.getId().equals(idFormato)) {
-                                            viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
-
-                                        }
-                                    }
-                                    adapterPagerDetalle.notifyDataSetChanged();
-                                    isLoading = false;
-                                }
-                            },idFormato);
-
-
-                        }
-                    },idFormato,tipoFormato);
-
-
-                } else {
-
-                        controllerDetalle.traerUnFormato(new ResultListener<Formato>() {
-                            @Override
-                            public void finish(Formato resultado1) {
-                                listaFormatos.add(resultado1);
-
-                                controllerDetalle.obtenerPeliculasRelacionadas(new ResultListener<List<Formato>>() {
-                                    @Override
-                                    public void finish(List<Formato> resultado) {
-
-
-                                        listaFormatos.addAll(resultado);
-
-                                        adapterPagerDetalle.addListaFormatos(listaFormatos);
-                                        for (final Formato unFormato : listaFormatos) {
-
-                                            if (unFormato.getId().equals(idFormato)) {
-                                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
-
-                                            }
-                                        }
-                                        adapterPagerDetalle.notifyDataSetChanged();
-                                        isLoading = false;
-                                    }
-                                },idFormato);
-
-
-                            }
-                        },idFormato,tipoFormato);
-                }
             }
+        },idFormato,tipoFormato);
 
     }
 

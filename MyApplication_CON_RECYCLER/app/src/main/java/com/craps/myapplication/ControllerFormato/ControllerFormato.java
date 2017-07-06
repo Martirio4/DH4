@@ -727,7 +727,7 @@ public class ControllerFormato {
         if (HTTPConnectionManager.isNetworkingOnline(context)) {
             DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
             if (tipoFormato.equals("series")) {
-                daoFormatoInternet.obtenerPeliculaDesdeInternet(new ResultListener<Formato>() {
+                daoFormatoInternet.obtenerSerieDesdeInternet(new ResultListener<Formato>() {
                     @Override
                     public void finish(Formato unaPagina) {
 
@@ -738,7 +738,7 @@ public class ControllerFormato {
                 }, formatoId);
             }
             else{
-                daoFormatoInternet.obtenerSerieDesdeInternet(new ResultListener<Formato>() {
+                daoFormatoInternet.obtenerPeliculaDesdeInternet(new ResultListener<Formato>() {
                     @Override
                     public void finish(Formato unaPagina) {
 
