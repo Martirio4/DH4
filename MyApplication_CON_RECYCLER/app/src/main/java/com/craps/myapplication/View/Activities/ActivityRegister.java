@@ -162,9 +162,6 @@ public class ActivityRegister extends AppCompatActivity {
 
 
 
-
-
-
     public void ingresarLogueadoNuevoUsuario(String mail){
             Intent unIntent = new Intent(ActivityRegister.this, ActivityMain.class);
             Bundle bundle= new Bundle();

@@ -146,7 +146,7 @@ public class ActivityLogin extends AppCompatActivity {
 
                 if (controllerUsuario.loguearUsuario(mail, contraseña)){
                     loguearFirebaseManual(mail, contraseña);
-                    ingresarLogueadoManual(ActivityLogin.this, mail);
+
                 }
                 else{
                     editTextPassword.setText(null);
@@ -240,15 +240,7 @@ public class ActivityLogin extends AppCompatActivity {
 */
     }
 
-    public void ingresarLogueadoManual(Activity unaActivity, String mail){
-        Intent unIntent = new Intent(unaActivity, ActivityMain.class);
-        Bundle bundle=new Bundle();
-        bundle.putString(ActivityMain.USUARIO, mail);
-        unIntent.putExtras(bundle);
-        finish();
-        startActivity(unIntent);
-    }
-    
+
 
     public void ingresarLogueado(Activity unaActivity, String mail, String imagenUsuario){
         Intent unIntent = new Intent(unaActivity, ActivityMain.class);
@@ -355,7 +347,7 @@ public class ActivityLogin extends AppCompatActivity {
                     }
                 });
     }
-
+/*
     private boolean estaLogueadoEnFacebook(){
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         return accessToken != null;
@@ -364,7 +356,7 @@ public class ActivityLogin extends AppCompatActivity {
         Session activeSession =TwitterCore.getInstance().getSessionManager().getActiveSession();
         return activeSession!=null;
     }
-
+*/
 
 
 

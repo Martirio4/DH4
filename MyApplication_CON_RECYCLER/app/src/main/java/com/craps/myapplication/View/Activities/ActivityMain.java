@@ -251,10 +251,9 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
                     logoutTwitter();
                     logoutFacebook();
                     logoutFirebase();
-
                 }
-                finish();
                 Intent unIntent = new Intent(v.getContext(), ActivityLogin.class);
+                ActivityMain.this.finish();
                 startActivity(unIntent);
             }
         });
