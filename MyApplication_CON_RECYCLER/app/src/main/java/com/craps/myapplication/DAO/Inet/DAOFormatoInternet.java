@@ -8,7 +8,7 @@ import com.craps.myapplication.Model.ContainerActores;
 import com.craps.myapplication.Model.ContainerCreditos;
 import com.craps.myapplication.Model.ContainerFormatos;
 import com.craps.myapplication.Model.ContainerTrailer;
-import com.craps.myapplication.Model.Creditos;
+import com.craps.myapplication.Model.Credito;
 import com.craps.myapplication.Model.Formato;
 import com.craps.myapplication.Model.Trailer;
 import com.craps.myapplication.Utils.HTTPConnectionManager;
@@ -30,7 +30,7 @@ public class DAOFormatoInternet {
 
     private List<Formato> laListaFormatos;
     private List<Actor>laListaActores;
-    private List<Creditos>laListaCreditos;
+    private List<Credito>laListaCreditos;
     private List<Trailer> laListaTrailer;
     private Formato elFormato;
     private Actor elActor;
@@ -254,10 +254,20 @@ public class DAOFormatoInternet {
         }
     }
 
-    public void obtenerFormatoDesdeInternet(ResultListener<Formato> listenerFromController,String queBuscoEnInet){
+    public void obtenerPeliculaDesdeInternet(ResultListener<Formato> listenerFromController,Integer idFormato){
 
         //cargo el string de la busqueda con la que le pego al api
-        this.urlParaAsyncTask =queBuscoEnInet;
+        this.urlParaAsyncTask =TMDBHelper.getMovieDetailURL(idFormato, idiomaDeLaSesion);
+
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerUnFormatoTask tarea = new ObtenerUnFormatoTask();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+    public void obtenerSerieDesdeInternet(ResultListener<Formato> listenerFromController,Integer idFormato){
+
+        //cargo el string de la busqueda con la que le pego al api
+        this.urlParaAsyncTask =TMDBHelper.getTVShowDetail(idFormato,idiomaDeLaSesion);
 
         //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
         ObtenerUnFormatoTask tarea = new ObtenerUnFormatoTask();
@@ -407,7 +417,7 @@ public class DAOFormatoInternet {
         }
     }
 
-    public void obtenerCreditosActor(ResultListener <List<Creditos>> listenerFromController, Integer actorId){
+    public void obtenerCreditosActor(ResultListener <List<Credito>> listenerFromController, Integer actorId){
 
         //cargo el string de la busqueda con la que le pego al api
         this.urlParaAsyncTask =TMDBHelper.getCredits(actorId, idiomaDeLaSesion);
@@ -418,17 +428,17 @@ public class DAOFormatoInternet {
         tarea.execute();
     }
 
-    private class ObtenerCreditosParaPersona extends AsyncTask<String,Void,List<Creditos>>{
+    private class ObtenerCreditosParaPersona extends AsyncTask<String,Void,List<Credito>>{
 
-        private ResultListener<List<Creditos>> listenerFromController;
-        public void setListenerFromController(ResultListener<List<Creditos>> listenerFromController) {
+        private ResultListener<List<Credito>> listenerFromController;
+        public void setListenerFromController(ResultListener<List<Credito>> listenerFromController) {
             this.listenerFromController = listenerFromController;
         }
 
         @Override
-        protected List<Creditos> doInBackground(String... params) {
+        protected List<Credito> doInBackground(String... params) {
 
-            List<Creditos> actores = null;
+            List<Credito> actores = null;
             try {
                 //PEDIR A INTERNET USANDO UNA URL EL ARCHIVO JSON
                 HTTPConnectionManager httpConnectionManager = new HTTPConnectionManager();
@@ -452,14 +462,14 @@ public class DAOFormatoInternet {
         }
 
         @Override
-        protected void onPostExecute(List<Creditos> actores) {
+        protected void onPostExecute(List<Credito> actores) {
 
             //AVISARLE AL CONTROLLER QUE SU LISTA DE NOTICIAS ESTA CARGADA
             listenerFromController.finish(actores);
         }
     }
 
-    //TRAER TRAILER PELICULAS
+    // TRAILER PELICULAS
     public void obtenerTrailerPeliculas(ResultListener<List<Trailer>> listenerFromController,Integer formatoId){
 
         urlParaAsyncTask= TMDBHelper.getTrailerURL(formatoId,TMDBHelper.language_ENGLISH);

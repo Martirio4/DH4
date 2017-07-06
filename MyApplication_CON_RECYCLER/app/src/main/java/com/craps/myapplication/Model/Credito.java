@@ -4,7 +4,7 @@ package com.craps.myapplication.Model;
  * Created by Martirio on 28/06/2017.
  */
 
-public class Creditos {
+public class Credito {
 
     private String character;
     private Integer id;

@@ -156,40 +156,19 @@
                 android:layout_below="@id/tag_sinopsis2"
                 />
 
-            <android.support.v7.widget.RecyclerView
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="350dp"
-                android:layout_marginRight="@dimen/tabTexto"
-                android:layout_marginLeft="@dimen/tabTexto"
-                android:layout_marginBottom="50dp"
-                android:id="@+id/recycler_actores"
-                android:layout_below="@id/creditos"
-                android:layout_centerHorizontal="true">
-
-            </android.support.v7.widget.RecyclerView>
 
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_below="@id/recycler_actores"
+                android:layout_below="@id/creditos"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:clickable="false"
+                android:clickable="true"
                 android:id="@+id/recycler_participacion"
                 >
 
             </android.support.v7.widget.RecyclerView>
-            <android.support.v7.widget.RecyclerView
-                android:layout_width="wrap_content"
-                android:layout_below="@id/recycler_participacion"
-                android:layout_height="50dp"
-                android:layout_marginLeft="@dimen/tabTexto"
-                android:layout_marginRight="@dimen/tabTexto"
-                android:layout_marginTop="30dp"
-                android:id="@+id/recycler_Similares"
-                >
 
-            </android.support.v7.widget.RecyclerView>
+
 
 
 

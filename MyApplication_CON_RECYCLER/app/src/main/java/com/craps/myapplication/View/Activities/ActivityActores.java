@@ -142,6 +142,20 @@ public class ActivityActores extends AppCompatActivity implements ControllerForm
 
     @Override
     public void recibirFormatoClickeado(Formato formato, String origen, Integer pagina, String StringABuscar, Integer drawerId) {
+        Bundle unBundle = new Bundle();
+
+        unBundle.putInt(ActivitySegunda.IDFORMATO, formato.getId());
+        unBundle.putString(ActivitySegunda.TIPOFORMATO,formato.getTipoFormato() );
+        unBundle.putString(ActivitySegunda.ORIGEN,origen );
+        unBundle.putInt(ActivitySegunda.PAGINA, pagina);
+        unBundle.putString(ActivitySegunda.STRINGBUSQUEDA, StringABuscar );
+        unBundle.putInt(ActivitySegunda.DRAWERID,drawerId );
+
+        Intent unIntent=new Intent(this, ActivitySegunda.class);
+        unIntent.putExtras(unBundle);
+        startActivity(unIntent);
+
+
     }
 
     @Override

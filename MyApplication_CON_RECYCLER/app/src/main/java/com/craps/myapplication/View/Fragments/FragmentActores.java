@@ -2,12 +2,10 @@ package com.craps.myapplication.View.Fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,21 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.craps.myapplication.ControllerFormato.ControllerFormato;
 import com.craps.myapplication.Model.Actor;
-import com.craps.myapplication.Model.Creditos;
+import com.craps.myapplication.Model.Credito;
 import com.craps.myapplication.Model.Formato;
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.ResultListener;
 import com.craps.myapplication.Utils.TMDBHelper;
-import com.craps.myapplication.View.Activities.ActivityPoster;
-import com.craps.myapplication.View.Adapters.AdapterActores;
 import com.craps.myapplication.View.Adapters.AdapterCreditos;
-import com.craps.myapplication.View.Adapters.AdapterFormato;
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -43,7 +35,7 @@ public class FragmentActores extends Fragment {
     public static final String ACTORID="ACTORID";
 
 
-    private RecyclerView recyclerActores;
+    private RecyclerView recyclerCreditos;
     private AdapterCreditos adapterCreditos;
     private LinearLayoutManager layoutManagerDetalle;
     private ControllerFormato controllerFragmentActores;
@@ -114,28 +106,36 @@ public class FragmentActores extends Fragment {
 
 
         //RECYCLER CREDITOS
-        recyclerActores=(RecyclerView)view.findViewById(R.id.recycler_participacion);
-        recyclerActores.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerCreditos =(RecyclerView)view.findViewById(R.id.recycler_participacion);
+        recyclerCreditos.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
         adapterCreditos= new AdapterCreditos();
         adapterCreditos.setContext(view.getContext());
-        adapterCreditos.setListaCreditosOriginales(new ArrayList<Creditos>());
-        recyclerActores.setAdapter(adapterCreditos);
+        adapterCreditos.setListaCreditosOriginales(new ArrayList<Credito>());
+        recyclerCreditos.setAdapter(adapterCreditos);
 
 
-        /*
-        //listener clickeo actores
+
+        //listener clickeo peliculas creditos
         View.OnClickListener listenerActore= new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer posicion = recyclerActores.getChildAdapterPosition(v);
-                List < Actor > listaActoresOriginales = adapterActores.getListaActoresOriginales();
-                Actor actorClickeado = listaActoresOriginales.get(posicion);
-                actorable.recibirActorClickeado(actorClickeado);
+                Integer posicion = recyclerCreditos.getChildAdapterPosition(v);
+                List <Credito> listaActoresOriginales = adapterCreditos.getListaCreditosOriginales();
+                Credito creditoClickeado = listaActoresOriginales.get(posicion);
+                Formato unFormato= new Formato();
+                unFormato.setId(creditoClickeado.getId());
+                if (creditoClickeado.getTitle()==null || creditoClickeado.getTitle().isEmpty()){
+                    unFormato.setTipoFormato("series");
+                }
+                else{
+                    unFormato.setTipoFormato("peliculas");
+                }
+                notificable.recibirFormatoClickeado(unFormato,"actores",1,"nulo",0);
             }
         };
-        recyclerActores.setOnClickListener(listenerActore);
+        adapterCreditos.setListener(listenerActore);
 
-        */
+
 
 
 
@@ -167,9 +167,9 @@ public class FragmentActores extends Fragment {
     }
 
     public void cargarDatosCreditos(){
-        controllerFragmentActores.traerCreditosPersona(new ResultListener<List<Creditos>>() {
+        controllerFragmentActores.traerCreditosPersona(new ResultListener<List<Credito>>() {
             @Override
-            public void finish(List<Creditos> resultado) {
+            public void finish(List<Credito> resultado) {
                 adapterCreditos.setListaCreditosOriginales(resultado);
                 adapterCreditos.notifyDataSetChanged();
             }

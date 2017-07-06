@@ -12,7 +12,7 @@ import com.craps.myapplication.DAO.Db.DAOFormatoDatabase;
 import com.craps.myapplication.DAO.Inet.DAOFormatoInternet;
 
 import com.craps.myapplication.Model.Actor;
-import com.craps.myapplication.Model.Creditos;
+import com.craps.myapplication.Model.Credito;
 import com.craps.myapplication.Model.Formato;
 import com.craps.myapplication.Model.Trailer;
 import com.craps.myapplication.R;
@@ -21,6 +21,7 @@ import com.craps.myapplication.Utils.ResultListener;
 import com.craps.myapplication.Utils.TMDBHelper;
 import com.craps.myapplication.View.Activities.ActivityMain;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -673,12 +674,12 @@ public class ControllerFormato {
 
         }
     }
-    public void traerCreditosPersona(final ResultListener<List<Creditos>> listenerFromView, Integer actorId){
+    public void traerCreditosPersona(final ResultListener<List<Credito>> listenerFromView, Integer actorId){
         if (HTTPConnectionManager.isNetworkingOnline(context)) {
             DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
-            daoFormatoInternet.obtenerCreditosActor (new ResultListener<List<Creditos>>() {
+            daoFormatoInternet.obtenerCreditosActor (new ResultListener<List<Credito>>() {
                 @Override
-                public void finish(List<Creditos> unaPagina) {
+                public void finish(List<Credito> unaPagina) {
 
 
                         listenerFromView.finish(unaPagina);
@@ -722,4 +723,33 @@ public class ControllerFormato {
         }
     }
 
+    public void traerUnFormato(final ResultListener<Formato> listenerFromView, Integer formatoId, String tipoFormato){
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+            DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
+            if (tipoFormato.equals("series")) {
+                daoFormatoInternet.obtenerPeliculaDesdeInternet(new ResultListener<Formato>() {
+                    @Override
+                    public void finish(Formato unaPagina) {
+
+
+                        listenerFromView.finish(unaPagina);
+
+                    }
+                }, formatoId);
+            }
+            else{
+                daoFormatoInternet.obtenerSerieDesdeInternet(new ResultListener<Formato>() {
+                    @Override
+                    public void finish(Formato unaPagina) {
+
+                        listenerFromView.finish(unaPagina);
+
+                    }
+                }, formatoId);
+            }
+        }
+        else{
+
+        }
+    }
 }

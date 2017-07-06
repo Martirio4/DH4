@@ -14,8 +14,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.craps.myapplication.Model.Creditos;
-import com.craps.myapplication.Model.Formato;
+import com.craps.myapplication.Model.Credito;
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.TMDBHelper;
 import com.craps.myapplication.View.Fragments.FragmentBusqueda;
@@ -30,8 +29,8 @@ import java.util.List;
 public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClickListener,View.OnLongClickListener {
 
     private Context context;
-    private List<Creditos> listaCreditosOriginales;
-    private List<Creditos> listaCreditosFavoritos;
+    private List<Credito> listaCreditosOriginales;
+    private List<Credito> listaCreditosFavoritos;
     private View.OnClickListener listener;
     private AdapterView.OnLongClickListener listenerLong;
     private Favoritable favoritable;
@@ -47,15 +46,15 @@ public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClic
         this.context = context;
     }
 
-    public void setListaCreditosOriginales(List<Creditos> listaCreditosOriginales) {
+    public void setListaCreditosOriginales(List<Credito> listaCreditosOriginales) {
         this.listaCreditosOriginales = listaCreditosOriginales;
     }
-    public void addListaCreditosOriginales(List<Creditos> listaCreditosOriginales) {
+    public void addListaCreditosOriginales(List<Credito> listaCreditosOriginales) {
         this.listaCreditosOriginales.addAll(listaCreditosOriginales);
     }
 
 
-    public List<Creditos> getListaCreditosOriginales(){
+    public List<Credito> getListaCreditosOriginales(){
         return listaCreditosOriginales;
     }
 
@@ -80,7 +79,7 @@ public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClic
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        final Creditos unCredito = listaCreditosOriginales.get(position);
+        final Credito unCredito = listaCreditosOriginales.get(position);
         FormatoViewHolder creditoViewHolder = (FormatoViewHolder) holder;
         creditoViewHolder.cargarFormato(unCredito);
 
@@ -94,7 +93,7 @@ public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClic
 
     @Override
     public void onClick(View view) {
-        //listener.onClick(view);
+        listener.onClick(view);
     }
 
     @Override
@@ -139,7 +138,7 @@ public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClic
             }
         }
 
-        public void cargarFormato(Creditos unCredito) {
+        public void cargarFormato(Credito unCredito) {
 
 
                 if (unCredito.getTitle()==null || unCredito.getTitle().isEmpty()) {
@@ -170,6 +169,6 @@ public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClic
     }
 
     public interface Favoritable{
-        public void recibirFormatoFavorito(Creditos unCredito);
+        public void recibirFormatoFavorito(Credito unCredito);
     }
 }

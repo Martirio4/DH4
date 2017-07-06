@@ -10,13 +10,13 @@ import java.util.List;
 
 public class ContainerCreditos {
         @SerializedName("cast")
-        private List<Creditos> creditosList;
+        private List<Credito> creditosList;
 
-    public List<Creditos> getCreditosList() {
+    public List<Credito> getCreditosList() {
         return creditosList;
     }
 
-    public void setActoresList(List<Creditos> unaLista) {
+    public void setActoresList(List<Credito> unaLista) {
         creditosList = unaLista;
     }
 }
