@@ -14,6 +14,7 @@ import com.craps.myapplication.DAO.Inet.DAOFormatoInternet;
 import com.craps.myapplication.Model.Actor;
 import com.craps.myapplication.Model.Credito;
 import com.craps.myapplication.Model.Formato;
+import com.craps.myapplication.Model.Imagen;
 import com.craps.myapplication.Model.Trailer;
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.HTTPConnectionManager;
@@ -21,7 +22,6 @@ import com.craps.myapplication.Utils.ResultListener;
 import com.craps.myapplication.Utils.TMDBHelper;
 import com.craps.myapplication.View.Activities.ActivityMain;
 
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -752,4 +752,22 @@ public class ControllerFormato {
 
         }
     }
+    
+    public void traerImagenesAdicionales(final ResultListener<List<Imagen>> listenerFromView, Integer personaId){
+        if (HTTPConnectionManager.isNetworkingOnline(context)) {
+            DAOFormatoInternet daoFormatoInternet = new DAOFormatoInternet();
+
+                daoFormatoInternet.traerImagenesAdicionales(new ResultListener<List<Imagen>>() {
+                    @Override
+                    public void finish(List<Imagen> unaPagina) {
+
+
+                        listenerFromView.finish(unaPagina);
+
+                    }
+                }, personaId);
+        }
+
+    }
+
 }

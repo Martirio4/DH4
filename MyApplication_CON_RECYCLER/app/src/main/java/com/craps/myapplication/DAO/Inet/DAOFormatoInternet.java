@@ -7,9 +7,11 @@ import com.craps.myapplication.Model.Actor;
 import com.craps.myapplication.Model.ContainerActores;
 import com.craps.myapplication.Model.ContainerCreditos;
 import com.craps.myapplication.Model.ContainerFormatos;
+import com.craps.myapplication.Model.ContainerImagenes;
 import com.craps.myapplication.Model.ContainerTrailer;
 import com.craps.myapplication.Model.Credito;
 import com.craps.myapplication.Model.Formato;
+import com.craps.myapplication.Model.Imagen;
 import com.craps.myapplication.Model.Trailer;
 import com.craps.myapplication.Utils.HTTPConnectionManager;
 import com.craps.myapplication.Utils.ResultListener;
@@ -34,6 +36,7 @@ public class DAOFormatoInternet {
     private List<Trailer> laListaTrailer;
     private Formato elFormato;
     private Actor elActor;
+    private List<Imagen> laListaImagenes;
 
     //PELICULAS POPULARES
     public void obtenerPeliculasPopulares(ResultListener<List<Formato>> listenerFromController,Integer numeroPagina){
@@ -527,6 +530,58 @@ public class DAOFormatoInternet {
 
             //AVISARLE AL CONTROLLER QUE SU LISTA DE NOTICIAS ESTA CARGADA
             listenerFromController.finish(trailers);
+        }
+    }
+
+    public void traerImagenesAdicionales(ResultListener <List<Imagen>> listenerFromController, Integer actorId){
+
+        //cargo el string de la busqueda con la que le pego al api
+        this.urlParaAsyncTask =TMDBHelper.getImagenesAdicionales(actorId);
+
+        //LE ESTOY INDICANDO AL DAO QUE EJECUTE LA TAREA EN SEGUNDO PLANO
+        ObtenerImagenesParaPersona tarea = new ObtenerImagenesParaPersona();
+        tarea.setListenerFromController(listenerFromController);
+        tarea.execute();
+    }
+
+    private class ObtenerImagenesParaPersona extends AsyncTask<String,Void,List<Imagen>>{
+
+        private ResultListener<List<Imagen>> listenerFromController;
+        public void setListenerFromController(ResultListener<List<Imagen>> listenerFromController) {
+            this.listenerFromController = listenerFromController;
+        }
+
+        @Override
+        protected List<Imagen> doInBackground(String... params) {
+
+            List<Imagen> actores = null;
+            try {
+                //PEDIR A INTERNET USANDO UNA URL EL ARCHIVO JSON
+                HTTPConnectionManager httpConnectionManager = new HTTPConnectionManager();
+                String json = httpConnectionManager.getRequestString(urlParaAsyncTask);
+
+                //USAR GSON PARA PARSEAR EL ARCHIVO Y CONVERTIRLO A LA LISTA DE NOTICIAS
+                Gson gson = new Gson();
+                ContainerImagenes containerImagenes = gson.fromJson(json, ContainerImagenes.class);
+                actores = containerImagenes.getImagenesList();
+                laListaImagenes =actores;
+
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+            //DEVOLVER LA LISTA
+            return actores;
+        }
+
+        @Override
+        protected void onPostExecute(List<Imagen> actores) {
+
+            //AVISARLE AL CONTROLLER QUE SU LISTA DE NOTICIAS ESTA CARGADA
+            listenerFromController.finish(actores);
         }
     }
 

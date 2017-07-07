@@ -82,8 +82,9 @@ package com.craps.myapplication.Utils;
         public static final String TV_GENRE_MUSIC = "10402";
         public static final String TV_GENRE_ROMANCE = "10749";
 
-
-
+        public static String getImagenesAdicionales(Integer personId){
+            return  baseUrl+"/person/"+personId+"/images?api_key="+apiKey;
+        }
 
         public static String getCastMovie(Integer movieId,String language){
             return baseUrl + "/movie/" + movieId + "/credits?api_key=" + apiKey + "&language=" + language;

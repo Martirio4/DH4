@@ -79,7 +79,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".View.Activities.ActivityYouTube" />
+        <activity android:name=".View.Activities.ActivityYouTube"
+            android:screenOrientation="landscape"
+            />
     </application>
 
 </manifest>

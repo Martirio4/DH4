@@ -15,6 +15,7 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.craps.myapplication.Utils.TMDBHelper.DEVELOPER_KEY;
@@ -50,19 +51,13 @@ public class ActivityYouTube extends AppCompatActivity implements ControllerForm
 
         controllerTrailers=new ControllerFormato(this);
 
-
-
-
-
         YouTubePlayerFragment mYouTubeFragment = YouTubePlayerFragment.newInstance();
-
-
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.youtubeplayercontainer, mYouTubeFragment).commit();
 
         mYouTubeFragment.initialize(devKey, new YouTubePlayer.OnInitializedListener() {
             @Override
-            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
+            public void onInitializationSuccess(YouTubePlayer.Provider provider, final YouTubePlayer youTubePlayer, boolean wasRestored) {
                 if (!wasRestored) {
                     youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
                     youTubePlayerP = youTubePlayer;
@@ -70,9 +65,19 @@ public class ActivityYouTube extends AppCompatActivity implements ControllerForm
                     controllerTrailers.traerTrailers(new ResultListener<List<Trailer>>() {
                         @Override
                         public void finish(List<Trailer> resultado) {
-                            youTubePlayerP.loadVideo(resultado.get(0).getClaveVideoYouTube());
-                            youTubePlayerP.setFullscreen(true);
-                            youTubePlayerP.play();
+                            if (resultado==null || resultado.size()<1){
+                            }
+                            else {
+                                List<String> lista = new ArrayList<String>();
+
+                                for (Trailer unTrailer : resultado
+                                        ) {
+                                    lista.add(unTrailer.getClaveVideoYouTube());
+                                }
+                               youTubePlayerP.loadVideos(lista);
+                                youTubePlayerP.setFullscreen(true);
+                                youTubePlayerP.play();
+                            }
 
                         }
                     }, id, formatoAMostrar);

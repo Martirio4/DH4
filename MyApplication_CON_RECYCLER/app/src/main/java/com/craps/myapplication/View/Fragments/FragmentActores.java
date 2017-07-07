@@ -18,10 +18,13 @@ import com.craps.myapplication.ControllerFormato.ControllerFormato;
 import com.craps.myapplication.Model.Actor;
 import com.craps.myapplication.Model.Credito;
 import com.craps.myapplication.Model.Formato;
+import com.craps.myapplication.Model.Imagen;
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.ResultListener;
 import com.craps.myapplication.Utils.TMDBHelper;
 import com.craps.myapplication.View.Adapters.AdapterCreditos;
+import com.craps.myapplication.View.Adapters.AdapterFormato;
+import com.craps.myapplication.View.Adapters.AdapterImagenes;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -37,6 +40,8 @@ public class FragmentActores extends Fragment {
 
     private RecyclerView recyclerCreditos;
     private AdapterCreditos adapterCreditos;
+    RecyclerView recyclerImagenes;
+    AdapterImagenes adapterImagenes;
     private LinearLayoutManager layoutManagerDetalle;
     private ControllerFormato controllerFragmentActores;
     public FragmentActores() {
@@ -73,6 +78,8 @@ public class FragmentActores extends Fragment {
         textosinopsis=(TextView)view.findViewById(R.id.tag_sinopsis2);
         textCalificacion = (TextView) view.findViewById(R.id.textViewrating);
 
+        controllerFragmentActores= new ControllerFormato(view.getContext());
+
         //RECIBO EL BUNDLE Y SACVO LOS DATOS, LOS PONGO EN LOS TEXTVIEWS
         Bundle unBundle= getArguments();
         if (unBundle==null || unBundle.isEmpty()){
@@ -82,9 +89,25 @@ public class FragmentActores extends Fragment {
             actorid=unBundle.getInt(ACTORID);
         }
 
+        recyclerImagenes = (RecyclerView) view.findViewById(R.id.recyclerFotoActor);
+        recyclerImagenes.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL,false));
+        adapterImagenes = new AdapterImagenes();
+        adapterImagenes.setContext(view.getContext());
+        recyclerImagenes.setAdapter(adapterImagenes);
+        adapterImagenes.setListaImagenesOriginales(new ArrayList<Imagen>());
+        controllerFragmentActores.traerImagenesAdicionales(new ResultListener<List<Imagen>>() {
+            @Override
+            public void finish(List<Imagen> resultado) {
+                adapterImagenes.setListaImagenesOriginales(resultado);
+                adapterImagenes.notifyDataSetChanged();
+            }
+        },actorid);
+
+
+
 
         //Datos
-        controllerFragmentActores= new ControllerFormato(view.getContext());
+
         controllerFragmentActores.traerDetallesPersona(new ResultListener<Actor>() {
             @Override
             public void finish(Actor resultado) {
@@ -156,7 +179,9 @@ public class FragmentActores extends Fragment {
 
     public void cargarDatosActor(){
         textonombre.setText(nombreActor);
+        textoaño.setVisibility(View.VISIBLE);
         textoaño.setText(fechaNacimientoActor);
+        textosinopsis.setVisibility(View.VISIBLE);
         textosinopsis.setText(biografiaActor);
         Picasso.with(imageButton.getContext())
                 .load(TMDBHelper.getBackDropPoster(TMDBHelper.IMAGE_SIZE_W342,fotoActor))

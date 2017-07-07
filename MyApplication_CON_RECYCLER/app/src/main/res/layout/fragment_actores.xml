@@ -39,6 +39,18 @@
                     android:paddingTop="4dp"
                     android:paddingBottom="4dp"
                     >
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/paleta0"
+                        >
+
+                    </View>
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:id="@+id/recyclerFotoActor"
+                        android:layout_height="match_parent">
+                    </android.support.v7.widget.RecyclerView>
 
                     <ImageButton
                         android:layout_width="match_parent"
@@ -47,52 +59,25 @@
                         android:src="@drawable/strange"
                         android:background="@color/paleta0"
                         android:scaleType="fitCenter"
-
-
+                        android:visibility="gone"
                         android:layout_gravity="center_horizontal|center_vertical"
-                        />
+                    />
                 </FrameLayout>
-
             </LinearLayout>
 
 
-            <ImageButton
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_star"
                 android:layout_below="@id/detalle_linear"
-                android:layout_marginTop="4dp"
-                android:background="@null"
-                android:layout_marginRight="@dimen/tabTexto"
-                android:layout_alignParentRight="true"
-                android:id="@+id/rating"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:maxLines="1"
-                android:layout_height="wrap_content"
-                android:text="sa"
-                android:id="@+id/textViewrating"
-                android:textColor="@color/marfil"
-                android:layout_below="@+id/rating"
-                android:layout_marginRight="@dimen/tabTexto"
-                android:layout_alignStart="@id/rating"
-                android:textAlignment="center"/>
-
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textViewrating"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="@dimen/tabTexto"
                 android:textSize="25sp"
-                android:text="@string/detalle_nombre_peli"
                 android:id="@+id/tag_nombre2"
-
                 android:textAlignment="center"
                 android:textColor="@color/paleta4"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="12dp"
                 />
 
 
@@ -116,7 +101,7 @@
                 android:layout_below="@id/tag_año"
                 android:layout_marginLeft="@dimen/tabTexto"
                 android:textSize="18sp"
-                android:text="@string/detalle_nombre_peli"
+                android:visibility="gone"
                 android:id="@+id/tag_año2"
                 android:textColor="@color/marfil" />
 
@@ -139,7 +124,7 @@
                 android:layout_below="@id/tag_sinopsis"
                 android:layout_marginLeft="@dimen/tabTexto"
                 android:textSize="18sp"
-                android:text="@string/detalle_nombre_peli"
+                android:visibility="gone"
                 android:id="@+id/tag_sinopsis2"
                 android:textColor="@color/marfil"
                 />

@@ -98,7 +98,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
             @Override
             public void onPageSelected(int position) {
-                if (position>=(adapterPagerDetalle.getCount()-2)){
+                if ((position>=(adapterPagerDetalle.getCount()-2))&&(!origenFormato.equals("actores"))){
                     pedirListaSegunOrigen();
                 }
 
@@ -535,8 +535,6 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                 adapterPagerDetalle.setListaFormatos(listaFormatos);
                 adapterPagerDetalle.notifyDataSetChanged();
                 isLoading = false;
-
-
             }
         },idFormato,tipoFormato);
 
