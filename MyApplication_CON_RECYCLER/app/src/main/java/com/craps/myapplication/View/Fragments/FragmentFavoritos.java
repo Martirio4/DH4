@@ -71,13 +71,10 @@ public class FragmentFavoritos extends Fragment {
                 notificable.recibirFormatoClickeado(formatoClickeado,"favoritos",1,"nulo", 0);
             }
         };
-
-
         adapterFavoritos.setListener(listener1);
         recycler1.setAdapter(adapterFavoritos);
 
         //cargar datos
-
         controllerFormato = new ControllerFormato(view.getContext());
         lista1 =new ArrayList<>();
 

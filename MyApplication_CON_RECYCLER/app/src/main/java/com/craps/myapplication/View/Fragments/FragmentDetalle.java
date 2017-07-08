@@ -289,7 +289,7 @@ public class FragmentDetalle extends Fragment {
         Picasso.with(imageButton.getContext())
                 .load(TMDBHelper.getBackDropPoster(TMDBHelper.IMAGE_SIZE_W342,backdrop))
                 .placeholder(R.drawable.loading2)
-                .error(R.drawable.noimagedetalle)
+                .error(R.drawable.hero)
                 .into(imageButton);
 
         imageButton.setOnClickListener(new View.OnClickListener() {

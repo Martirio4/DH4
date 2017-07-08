@@ -27,7 +27,7 @@ public class Actor {
     @SerializedName("deathday")
     private String fechaMuerte;
     @SerializedName("gender")
-    private String genero;
+    private Integer genero;
     @SerializedName("homepage")
     private String paginaWeb;
     @SerializedName("place_of_birth")
@@ -118,11 +118,11 @@ public class Actor {
         this.personaje = personaje;
     }
 
-    public String getGenero() {
+    public Integer getGenero() {
         return genero;
     }
 
-    public void setGenero(String genero) {
+    public void setGenero(Integer genero) {
         this.genero = genero;
     }
 }

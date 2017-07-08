@@ -158,7 +158,7 @@ public class AdapterFormato extends RecyclerView.Adapter implements View.OnClick
             Picasso.with(imageView.getContext())
                     .load(TMDBHelper.getImagePoster(TMDBHelper.IMAGE_SIZE_W92,unFormato.getPoster_path()))
                     .placeholder(R.drawable.loading)
-                    .error(R.drawable.noimagethumb)
+                    .error(R.drawable.posterpelinotfound)
                     .into(imageView);
         }
 

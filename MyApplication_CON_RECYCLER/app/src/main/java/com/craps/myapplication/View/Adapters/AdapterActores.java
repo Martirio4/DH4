@@ -93,9 +93,9 @@ public class AdapterActores extends RecyclerView.Adapter implements View.OnClick
             textViewNombrePersonaje.setText(unActor.getPersonaje());
 
             Picasso.with(imageView.getContext())
-                    .load(TMDBHelper.getImagePoster(TMDBHelper.IMAGE_SIZE_W92,unActor.getFotoPerfilActor()))
+                    .load(TMDBHelper.getImagePoster(TMDBHelper.IMAGE_SIZE_W92, unActor.getFotoPerfilActor()))
                     .placeholder(R.drawable.loading)
-                    .error(R.drawable.noimagethumb)
+                    .error(R.drawable.desconocidocolor)
                     .into(imageView);
         }
     }
