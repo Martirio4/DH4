@@ -210,44 +210,39 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
     public void pedirPaginaSimilarclickeado(final Formato unFormato, String origen, Integer pagina, String tipoDeFormato ){
         if (controllerDetalle.isPageAvailable()) {
+
             isLoading = true;
 
             if (tipoDeFormato.equals("peliculas")) {
                 controllerDetalle.obtenerPeliculasRelacionadas(new ResultListener<List<Formato>>() {
                     @Override
                     public void finish(List<Formato> resultado) {
-                        resultado.add(unFormato);
+                        resultado.add(0,unFormato);
                         adapterPagerDetalle.addListaFormatos(resultado);
-                        for (final Formato formato : resultado) {
-
-                            if (formato.getId().equals(unFormato.getId())) {
-
-                                viewPagerDetalle.setCurrentItem(resultado.indexOf(unFormato)+(adapterPagerDetalle.getCount()-21));
-                               
-                            }
-                        }
-                        adapterPagerDetalle.notifyDataSetChanged();
+                        viewPagerDetalle.setAdapter(adapterPagerDetalle);
+                        viewPagerDetalle.setCurrentItem(0);
                         isLoading = false;
+                        adapterPagerDetalle.notifyDataSetChanged();
                     }
                 },unFormato.getId());
+
 
             } else {
                 controllerDetalle.obtenerSeriesRelacionadas(new ResultListener<List<Formato>>() {
                     @Override
                     public void finish(List<Formato> resultado) {
 
-                        resultado.add(unFormato);
-                        adapterPagerDetalle.addListaFormatos(resultado);
-                        for (final Formato formato : resultado) {
-
-                            if (formato.getId().equals(unFormato.getId())) {
-
-                                viewPagerDetalle.setCurrentItem(resultado.indexOf(unFormato)+(adapterPagerDetalle.getCount()-21));
-                               
+                        controllerDetalle.obtenerSeriesRelacionadas(new ResultListener<List<Formato>>() {
+                            @Override
+                            public void finish(List<Formato> resultado) {
+                                resultado.add(0,unFormato);
+                                adapterPagerDetalle.addListaFormatos(resultado);
+                                viewPagerDetalle.setAdapter(adapterPagerDetalle);
+                                viewPagerDetalle.setCurrentItem(0);
+                                isLoading = false;
+                                adapterPagerDetalle.notifyDataSetChanged();
                             }
-                        }
-                        adapterPagerDetalle.notifyDataSetChanged();
-                        isLoading = false;
+                        },unFormato.getId());
                     }
                 },unFormato.getId());
             }
@@ -498,8 +493,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
     @Override
     public void recibirFormatoClickeado(Formato formato, String origen, Integer pagina, String elString, Integer drawerId) {
-
-
+        adapterPagerDetalle=new AdapterPagerFormato(getSupportFragmentManager());
         String unTipoDeFormato;
         if (formato.getTitle()==null || formato.getTitle().isEmpty()) {
             unTipoDeFormato = "series";
