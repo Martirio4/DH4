@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,11 +33,10 @@ public class FragmentFavoritos extends Fragment {
     //DECLARO INTERFAZ
 
     public interface Notificable {
-        public void recibirFormatoClickeado(Formato formato,String origen, Integer pagina, String StringABuscar, Integer drawerId);
+        public void recibirFormatoClickeado(Formato formato, String origen, Integer pagina, String StringABuscar, Integer drawerId);
 
 
     }
-
 
 
     public FragmentFavoritos() {
@@ -48,7 +48,7 @@ public class FragmentFavoritos extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_favoritos, container, false);
+        View view = inflater.inflate(R.layout.fragment_favoritos, container, false);
 
 
         //SETEAR EL ADAPTER
@@ -56,7 +56,7 @@ public class FragmentFavoritos extends Fragment {
 
 
         recycler1.setHasFixedSize(true);
-        recycler1.setLayoutManager(new GridLayoutManager(view.getContext(),3));
+        recycler1.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
         adapterFavoritos = new AdapterFormato();
         adapterFavoritos.setContext(view.getContext());
 
@@ -66,9 +66,9 @@ public class FragmentFavoritos extends Fragment {
             public void onClick(View view) {
                 //ESTO SE UTILIZA PARA OBTENER LA POSITION DE LO QUE FUE CLICKEADO.
                 Integer posicion = recycler1.getChildAdapterPosition(view);
-                List< Formato > listaPeliculasOriginales = adapterFavoritos.getListaFormatosOriginales();
+                List<Formato> listaPeliculasOriginales = adapterFavoritos.getListaFormatosOriginales();
                 Formato formatoClickeado = listaPeliculasOriginales.get(posicion);
-                notificable.recibirFormatoClickeado(formatoClickeado,"favoritos",1,"nulo", 0);
+                notificable.recibirFormatoClickeado(formatoClickeado, "favoritos", 1, "nulo", 0);
             }
         };
         adapterFavoritos.setListener(listener1);
@@ -76,14 +76,14 @@ public class FragmentFavoritos extends Fragment {
 
         //cargar datos
         controllerFormato = new ControllerFormato(view.getContext());
-        lista1 =new ArrayList<>();
+        lista1 = new ArrayList<>();
 
         controllerFormato.obtenerFavoritos(new ResultListener<List<Formato>>() {
             @Override
             public void finish(List<Formato> resultado) {
 
                 adapterFavoritos.setListaFormatosOriginales(resultado);
-                lista1=resultado;
+                lista1 = resultado;
                 adapterFavoritos.notifyDataSetChanged();
             }
         });
@@ -95,7 +95,7 @@ public class FragmentFavoritos extends Fragment {
         TextView tituloR1 = (TextView) view.findViewById(R.id.texto_titulo_sinconexion);
 
 
-        Typeface roboto = Typeface.createFromAsset(getContext().getAssets(),"fonts/Roboto-Light.ttf");
+        Typeface roboto = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
         tituloR1.setTypeface(roboto);
         tituloR1.setText("FAVORITOS");
 
@@ -108,16 +108,36 @@ public class FragmentFavoritos extends Fragment {
         super.onAttach(context);
         this.notificable = (Notificable) context;
     }
-    public static FragmentFavoritos crearFragmentMaestro(){
-        FragmentFavoritos fragmentFavoritos=new FragmentFavoritos();
+
+    public static FragmentFavoritos crearFragmentMaestro() {
+        FragmentFavoritos fragmentFavoritos = new FragmentFavoritos();
         return fragmentFavoritos;
     }
 
 
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
 
 
+        if (isVisibleToUser) {
+            controllerFormato.obtenerFavoritos(new ResultListener<List<Formato>>() {
+                @Override
+                public void finish(List<Formato> resultado) {
 
-
-
+                    adapterFavoritos.setListaFormatosOriginales(resultado);
+                    lista1=resultado;
+                    adapterFavoritos.notifyDataSetChanged();
+                }
+            });
+        }
+        super.setUserVisibleHint(isVisibleToUser);
+    }
 }
+
 
