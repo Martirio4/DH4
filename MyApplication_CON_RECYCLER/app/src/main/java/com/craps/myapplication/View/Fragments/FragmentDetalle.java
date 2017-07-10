@@ -632,12 +632,11 @@ public class FragmentDetalle extends Fragment {
 
     public void agregarCompartir() {
 
-        if (estaLogueadoAFacebook()) {
+
 
             compartir = new FloatingActionButton(getActivity());
-
             compartir.setButtonSize(FloatingActionButton.SIZE_MINI);
-            compartir.setLabelText(getString(R.string.share_Facebook));
+            compartir.setLabelText(getString(R.string.share));
             compartir.setImageResource(R.drawable.ic_share_black_24dp);
             menuDetalle.addMenuButton(compartir);
 
@@ -649,33 +648,12 @@ public class FragmentDetalle extends Fragment {
             compartir.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    compartirFB.performClick();
+                    shareNativo();
                 }
             });
 
 
-        }
-        if (estaLogueadoATwitter()){
 
-            compartir = new FloatingActionButton(getActivity());
-
-            compartir.setButtonSize(FloatingActionButton.SIZE_MINI);
-            compartir.setLabelText(getString(R.string.share_Twitter));
-            compartir.setImageResource(R.drawable.ic_share_black_24dp);
-            menuDetalle.addMenuButton(compartir);
-
-            compartir.setLabelColors(ContextCompat.getColor(getActivity(), R.color.color5),
-                    ContextCompat.getColor(getActivity(), R.color.light_grey),
-                    ContextCompat.getColor(getActivity(), R.color.white_transparent));
-            compartir.setLabelTextColor(ContextCompat.getColor(getActivity(), R.color.black));
-
-            compartir.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    composeTweet(v);
-                }
-            });
-        }
     }
 
 
@@ -699,6 +677,31 @@ public class FragmentDetalle extends Fragment {
         TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
         return  (session != null);
     }
+
+    public void shareNativo(){
+        String queMuestro;
+        String tituloFormato;
+        if (formatoAMostrar.equals("peliculas")) {
+            queMuestro = "pelicula";
+            tituloFormato=title;
+        }
+        else{
+            queMuestro="serie";
+            tituloFormato=nombre;
+        }
+        //Creamos un share de tipo ACTION_SENT
+        Intent share = new Intent(android.content.Intent.ACTION_SEND);
+//Indicamos que voy a compartir texto
+        share.setType("text/plain");
+//Le agrego un título
+        share.putExtra(Intent.EXTRA_SUBJECT, "Comparti Reelshot");
+//Le agrego el texto a compartir (Puede ser un link tambien)
+        share.putExtra(Intent.EXTRA_TEXT, "Les recomiendo esta "+queMuestro+" que encontre en ReelShot: "+tituloFormato);
+//Hacemos un start para que comparta el contenido.
+        startActivity(Intent.createChooser(share, "Compartí con tus amigos"));
+
+
+        }
 
 
 

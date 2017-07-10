@@ -77,6 +77,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
     public static final String TEXTOLOGIN = "textoLogin";
     public static final String IMAGENUSUARIO = "imagenUsuario";
     public static final String LOGIN = "login";
+
     private String textoLogin = "LOGIN";
     private String imagenUsuario;
 
@@ -244,13 +245,12 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
             public void onClick(View v) {
                 if (login == true) {
                     usuario = null;
-                    //usuario.setImagen(R.drawable.icono);
-                    //imagenUsuario = usuario.getImagen();
                     login = false;
                     textoLogin = "LOGIN";
                     logoutTwitter();
                     logoutFacebook();
                     logoutFirebase();
+                    ActivityMain.this.finish();
                 }
                 Intent unIntent = new Intent(v.getContext(), ActivityLogin.class);
                 ActivityMain.this.finish();
@@ -362,7 +362,8 @@ public class ActivityMain extends AppCompatActivity implements FragmentBusqueda.
                     } else {
                         //pedirListaBuscada(text.toLowerCase());
                         if (login == false && tabLayout.getSelectedTabPosition() == 2) {
-                        } else {
+                        }
+                        else {
                             pedirListaBuscada(text.toLowerCase(), 0);
                         }
                     }

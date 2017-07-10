@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +60,7 @@ public class ActivityLogin extends AppCompatActivity {
     private ImageButton loginBtn;
     TwitterAuthClient twitterAuthClient;
     TwitterApiClient twitterApiClient;
+    private ProgressBar unProgressBar;
 
     private CallbackManager callbackManager;
     private LoginButton loginButton;
@@ -75,6 +77,10 @@ public class ActivityLogin extends AppCompatActivity {
         Twitter.initialize(this);
         mAuth= FirebaseAuth.getInstance();
         setContentView(R.layout.activity_login);
+
+        //progressbar
+        final ProgressBar unProgressBar= (ProgressBar)findViewById(R.id.progress_bar);
+        unProgressBar.setVisibility(View.GONE);
 
         //chequeo si hay internet
         if (!HTTPConnectionManager.isNetworkingOnline(this)){
@@ -96,9 +102,11 @@ public class ActivityLogin extends AppCompatActivity {
                     else{mail=user.getEmail();}
                     if (user.getPhotoUrl()==null){foto="sinFoto";}
                     else{foto=user.getPhotoUrl().toString();}
-                    Toast.makeText(ActivityLogin.this, "Bienvenido! "+mail, Toast.LENGTH_SHORT).show();
                     ingresarLogueado(ActivityLogin.this, mail, foto);
-                    user.getEmail();
+                    Toast.makeText(ActivityLogin.this, "Bienvenido! "+mail, Toast.LENGTH_SHORT).show();
+                    unProgressBar.setVisibility(View.GONE);
+
+
                 }
                 else{
 
@@ -187,6 +195,7 @@ public class ActivityLogin extends AppCompatActivity {
                     public void success(Result<TwitterSession> result) {
                         //success
                         handleTwitterSession(result.data);
+                        unProgressBar.setVisibility(View.VISIBLE);
 
                     }
 
@@ -215,6 +224,8 @@ public class ActivityLogin extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
                 Log.d("error", "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
+
+                unProgressBar.setVisibility(View.VISIBLE);
             }
 
             @Override

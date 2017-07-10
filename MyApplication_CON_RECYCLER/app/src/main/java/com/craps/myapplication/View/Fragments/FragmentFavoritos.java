@@ -123,21 +123,39 @@ public class FragmentFavoritos extends Fragment {
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-
+        super.setUserVisibleHint(isVisibleToUser);
 
         if (isVisibleToUser) {
-            controllerFormato.obtenerFavoritos(new ResultListener<List<Formato>>() {
-                @Override
-                public void finish(List<Formato> resultado) {
+            if (isResumed()) {
+                controllerFormato.obtenerFavoritos(new ResultListener<List<Formato>>() {
+                    @Override
+                    public void finish(List<Formato> resultado) {
 
-                    adapterFavoritos.setListaFormatosOriginales(resultado);
-                    lista1=resultado;
-                    adapterFavoritos.notifyDataSetChanged();
-                }
-            });
+                        adapterFavoritos.setListaFormatosOriginales(resultado);
+                        lista1 = resultado;
+                        adapterFavoritos.notifyDataSetChanged();
+                    }
+                });
+            }
         }
-        super.setUserVisibleHint(isVisibleToUser);
+    }
+
+
+
+    @Override
+    public void onResume() {
+        controllerFormato.obtenerFavoritos(new ResultListener<List<Formato>>() {
+            @Override
+            public void finish(List<Formato> resultado) {
+
+                adapterFavoritos.setListaFormatosOriginales(resultado);
+                lista1 = resultado;
+                adapterFavoritos.notifyDataSetChanged();
+            }
+        });
+        super.onResume();
     }
 }
+
 
 

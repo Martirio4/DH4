@@ -152,7 +152,8 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                 for (Formato unFormato:listaFormatos
                      ) {
                     if (unFormato.getId().equals(idFormato)){
-                        viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                        viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),true);
+
                        
                     }
 
@@ -176,7 +177,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                         for (final Formato unFormato : listaFormatos) {
 
                             if (unFormato.getId().equals(idFormato)) {
-                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),true);
                                
                             }
                         }
@@ -195,7 +196,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                         for (final Formato unFormato : listaFormatos) {
 
                             if (unFormato.getId().equals(idFormato)) {
-                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),true);
                                
                             }
                         }
@@ -220,7 +221,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                         resultado.add(0,unFormato);
                         adapterPagerDetalle.addListaFormatos(resultado);
                         viewPagerDetalle.setAdapter(adapterPagerDetalle);
-                        viewPagerDetalle.setCurrentItem(0);
+                        viewPagerDetalle.setCurrentItem(0,true);
                         isLoading = false;
                         adapterPagerDetalle.notifyDataSetChanged();
                     }
@@ -238,7 +239,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                                 resultado.add(0,unFormato);
                                 adapterPagerDetalle.addListaFormatos(resultado);
                                 viewPagerDetalle.setAdapter(adapterPagerDetalle);
-                                viewPagerDetalle.setCurrentItem(0);
+                                viewPagerDetalle.setCurrentItem(0,true);
                                 isLoading = false;
                                 adapterPagerDetalle.notifyDataSetChanged();
                             }
@@ -263,7 +264,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                         for (final Formato unFormato : listaFormatos) {
 
                             if (unFormato.getId().equals(idFormato)) {
-                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),true);
                                
                             }
                         }
@@ -280,7 +281,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                         for (final Formato unFormato : listaFormatos) {
 
                             if (unFormato.getId().equals(idFormato)) {
-                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),true);
                                
                             }
                         }
@@ -305,7 +306,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                         for (final Formato unFormato : listaFormatos) {
 
                             if (unFormato.getId().equals(idFormato)) {
-                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),true);
                                
                             }
                         }
@@ -322,7 +323,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                         for (final Formato unFormato : listaFormatos) {
 
                             if (unFormato.getId().equals(idFormato)) {
-                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),true);
                                
                             }
                         }
@@ -347,7 +348,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                         for (final Formato unFormato : listaFormatos) {
 
                             if (unFormato.getId().equals(idFormato)) {
-                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),true);
                                
                             }
                         }
@@ -364,7 +365,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                         for (final Formato unFormato : listaFormatos) {
 
                             if (unFormato.getId().equals(idFormato)) {
-                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),true);
                                
                             }
                         }
@@ -389,7 +390,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                    for (final Formato unFormato : listaFormatos) {
 
                        if (unFormato.getId().equals(idFormato)) {
-                           viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                           viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),true);
                           
                        }
                    }
@@ -416,7 +417,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                             for (final Formato unFormato : listaFormatos) {
 
                                 if (unFormato.getId().equals(idFormato)) {
-                                    viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                                    viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),true);
                                    
                                 }
                             }
@@ -436,7 +437,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                             for (final Formato unFormato : listaFormatos) {
 
                                 if (unFormato.getId().equals(idFormato)) {
-                                    viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                                    viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),true);
                                    
                                 }
                             }
@@ -454,7 +455,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                             for (final Formato unFormato : listaFormatos) {
 
                                 if (unFormato.getId().equals(idFormato)) {
-                                    viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato));
+                                    viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),true);
                                    
                                 }
                             }
@@ -483,6 +484,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
         if (ActivityMain.login==true){
             ControllerFormato controllerFormato = new ControllerFormato(this);
             controllerFormato.eliminarFavorito(unFormato, ActivityMain.usuario);
+
         }
     }
     @Override

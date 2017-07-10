@@ -34,7 +34,9 @@
             android:name=".View.Activities.ActivitySegunda"
             android:parentActivityName=".View.Activities.ActivityMain"
             android:screenOrientation="portrait" />
-        <activity android:name=".View.Activities.ActivityMain" />
+        <activity android:name=".View.Activities.ActivityMain"
+                 android:launchMode="singleInstance"
+            />
         <activity android:name=".View.Activities.ActivityLogin" />
         <activity
             android:name=".View.Activities.ActivityRegister"

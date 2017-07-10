@@ -568,23 +568,36 @@ public class ControllerFormato {
         }
     }
     
-    public void eliminarFavorito(Formato unFormato, String unString){
-        final Formato elFormato;
+    public void eliminarFavorito(final Formato unFormato, final String unString){
+
         final DAOFavoritosDatabase daoFavoritosDatabase= new DAOFavoritosDatabase(context);
+        String nombre;
+        String tipo;
+        if (unFormato.getTitle()==null || unFormato.getTitle().isEmpty()){
+            nombre=unFormato.getName();
+            tipo="serie";
+        }
+        else{
+            nombre=unFormato.getTitle();
+            tipo="pelicula";
+        }
         if(daoFavoritosDatabase.checkIfExist(unFormato.getId(), ActivityMain.usuario)){
-            elFormato=daoFavoritosDatabase.getFormato(unFormato.getId(), unString);
-            daoFavoritosDatabase.borrarFavorito(unFormato, unString);
-            Activity unaActivity = (Activity) context;
+
+
+
+            final Activity unaActivity = (Activity) context;
             View view = (View) unaActivity.findViewById(R.id.detalle_contenedor_fragment);
 
-            Snackbar.make(view, "Formato eliminado",Snackbar.LENGTH_LONG)
-                    .setAction("Deshacer?", new View.OnClickListener() {
+            Snackbar.make(view, "Desea eliminar la "+tipo+" "+nombre+" de sus favoritos?",Snackbar.LENGTH_LONG)
+                    .setAction("Aceptar", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            daoFavoritosDatabase.addFormato(elFormato,ActivityMain.usuario);
+                            daoFavoritosDatabase.borrarFavorito(unFormato, unString);
+                            unaActivity.finish();
                         }
                     })
                     .show();
+
 
         }
         else{
