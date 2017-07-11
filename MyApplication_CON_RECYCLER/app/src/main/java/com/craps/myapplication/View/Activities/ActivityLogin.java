@@ -61,6 +61,7 @@ public class ActivityLogin extends AppCompatActivity {
     TwitterAuthClient twitterAuthClient;
     TwitterApiClient twitterApiClient;
     private ProgressBar unProgressBar;
+    private ImageButton fakeFbLogin;
 
     private CallbackManager callbackManager;
     private LoginButton loginButton;
@@ -217,7 +218,7 @@ public class ActivityLogin extends AppCompatActivity {
 
         // Initialize Facebook Login button
         callbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -248,7 +249,15 @@ public class ActivityLogin extends AppCompatActivity {
 
         //Asigno el content al share button
         shareButton.setShareContent(content);
+
 */
+        fakeFbLogin=(ImageButton)findViewById(R.id.fakeLogin);
+        fakeFbLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginButton.performClick();
+            }
+        });
     }
 
 

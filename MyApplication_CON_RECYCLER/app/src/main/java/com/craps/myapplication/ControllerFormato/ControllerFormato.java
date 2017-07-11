@@ -588,7 +588,7 @@ public class ControllerFormato {
             final Activity unaActivity = (Activity) context;
             View view = (View) unaActivity.findViewById(R.id.detalle_contenedor_fragment);
 
-            Snackbar.make(view, "Desea eliminar la "+tipo+" "+nombre+" de sus favoritos?",Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "Desea eliminar la "+tipo+" "+nombre+" de sus favoritos?",Snackbar.LENGTH_SHORT)
                     .setAction("Aceptar", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

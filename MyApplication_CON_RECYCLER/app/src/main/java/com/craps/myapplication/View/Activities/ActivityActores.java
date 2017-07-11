@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import com.craps.myapplication.ControllerFormato.ControllerFormato;
 import com.craps.myapplication.Model.Actor;
 import com.craps.myapplication.Model.Formato;
+import com.craps.myapplication.Model.Imagen;
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.ResultListener;
 import com.craps.myapplication.View.Adapters.AdapterPagerActores;
@@ -57,6 +58,15 @@ public class ActivityActores extends AppCompatActivity implements ControllerForm
     @Override
     public void recibirActorClickeado(Actor unActor, Integer formatoId, String unFormato) {
 
+    }
+
+    @Override
+    public void recibirImagenClickeada(Imagen unaImagen) {
+        Intent unIntent= new Intent(this,ActivityPoster.class);
+        Bundle unBundle= new Bundle();
+        unBundle.putString(ActivityPoster.POSTERID,unaImagen.getRutaImagen());
+        unIntent.putExtras(unBundle);
+        startActivity(unIntent);
     }
 
     @Override

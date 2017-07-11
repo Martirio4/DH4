@@ -1,7 +1,9 @@
 package com.craps.myapplication.View.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import com.craps.myapplication.Model.Imagen;
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.TMDBHelper;
+import com.craps.myapplication.View.Activities.ActivityPoster;
 import com.craps.myapplication.View.Fragments.FragmentBusqueda;
 import com.squareup.picasso.Picasso;
 
@@ -71,10 +74,23 @@ public class AdapterImagenes extends RecyclerView.Adapter implements View.OnClic
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         final Imagen unImagen = listaImagenesOriginales.get(position);
         FormatoViewHolder imagenViewHolder = (FormatoViewHolder) holder;
         imagenViewHolder.cargarFormato(unImagen);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Imagen imagenClickeada = listaImagenesOriginales.get(position);
+                Intent unIntent= new Intent(holder.itemView.getContext(),ActivityPoster.class);
+                Bundle unBundle= new Bundle();
+                unBundle.putString(ActivityPoster.POSTERID,imagenClickeada.getRutaImagen());
+                unIntent.putExtras(unBundle);
+                holder.itemView.getContext().startActivity(unIntent);
+            }
+        });
+
 
 
     }

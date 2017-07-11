@@ -10,6 +10,7 @@
     android:background="@color/paleta0">
 
 
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,12 +38,6 @@
         android:layout_centerInParent="true"
         android:layout_height="wrap_content">
 
-        <ProgressBar
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:id="@+id/progress_bar"
-            android:layout_gravity="center_horizontal|center_vertical"
-            />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -141,6 +136,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
+        android:layout_marginTop="24dp"
         android:layout_marginBottom="8dp"
         android:layout_below="@id/contenedorBotones"
         android:layout_height="wrap_content">
@@ -154,13 +150,12 @@
             android:layout_height="wrap_content">
 
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
-                android:scaleType="centerInside"
+                android:scaleType="fitXY"
                 android:id="@+id/loginBtn"
-                android:scaleX=".5"
-                android:scaleY=".5"
+
 
                 android:background="@android:color/transparent"
                 android:src="@drawable/twitterlogin"
@@ -182,11 +177,28 @@
             android:layout_weight="60"
             android:orientation="vertical">
 
+            <ImageButton
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@null"
+                android:id="@+id/fakeLogin"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:src="@drawable/face"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_below="@id/loginBtn"
+                android:layout_gravity="center"
+                android:textColor="#5ea8dc"
+                android:text="Facebook login"
+                android:layout_height="wrap_content" />
+
             <com.facebook.login.widget.LoginButton
                 android:id="@+id/login_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:visibility="gone"
 
                 />
         </LinearLayout>
@@ -196,7 +208,13 @@
 
 
 
-
+    <ProgressBar
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        android:id="@+id/progress_bar"
+        android:layout_gravity="center_horizontal|center_vertical"
+        />
 
 
 

@@ -42,29 +42,25 @@ public class FragmentActores extends Fragment {
     private AdapterCreditos adapterCreditos;
     RecyclerView recyclerImagenes;
     AdapterImagenes adapterImagenes;
-    private LinearLayoutManager layoutManagerDetalle;
+
     private ControllerFormato controllerFragmentActores;
     public FragmentActores() {
     }
     private Boolean isLoading = false;
     private Integer actorid;
-    private Integer formatoOrigenId;
     private String nombreActor;
     private String fechaNacimientoActor;
     private String biografiaActor;
-    private String fotoActor;
-    private Float popularidadActor;
     private TextView textonombre;
     private TextView textoaño;
     private TextView textosinopsis;
-    private TextView textCalificacion;
-    private ImageButton imageButton;
     private Notificable notificable;
 
 
     //DECLARO INTERFAZ
     public interface Notificable {
         public void recibirFormatoClickeado(Formato formato, String origen, Integer pagina, String StringABuscar, Integer drawerId);
+        public void recibirImagenClickeada(Imagen unaImagen);
     }
 
     @Override
@@ -72,11 +68,9 @@ public class FragmentActores extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_actores, container, false);
 
-        imageButton=(ImageButton) view.findViewById(R.id.detalle_img);
         textonombre=(TextView)view.findViewById(R.id.tag_nombre2);
         textoaño=(TextView)view.findViewById(R.id.tag_año2);
         textosinopsis=(TextView)view.findViewById(R.id.tag_sinopsis2);
-        textCalificacion = (TextView) view.findViewById(R.id.textViewrating);
 
         controllerFragmentActores= new ControllerFormato(view.getContext());
 
@@ -89,12 +83,16 @@ public class FragmentActores extends Fragment {
             actorid=unBundle.getInt(ACTORID);
         }
 
+        //RECYCLER IMAGENES
         recyclerImagenes = (RecyclerView) view.findViewById(R.id.recyclerFotoActor);
         recyclerImagenes.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL,false));
+
         adapterImagenes = new AdapterImagenes();
         adapterImagenes.setContext(view.getContext());
+
         recyclerImagenes.setAdapter(adapterImagenes);
         adapterImagenes.setListaImagenesOriginales(new ArrayList<Imagen>());
+
         controllerFragmentActores.traerImagenesAdicionales(new ResultListener<List<Imagen>>() {
             @Override
             public void finish(List<Imagen> resultado) {
@@ -103,9 +101,23 @@ public class FragmentActores extends Fragment {
             }
         },actorid);
 
+        //LISTENER CLICK FOTO ACTOR
+       /* View.OnClickListener listenerFotoActor= new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Integer laposicion = recyclerImagenes.getChildAdapterPosition(v);
+                List <Imagen> listaFotosActor = adapterImagenes.getListaImagenesOriginales();
+                Imagen imagenClickeada = listaFotosActor.get(laposicion);
+                Imagen unaImagen= new Imagen();
+                unaImagen.setRutaImagen(imagenClickeada.getRutaImagen());
+
+                notificable.recibirImagenClickeada(unaImagen);
+            }
+        };
 
 
-
+        adapterImagenes.setListener(listenerFotoActor);
+*/
         //Datos
 
         controllerFragmentActores.traerDetallesPersona(new ResultListener<Actor>() {
@@ -114,8 +126,6 @@ public class FragmentActores extends Fragment {
                 nombreActor=resultado.getNombreActor();
                 fechaNacimientoActor=resultado.getCumpleaños();
                 biografiaActor=resultado.getBiografia();
-                popularidadActor=resultado.getPopularidad();
-                fotoActor=resultado.getFotoPerfilActor();
                 cargarDatosActor();
                 cargarDatosCreditos();
             }
@@ -127,7 +137,6 @@ public class FragmentActores extends Fragment {
         textoaño.setTypeface(roboto);
         textosinopsis.setTypeface(roboto);
 
-
         //RECYCLER CREDITOS
         recyclerCreditos =(RecyclerView)view.findViewById(R.id.recycler_participacion);
         recyclerCreditos.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -135,8 +144,6 @@ public class FragmentActores extends Fragment {
         adapterCreditos.setContext(view.getContext());
         adapterCreditos.setListaCreditosOriginales(new ArrayList<Credito>());
         recyclerCreditos.setAdapter(adapterCreditos);
-
-
 
         //listener clickeo peliculas creditos
         View.OnClickListener listenerActore= new View.OnClickListener() {
@@ -158,22 +165,6 @@ public class FragmentActores extends Fragment {
         };
         adapterCreditos.setListener(listenerActore);
 
-
-
-
-
-
-        /*ImageButton imagebuttonFAV= (ImageButton) view.findViewById(R.id.boton_favo_grande);
-        imagebuttonFAV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                favoritable= (FavoritableFav) v.getContext();
-
-                favoritable.recibirFormatoFavorito(nombre);
-
-            }
-        });
-        */
         return view;
     }
 
@@ -183,12 +174,6 @@ public class FragmentActores extends Fragment {
         textoaño.setText(fechaNacimientoActor);
         textosinopsis.setVisibility(View.VISIBLE);
         textosinopsis.setText(biografiaActor);
-        Picasso.with(imageButton.getContext())
-                .load(TMDBHelper.getBackDropPoster(TMDBHelper.IMAGE_SIZE_W342,fotoActor))
-                .placeholder(R.drawable.loading2)
-                .error(R.drawable.noimagedetalle)
-                .into(imageButton);
-
     }
 
     public void cargarDatosCreditos(){
