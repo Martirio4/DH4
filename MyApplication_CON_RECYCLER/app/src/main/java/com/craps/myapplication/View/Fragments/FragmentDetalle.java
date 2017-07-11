@@ -45,6 +45,7 @@ import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.tweetcomposer.ComposerActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -107,7 +108,11 @@ public class FragmentDetalle extends Fragment {
     private String nombreAMostrarCompartir;
     private ShareButton compartirFB;
 
-
+    //PABLO 1/3 A - DEMO 10/07 (VER CLICKABLE EN LAYOUT ONCLIK_DETALLE)
+    private Integer maxLength = 175;
+    private final List<Character> doNotEndTitlesWithTheseCharacters = Arrays.asList(':', ',', ';', '-', '"', '/', '+');
+    private String sinopsisCortada;
+    //PABLO 1/3 C - DEMO 10/07
 
 
 
@@ -279,7 +284,11 @@ public class FragmentDetalle extends Fragment {
 
         TextView textonombre=(TextView)view.findViewById(R.id.tag_nombre2);
         TextView textoaño=(TextView)view.findViewById(R.id.tag_año2);
-        TextView textosinopsis=(TextView)view.findViewById(R.id.tag_sinopsis2);
+
+        // PABLO AGREGADO "FINAL" PARA METODO ONCLICK
+        final TextView textosinopsis=(TextView)view.findViewById(R.id.tag_sinopsis2);
+        //
+
         TextView textCalificacion = (TextView) view.findViewById(R.id.textViewrating);
         Typeface roboto = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
         ImageButton imageButton=(ImageButton) view.findViewById(R.id.detalle_img);
@@ -311,7 +320,22 @@ public class FragmentDetalle extends Fragment {
             textonombre.setText(title);
             textoaño.setText(releaseDate);
         }
-        textosinopsis.setText(sinopsis);
+
+        //PABLO 2/3 A - DEMO 10/07 (VER CLICKABLE EN LAYOUT ONCLIK_DETALLE)
+        cortarSinopsis(sinopsis,maxLength);
+        textosinopsis.setText(sinopsisCortada);
+
+        textosinopsis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (textosinopsis.getText() == sinopsisCortada) {
+                    textosinopsis.setText(sinopsis);
+                } else {
+                    textosinopsis.setText(sinopsisCortada);
+                }
+            }});
+        // PABLO 2/3 C
+
         textCalificacion.setText(calificacion.toString());
 
         textonombre.setTypeface(roboto);
@@ -701,8 +725,32 @@ public class FragmentDetalle extends Fragment {
         startActivity(Intent.createChooser(share, "Compartí con tus amigos"));
 
 
+    }
+
+    //PABLO 3/3 A - DEMO 10/07 (VER CLICKABLE EN LAYOUT ONCLIK_DETALLE)
+    public String cortarSinopsis(String sinopsisOriginal, Integer largoMax) {
+
+        if (sinopsisOriginal.length() <= largoMax) {
+            return sinopsisOriginal;
         }
 
+        sinopsisCortada = sinopsisOriginal.substring(0, largoMax);
+        sinopsisCortada = sinopsisCortada.substring(0, sinopsisCortada.lastIndexOf(' '));
+
+        while (endsInAWeirdCharacter(sinopsisCortada)) {
+            sinopsisCortada = sinopsisCortada.substring(0, sinopsisCortada.length() - 1);
+        }
+
+        sinopsisCortada = sinopsisCortada + "...";
+
+        return sinopsisCortada;
+
+    }
+
+    public Boolean endsInAWeirdCharacter(String unString){
+        return !(doNotEndTitlesWithTheseCharacters.indexOf(unString.charAt(unString.length() - 1)) == -1);
+    }
+    //PABLO 3/3 C
 
 
 

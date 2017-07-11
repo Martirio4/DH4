@@ -179,6 +179,7 @@
                     android:text="@string/detalle_nombre_peli"
                     android:id="@+id/tag_sinopsis2"
                     android:textColor="@color/marfil"
+                    android:clickable="true"
                     />
 
                 <TextView
