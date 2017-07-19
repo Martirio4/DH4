@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/paleta0"
+    android:layout_height="match_parent"
+    tools:context="com.craps.myapplication.View.Fragments.FragmentFavoritosSinUsuario">
+
+    <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logofilm"
+        android:layout_centerInParent="true"
+        android:alpha=".3"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:textSize="25dp"
+        android:textColor="@color/marfil"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textAlignment="center"
+        android:id="@+id/textosinlogin"
+        android:layout_centerHorizontal="true"
+        android:text="Esta seccion solo esta disponible para usuarios registrados" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="INICIAR SESION"
+        android:id="@+id/buttonLogin"
+        android:layout_below="@id/textosinlogin"
+        android:background="@drawable/boton"
+        android:textColor="@color/marfil"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="REGISTRARSE"
+        android:id="@+id/buttonRegister"
+        android:background="@drawable/boton"
+        android:layout_below="@+id/buttonLogin"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/marfil"
+        android:elevation="10dp"
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>

@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">ReelShot</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="titulo_series">SERIES</string>
+    <string name="titulo_peliculas">PELICULAS</string>
+    <string name="detalle_nombre_peli">NOMBRE</string>
+    <string name="detalle_genero_peli">GENERO</string>
+    <string name="detalle_año_peli">FECHA DE LANZAMIENTO:</string>
+    <string name="detalle_director_peli">DIRECTOR:</string>
+    <string name="detalle_actor_ppal">PROTAGONISTA M:</string>
+    <string name="detalle_actriz_ppal">PROTAGONISTA F:</string>
+    <string name="detalle_sinopsis_peli">SINOPSIS:</string>
+    <string name="hint">Busca peli, serie, genero, director...</string>
+    <string name="add_to_favorite">Agregar a favoritos</string>
+    <string name="remove_favorite">Eliminar de favoritos</string>
+    <string name="watch_trailer">Ver trailer</string>
+    <string name="share_Twitter">Compartir con Twitter</string>
+    <string name="share">Compartir</string>
+    <string name="drawer_open">drawer open</string>
+    <string name="drawer_close">drawer close</string>
+    <string name="noSinopsis">No hay sinopsis para el formato seleccionado</string>
+
+    <string name="com.twitter.sdk.android.CONSUMER_KEY">Laarv9UmB3hspPkxfWo8Jnp3F</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET">M57Qbt4sj4nNpq0Qj4k8AIcU4CyprPnOwQDks0cEbKkSuVXKOt</string>
+
+    <string name="facebook_app_id">835511146603634</string>
+    <string name="fb_login_protocol_scheme">fb835511146603634</string>
+
+</resources>

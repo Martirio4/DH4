@@ -1,0 +1,40 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/paleta0"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.craps.myapplication.View.Fragments.FragmentMain">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/paleta0">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/marfil"
+            android:text="texto de prueba"
+            android:layout_marginTop="8dp"
+            android:padding="2dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:id="@+id/texto_titulo_sinconexion"
+            />
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/recycler1"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/paleta0"
+            android:dividerHeight="0dp"
+            android:layout_marginLeft="@dimen/tabTexto"
+            android:layout_marginRight="@dimen/tabTexto"
+            android:divider="@null">
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+
+
+
+</FrameLayout>

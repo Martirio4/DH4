@@ -1,0 +1,98 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/paleta0"
+    android:layout_height="match_parent"
+    tools:context="com.craps.myapplication.View.Fragments.FragmentTrivia">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ReelShot Trivia"
+        android:textSize="50sp"
+        android:layout_marginTop="50dp"
+        android:textStyle="bold"
+        android:textColor="@color/marfil"
+        android:id="@+id/tituloTrivia"
+        android:layout_centerHorizontal="true"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_margin="8dp"
+        android:id="@+id/linearTrivia"
+        android:layout_below="@id/tituloTrivia"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content"
+            android:text="Tu puntaje actual"
+            android:textColor="@color/marfil"
+
+            android:layout_below="@id/tituloTrivia"
+            android:id="@+id/tagPuntaje"
+            android:layout_alignParentLeft="true"
+
+            android:layout_marginLeft="8dp"/>
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content"
+            android:text="4628"
+            android:textAlignment="center"
+            android:textColor="@color/paleta4"
+            android:textSize="30sp"
+            android:id="@+id/puntajePortadaTrivia"
+            android:layout_below="@id/tituloTrivia"
+            android:layout_toRightOf="@id/tagPuntaje"
+            android:layout_marginLeft="8dp"/>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/boton"
+        android:textColor="@color/marfil"
+
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:id="@+id/btn_empezarTrivia"
+
+        android:text="Comenzar ReelShot Trivia"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/boton2"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/btn_subirPregunta"
+        android:layout_height="50dp"
+
+        android:layout_below="@id/btn_empezarTrivia"
+        android:text="Crear una pregunta nueva"/>
+
+    <com.github.clans.fab.FloatingActionButton
+        android:layout_gravity="right"
+        android:id="@+id/compartirPuntajeInicial"
+        android:layout_marginRight="16dp"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/btn_subirPregunta"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content" />
+
+
+
+
+
+
+
+
+
+</RelativeLayout>

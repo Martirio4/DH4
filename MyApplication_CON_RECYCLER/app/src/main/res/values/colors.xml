@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#232323</color>
+    <color name="colorPrimaryDark">#2b2d42</color>
+    <color name="colorAccent">#4db5ab</color>
+    <color name="fondoTextoImagen">#2b2d42</color>
+    <color name="textoImagen">#26c6da</color>
+    <color name="textoDescriptivo">#b5eeff</color>
+    <color name="lima">#a5d6a7</color>
+
+    <color name="marfil">#ffffff</color>
+    <color name="color0">#6fa597</color>
+    <color name="textColorPrimary">#2b2d42</color>
+    <color name="color1">#ecf1f3</color>
+    <color name="color2">#8c98ad</color>
+    <color name="color3">#2b2d42</color>
+    <color name="color5">#d94336</color>
+    <color name="color6">#d94336</color>
+
+
+
+
+
+    <color name="paleta0">#2d2d2d</color>
+    <color name="paleta3">#263238</color>
+    <color name="paleta1">#78909c</color>
+    <color name="paleta2">#8c98ad</color>
+    <color name="paleta4">#4db6ac</color>
+
+    <color name="app_primary">#1976D2</color>
+    <color name="app_primary_dark">#1565C0</color>
+    <color name="grey">#DDDDDD</color>
+    <color name="light_grey">#EEEEEE</color>
+    <color name="white_transparent">#99FFFFFF</color>
+    <color name="black">#000</color>
+
+</resources>

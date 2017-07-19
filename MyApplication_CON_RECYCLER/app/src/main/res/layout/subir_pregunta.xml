@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<ScrollView android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@color/paleta0"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:background="@color/paleta0"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ReelShot Trivia"
+        android:textSize="30sp"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        android:textColor="@color/paleta4"
+        android:id="@+id/textViewLogin"
+        android:layout_gravity="center_horizontal"
+        />
+   <TextView
+       android:layout_marginTop="8dp"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Envianos tu pregunta"
+       android:textColor="@color/marfil"
+       android:textSize="20sp"
+       android:layout_gravity="center_horizontal"/>
+    <LinearLayout
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="12dp"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:alpha="0.2"
+                android:src="@drawable/logofilm"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/inputLayout11"
+                    android:textColorHint="@color/marfil"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:id="@+id/edit11"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/marfil"
+                        android:textAlignment="center"
+                        android:hint="Escribí la pregunta"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/inputLayout12"
+                    android:textColorHint="@color/marfil"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/marfil"
+                        android:id="@+id/edit12"
+                        android:textAlignment="center"
+                        android:hint="Respuesta correcta"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/inputLayout13"
+                    android:textColorHint="@color/marfil"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edit13"
+                        android:textColor="@color/marfil"
+                        android:textAlignment="center"
+                        android:hint="Respuesta Incorrecta"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/inputLayout14"
+                    android:textColorHint="@color/marfil"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edit14"
+                        android:textColor="@color/marfil"
+                        android:textAlignment="center"
+                        android:hint="Respuesta Incorrecta"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/inputLayout15"
+                    android:textColorHint="@color/marfil"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:textColor="@color/marfil"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edit15"
+                        android:textAlignment="center"
+                        android:hint="Respuesta Incorrecta"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/inputLayout16"
+                    android:textColorHint="@color/marfil"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edit16"
+                        android:textColor="@color/marfil"
+                        android:textAlignment="center"
+                        android:hint="Respuesta Incorrecta"/>
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enviar pregunta"
+            android:id="@+id/btn_upload_pregunta"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/marfil"
+            android:background="@drawable/boton"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/boton"
+            android:textColor="@color/marfil"
+            android:id="@+id/btn_limpiar_campos"
+            android:text="Limpiar campos"/>
+
+    </LinearLayout>
+
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/boton2"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:id="@+id/btn_volver_a_fragmentTrivia"
+            android:text="Volver"/>
+
+
+</LinearLayout>
+</ScrollView>

@@ -1,0 +1,165 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/paleta0"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context="com.craps.myapplication.View.Fragments.FragmentJugarTrivia">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ReelShot Trivia"
+        android:textSize="30sp"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        android:textColor="@color/paleta4"
+        android:id="@+id/textViewLogin"
+        android:layout_gravity="center_horizontal"
+        />
+    <TextView
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cuánto sabés de cine y TV?"
+        android:textColor="@color/marfil"
+        android:textSize="20sp"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/textoDePregunta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="12dp"
+        android:textSize="18dp"
+        android:layout_marginBottom="12dp"
+        android:textColor="@color/paleta4"
+        android:text="Aqui va la pregunta que recib el usuario, debe elegir una de las 5 opciones"
+        android:textAlignment="center" />
+
+    <RadioGroup
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/radioGroup"
+
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp">
+
+        <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" android:buttonTint="@color/paleta4"
+        android:id="@+id/opcion1"
+
+        android:textColor="@color/marfil"
+        android:textColorHighlight="@color/paleta4"
+        android:text="texto de la opcion1"
+        />
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/opcion2"
+            android:layout_gravity="center"
+            android:buttonTint="@color/paleta4"
+            android:textColor="@color/marfil"
+            android:textColorHighlight="@color/paleta4"
+            android:text="texto de la opcion1"
+            />
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/opcion3"
+            android:buttonTint="@color/paleta4"
+            android:layout_gravity="center"
+            android:textColor="@color/marfil"
+            android:textColorHighlight="@color/paleta4"
+            android:text="texto de la opcion1"
+            />
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/opcion4"
+            android:buttonTint="@color/paleta4"
+            android:layout_gravity="center"
+            android:textColor="@color/marfil"
+            android:textColorHighlight="@color/paleta4"
+            android:text="texto de la opcion1"
+            />
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/opcion5"
+            android:buttonTint="@color/paleta4"
+            android:layout_gravity="center"
+            android:textColor="@color/marfil"
+            android:textColorHighlight="@color/paleta4"
+            android:text="texto de la opcion1"
+            />
+    </RadioGroup>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:id="@+id/btn_enviarRespuesta"
+            android:text="Enviar Respuesta"
+            android:background="@drawable/boton"
+            android:textColor="@color/marfil"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:text="Volver"
+            android:id="@+id/btn_volver"
+            android:background="@drawable/boton2"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textAutor"
+        android:text="pregunta enviada por: juancarlos"
+        android:textColor="@color/paleta4"
+        android:textAlignment="center"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="30sp"
+            android:text="puntaje"
+            android:id="@+id/textPuntaje"
+            android:textColor="@color/marfil"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical|left"
+            android:textSize="18sp"
+            android:layout_marginLeft="16dp"
+            android:text="Tu puntaje: "
+            android:textColor="@color/paleta4"
+            android:layout_height="wrap_content" />
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_gravity="right"
+            android:id="@+id/compartirPuntaje"
+            android:layout_marginRight="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+
+</LinearLayout>
