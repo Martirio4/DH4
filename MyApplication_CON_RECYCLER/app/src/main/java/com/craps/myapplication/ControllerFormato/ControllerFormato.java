@@ -947,6 +947,10 @@ public class ControllerFormato {
         unDialogo.show();
 
         final Button positiveButton = unDialogo.getButton(AlertDialog.BUTTON_POSITIVE);
+        final Button negativeButton = unDialogo.getButton(AlertDialog.BUTTON_NEGATIVE);
+        positiveButton.setTextColor(context.getResources().getColor(R.color.paleta4));
+        negativeButton.setTextColor(context.getResources().getColor(R.color.paleta4));
+
         LinearLayout.LayoutParams positiveButtonLL = (LinearLayout.LayoutParams) positiveButton.getLayoutParams();
         positiveButtonLL.width = ViewGroup.LayoutParams.MATCH_PARENT;
         positiveButton.setLayoutParams(positiveButtonLL);

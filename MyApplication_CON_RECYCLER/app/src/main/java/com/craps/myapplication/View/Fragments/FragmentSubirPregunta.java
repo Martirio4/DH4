@@ -182,7 +182,7 @@ public class FragmentSubirPregunta extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.Dialog);
         builder.setTitle("ReelShot Trivia")
                 .setMessage("Su pregunta fue agregada con éxito" + "\n" + "desea agregar otra pregunta?")
-                .setPositiveButton("Crear otra pregunta", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Tengo otra!", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         textInputLayout11.setError(null);
@@ -210,6 +210,10 @@ public class FragmentSubirPregunta extends Fragment {
         unDialogo.show();
 
         final Button positiveButton = unDialogo.getButton(AlertDialog.BUTTON_POSITIVE);
+        final Button negativeButton = unDialogo.getButton(AlertDialog.BUTTON_NEGATIVE);
+        positiveButton.setTextColor(getResources().getColor(R.color.paleta4));
+        negativeButton.setTextColor(getResources().getColor(R.color.paleta4));
+
         LinearLayout.LayoutParams positiveButtonLL = (LinearLayout.LayoutParams) positiveButton.getLayoutParams();
         positiveButtonLL.width = ViewGroup.LayoutParams.MATCH_PARENT;
         positiveButton.setLayoutParams(positiveButtonLL);
