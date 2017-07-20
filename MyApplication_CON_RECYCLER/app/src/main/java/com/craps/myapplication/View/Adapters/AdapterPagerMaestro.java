@@ -1,8 +1,6 @@
 package com.craps.myapplication.View.Adapters;
 
 
-
-
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -28,7 +26,7 @@ import retrofit2.http.HTTP;
 public class AdapterPagerMaestro extends FragmentStatePagerAdapter {
 
     private List<android.support.v4.app.Fragment> listaContenedoresMaestros;
-    private List<String>listaTitulos= new ArrayList<>();
+    private List<String> listaTitulos = new ArrayList<>();
     protected Context context;
 
     public void setContext(Context context) {
@@ -37,48 +35,45 @@ public class AdapterPagerMaestro extends FragmentStatePagerAdapter {
 
     public AdapterPagerMaestro(FragmentManager fm, List<String> listaFragmentMain, Context context) {
         super(fm);
-            //guardo los titulos
-        listaTitulos=listaFragmentMain;
+        //guardo los titulos
+        listaTitulos = listaFragmentMain;
 
-            //INICIALIZO LA LISTA DE FRAGMENT
-            listaContenedoresMaestros = new ArrayList<>();
+        //INICIALIZO LA LISTA DE FRAGMENT
+        listaContenedoresMaestros = new ArrayList<>();
 
         //LE CARGO LOS FRAGMENTS QUE QUIERO. UTILIZO LA LISTA DE PELICULAS Y SERIES PARA CREAR LOS FRAGMENTS.
 
         //if (HTTPConnectionManager.isNetworkingOnline(context)) {
-            for (String unString : listaFragmentMain) {
-                switch (unString){
-                    case "favoritos":
-                        if (ActivityMain.login==true){
-                            listaContenedoresMaestros.add(FragmentFavoritos.crearFragmentMaestro());
-                        }
-                        else{
-                            listaContenedoresMaestros.add(FragmentFavoritosSinUsuario.crearFragmentMaestro());
-                        }
-                        break;
-                    case "trivia":
-                        if (ActivityMain.login==true){
-                            listaContenedoresMaestros.add(FragmentTrivia.crearFragmentMaestro());
-                        }
-                        else{
-                            listaContenedoresMaestros.add(FragmentFavoritosSinUsuario.crearFragmentMaestro());
-                        }
+        for (String unString : listaFragmentMain) {
+            switch (unString) {
+                case "favoritos":
+                    if (ActivityMain.login == true) {
+                        listaContenedoresMaestros.add(FragmentFavoritos.crearFragmentMaestro());
+                    } else {
+                        listaContenedoresMaestros.add(FragmentFavoritosSinUsuario.crearFragmentMaestro());
+                    }
+                    break;
+                case "trivia":
+                    if (ActivityMain.login == true) {
+                        listaContenedoresMaestros.add(FragmentTrivia.crearFragmentMaestro());
+                    } else {
+                        listaContenedoresMaestros.add(FragmentFavoritosSinUsuario.crearFragmentMaestro());
+                    }
 
-                        break;
-                    default:
-                        if (HTTPConnectionManager.isNetworkingOnline(context)){
-                            listaContenedoresMaestros.add((FragmentMain.crearFragmentMaestro(unString)));
-                        }
-                        else{
-                            listaContenedoresMaestros.add(FragmentSinConexion.crearFragmentMaestro());
-                        }
-                        break;
-                }
+                    break;
+                default:
+                    if (HTTPConnectionManager.isNetworkingOnline(context)) {
+                        listaContenedoresMaestros.add((FragmentMain.crearFragmentMaestro(unString)));
+                    } else {
+                        listaContenedoresMaestros.add(FragmentSinConexion.crearFragmentMaestro());
+                    }
+                    break;
             }
+        }
         //}
         //else{
-               // listaContenedoresMaestros.add(FragmentSinConexion.crearFragmentMaestro());
-               // listaContenedoresMaestros.add(FragmentFavoritos.crearFragmentMaestro());
+        // listaContenedoresMaestros.add(FragmentSinConexion.crearFragmentMaestro());
+        // listaContenedoresMaestros.add(FragmentFavoritos.crearFragmentMaestro());
         //}
 
         //LE AVISO AL ADAPTER QUE CAMBIO SU LISTA DE FRAGMENTS.

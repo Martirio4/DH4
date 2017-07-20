@@ -75,43 +75,49 @@ public class ActivityLogin extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         //INICIALIZO TWITTER
         Twitter.initialize(this);
-        mAuth= FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_login);
 
         //progressbar
-        final ProgressBar unProgressBar= (ProgressBar)findViewById(R.id.progress_bar);
+        final ProgressBar unProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         unProgressBar.setVisibility(View.GONE);
 
         //chequeo si hay internet
-        if (!HTTPConnectionManager.isNetworkingOnline(this)){
-            TextView unText=(TextView)findViewById(R.id.texto_sin_conexion);
+        if (!HTTPConnectionManager.isNetworkingOnline(this)) {
+            TextView unText = (TextView) findViewById(R.id.texto_sin_conexion);
             unText.setVisibility(View.VISIBLE);
         }
 
 
         //INICIALIZAR FIREBASE
         twitterAuthClient = new TwitterAuthClient();
-        mAuthListener=new FirebaseAuth.AuthStateListener(){
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user= firebaseAuth.getCurrentUser();
-                if (user!=null){
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
                     String mail;
                     String foto;
-                    if (user.getEmail() == null||user.getEmail().isEmpty()){mail=user.getDisplayName();}
-                    else{mail=user.getEmail();}
-                    if (user.getPhotoUrl()==null){foto="sinFoto";}
-                    else{foto=user.getPhotoUrl().toString();}
+                    if (user.getEmail() == null || user.getEmail().isEmpty()) {
+                        mail = user.getDisplayName();
+                    } else {
+                        mail = user.getEmail();
+                    }
+                    if (user.getPhotoUrl() == null) {
+                        foto = "sinFoto";
+                    } else {
+                        foto = user.getPhotoUrl().toString();
+                    }
                     ingresarLogueado(ActivityLogin.this, mail, foto);
-                    Toast.makeText(ActivityLogin.this, "Bienvenido! "+mail, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityLogin.this, "Bienvenido! " + mail, Toast.LENGTH_SHORT).show();
                     unProgressBar.setVisibility(View.GONE);
 
 
-                }
-                else{
+                } else {
 
                 }
             }
@@ -137,7 +143,7 @@ public class ActivityLogin extends AppCompatActivity {
             public void onClick(View v) {
                 textInputLayout1.setError(null);
                 textInputLayout2.setError(null);
-                Integer validar =0;
+                Integer validar = 0;
                 if (editTextUsuario.getText().toString().isEmpty()) {
                     textInputLayout1.setError("Por favor, ingrese un usuario valido");
                     validar = validar + 1;
@@ -155,11 +161,10 @@ public class ActivityLogin extends AppCompatActivity {
                 String mail = editTextUsuario.getText().toString().toLowerCase();
                 String contraseña = editTextPassword.getText().toString();
 
-                if (controllerUsuario.loguearUsuario(mail, contraseña)){
+                if (controllerUsuario.loguearUsuario(mail, contraseña)) {
                     loguearFirebaseManual(mail, contraseña);
 
-                }
-                else{
+                } else {
                     editTextPassword.setText(null);
                     editTextUsuario.setText(null);
                 }
@@ -186,9 +191,6 @@ public class ActivityLogin extends AppCompatActivity {
         });
 
 
-
-
-
         loginBtn = (ImageButton) findViewById(R.id.loginBtn);
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,8 +214,8 @@ public class ActivityLogin extends AppCompatActivity {
             }
         });
 
-        idFacebook = nombreFacebook = nombreMedioFacebook = apellidoFacebook = sexoFacebook = nombreCompletoFacebook = emailFacebook ="";
-        imagenFacebook="nada";
+        idFacebook = nombreFacebook = nombreMedioFacebook = apellidoFacebook = sexoFacebook = nombreCompletoFacebook = emailFacebook = "";
+        imagenFacebook = "nada";
 
         //for facebook
         //FACEBOOK
@@ -253,7 +255,7 @@ public class ActivityLogin extends AppCompatActivity {
         shareButton.setShareContent(content);
 
 */
-        fakeFbLogin=(ImageButton)findViewById(R.id.fakeLogin);
+        fakeFbLogin = (ImageButton) findViewById(R.id.fakeLogin);
         fakeFbLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -263,17 +265,15 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
 
-
-    public void ingresarLogueado(Activity unaActivity, String mail, String imagenUsuario){
+    public void ingresarLogueado(Activity unaActivity, String mail, String imagenUsuario) {
         Intent unIntent = new Intent(unaActivity, ActivityMain.class);
-        Bundle bundle=new Bundle();
+        Bundle bundle = new Bundle();
         bundle.putString(ActivityMain.USUARIO, mail);
         bundle.putString(ActivityMain.IMAGENUSUARIO, imagenUsuario);
         unIntent.putExtras(bundle);
         finish();
         startActivity(unIntent);
     }
-
 
 
     @Override
@@ -285,21 +285,21 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (mAuthListener!=null){
+        if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
+
     private void handleTwitterSession(TwitterSession session) {
 
         AuthCredential credential = TwitterAuthProvider.getCredential(
@@ -312,7 +312,6 @@ public class ActivityLogin extends AppCompatActivity {
                         if (!task.isSuccessful()) {
 
 
-
                             // If sign in fails, display a message to the user.
                             Toast.makeText(ActivityLogin.this, "El usuario ya existe. utilize otro Email", Toast.LENGTH_SHORT).show();
 
@@ -321,16 +320,15 @@ public class ActivityLogin extends AppCompatActivity {
                 });
     }
 
-    public void LogoutFirebase(){
+    public void LogoutFirebase() {
         FirebaseAuth.getInstance().signOut();
     }
 
-    public void loguearFirebaseManual(String usuario, String pass){
+    public void loguearFirebaseManual(String usuario, String pass) {
         mAuth.signInWithEmailAndPassword(usuario, pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-
 
 
                         // If sign in fails, display a message to the user. If sign in succeeds
@@ -344,7 +342,6 @@ public class ActivityLogin extends AppCompatActivity {
                     }
                 });
     }
-
 
 
     private void handleFacebookAccessToken(AccessToken token) {
@@ -382,8 +379,7 @@ public class ActivityLogin extends AppCompatActivity {
 */
 
 
-
-    }
+}
 
 
 

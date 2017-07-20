@@ -26,7 +26,7 @@ public class ActivityTrivia extends AppCompatActivity implements ControllerForma
         Bundle unBundle = unIntent.getExtras();
         Integer queMuestro = unBundle.getInt(QUEMUESTRO);
 
-        switch (queMuestro){
+        switch (queMuestro) {
             case 0:
                 cargarFragmentTrivia();
                 break;
@@ -38,21 +38,23 @@ public class ActivityTrivia extends AppCompatActivity implements ControllerForma
 
     }
 
-    public void cargarFragmentTrivia(){
+    public void cargarFragmentTrivia() {
         FragmentJugarTrivia fragmentJugarTrivia = new FragmentJugarTrivia();
-        FragmentManager fragmentManager= getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.activity_trivia, fragmentJugarTrivia);
         fragmentTransaction.commit();
 
     }
-    public void cargarFragmentSubirPregunta(){
+
+    public void cargarFragmentSubirPregunta() {
         FragmentSubirPregunta fragmentSubirPregunta = new FragmentSubirPregunta();
-        FragmentManager fragmentManager= getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.activity_trivia, fragmentSubirPregunta);
         fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();}
+        fragmentTransaction.commit();
+    }
 
     @Override
     public void solicitarRegistro() {

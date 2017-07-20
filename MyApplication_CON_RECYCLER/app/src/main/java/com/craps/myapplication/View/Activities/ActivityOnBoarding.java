@@ -18,11 +18,12 @@ import com.github.paolorotolo.appintro.AppIntro2Fragment;
 
 public class ActivityOnBoarding extends AppIntro {
     private Bundle bundle;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent unIntent = getIntent();
-        bundle= unIntent.getExtras();
+        bundle = unIntent.getExtras();
 
         addSlide(new FragmentOB1());
         addSlide(new FragmentOB2());

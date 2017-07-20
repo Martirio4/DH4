@@ -1,12 +1,9 @@
 package com.craps.myapplication.View.Activities;
 
 
-
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,7 +15,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -28,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,26 +34,23 @@ import com.craps.myapplication.Model.Formato;
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.HTTPConnectionManager;
 import com.craps.myapplication.Utils.TMDBHelper;
-import com.craps.myapplication.View.Adapters.AdapterFormato;
 import com.craps.myapplication.View.Adapters.AdapterPagerMaestro;
 import com.craps.myapplication.View.Fragments.FragmentAboutUs;
 import com.craps.myapplication.View.Fragments.FragmentBusqueda;
 import com.craps.myapplication.View.Fragments.FragmentFavoritos;
 import com.craps.myapplication.View.Fragments.FragmentMain;
 import com.craps.myapplication.View.Fragments.FragmentSinConexion;
+import com.craps.myapplication.View.Fragments.FragmentTerms;
 import com.craps.myapplication.View.Fragments.FragmentTrivia;
-import com.facebook.FacebookActivity;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
-import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterSession;
 
 import java.util.List;
-import java.util.logging.MemoryHandler;
 
-public class ActivityMain extends AppCompatActivity implements FragmentTrivia.Triviable, FragmentBusqueda.Notificable,ControllerFormato.Registrable ,FragmentMain.Notificable,FragmentSinConexion.Notificable, FragmentFavoritos.Notificable{
+public class ActivityMain extends AppCompatActivity implements FragmentTrivia.Triviable, FragmentBusqueda.Notificable, ControllerFormato.Registrable, FragmentMain.Notificable, FragmentSinConexion.Notificable, FragmentFavoritos.Notificable {
 
     private FloatingActionButton floatingActionButton;
     private List<String> listaFragmentsMaestros;
@@ -87,8 +79,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentTrivia.Tr
     //Variables de incio
     public static String usuario = null;
     public static Boolean login = false;
-    public static String idiomaDeLaSesion =TMDBHelper.language_SPANISH;
-
+    public static String idiomaDeLaSesion = TMDBHelper.language_SPANISH;
 
 
     //PABLO 1/4C
@@ -97,6 +88,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentTrivia.Tr
     public void setQueMostrar(String queMostrar) {
         this.queMostrar = queMostrar;
     }
+
     public String getQueMostrar() {
         return queMostrar;
     }
@@ -113,11 +105,11 @@ public class ActivityMain extends AppCompatActivity implements FragmentTrivia.Tr
         Intent unIntent = getIntent();
         Bundle unBundle = unIntent.getExtras();
 
-        if(unBundle!=null) {
-            if(unBundle.getString(USUARIO)!=null) {
+        if (unBundle != null) {
+            if (unBundle.getString(USUARIO) != null) {
                 usuario = unBundle.getString(USUARIO);
-                imagenUsuario=unBundle.getString(IMAGENUSUARIO);
-                login=true;
+                imagenUsuario = unBundle.getString(IMAGENUSUARIO);
+                login = true;
                 textoLogin = "LOGOUT";
             }
         }
@@ -131,7 +123,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentTrivia.Tr
         TextView textView = (TextView) headerLayout.findViewById(R.id.textoMailUsuario);
         textView.setText(usuario);
         textView.setTypeface(roboto);
-        ImageView fotoUsuario=(ImageView)headerLayout.findViewById(R.id.HDimagen);
+        ImageView fotoUsuario = (ImageView) headerLayout.findViewById(R.id.HDimagen);
 
 
         Picasso.with(this)
@@ -141,12 +133,10 @@ public class ActivityMain extends AppCompatActivity implements FragmentTrivia.Tr
                 .into(fotoUsuario);
 
 
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.ABappBar);
         setSupportActionBar(toolbar);
 
-        if(getSupportActionBar() != null) {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -193,15 +183,18 @@ public class ActivityMain extends AppCompatActivity implements FragmentTrivia.Tr
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if (HTTPConnectionManager.isNetworkingOnline(navigationView.getContext())) {
-                    if (item.getItemId()==R.id.aboutus){
-                        cargarAboutUs();
-                    }
-                    else{
-                        pedirListaBuscada("nulo",item.getItemId());
-                    }
+                    switch (item.getItemId()) {
+                        case R.id.terms:
+                            cargarTerms();
+                            break;
+                        case R.id.aboutus:
+                            cargarAboutUs();
+                            break;
+                        default:
+                            pedirListaBuscada("nulo", item.getItemId());
 
-                }
-                else {
+                    }
+                } else {
                     cargarFragmentSinConexion();
                 }
                 drawerLayout.closeDrawers();
@@ -222,17 +215,17 @@ public class ActivityMain extends AppCompatActivity implements FragmentTrivia.Tr
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition(),false);
+                viewPager.setCurrentItem(tab.getPosition(), true);
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition(),false);
+                viewPager.setCurrentItem(tab.getPosition(), true);
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition(),false);
+                viewPager.setCurrentItem(tab.getPosition(), true);
             }
         });
 
@@ -240,7 +233,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentTrivia.Tr
         //LISTA DE LOS FORMATOS A EXHIBIR
 
         View headerview = navigationView.getHeaderView(0);
-        botonNavViewApretado=(Button) headerview.findViewById(R.id.botonNavView);
+        botonNavViewApretado = (Button) headerview.findViewById(R.id.botonNavView);
         botonNavViewApretado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -262,47 +255,59 @@ public class ActivityMain extends AppCompatActivity implements FragmentTrivia.Tr
 
         listaFragmentsMaestros = controllerFormato.recibirListaFormatos();
         //LE SETEO EL ADAPTER AL VIEW PAGER, EL ADAPTER UTILIZA EL FRAGMENT MANAGER PARA CARGAR FRAGMENT Y LA LISTA DE PELICULAS PARA CREAR LOS FRAGMENTS CORRESPONDIENTES
-        AdapterPagerMaestro adapterPagerMaestro = new AdapterPagerMaestro(getSupportFragmentManager(), listaFragmentsMaestros,this);
+        AdapterPagerMaestro adapterPagerMaestro = new AdapterPagerMaestro(getSupportFragmentManager(), listaFragmentsMaestros, this);
         adapterPagerMaestro.setContext(this);
         viewPager.setAdapter(adapterPagerMaestro);
 
     }
 
-    public Integer obtenerTab(){
+    public Integer obtenerTab() {
         return tabLayout.getSelectedTabPosition();
 
     }
 
 
     //METODO PUBLICO ABRIR DETALLE CUANDO HAGO CLICK EN UNA PELI
-    public void clickFormato(Formato formato, String origen, Integer numeroPagina,String stringABuscar, Integer drawerId) {
-        Intent unIntent = new Intent(this, ActivitySegunda.class);
+    public void clickFormato(Formato formato, String origen, Integer numeroPagina, String stringABuscar, Integer drawerId) {
+        Intent unIntent = new Intent(this, ActivityDetalle.class);
         Bundle unBundle = new Bundle();
-        unBundle.putString(ActivitySegunda.ORIGEN, origen);
-        unBundle.putInt(ActivitySegunda.IDFORMATO, formato.getId());
-        unBundle.putInt(ActivitySegunda.PAGINA, numeroPagina);
-        unBundle.putString(ActivitySegunda.STRINGBUSQUEDA, stringABuscar);
-        unBundle.putInt(ActivitySegunda.DRAWERID, drawerId);
-        if (formato.getTitle()==null||formato.getTitle().isEmpty()){
-            unBundle.putString(ActivitySegunda.TIPOFORMATO, "series");
-        }
-        else{
-            unBundle.putString(ActivitySegunda.TIPOFORMATO, "peliculas");
+        unBundle.putString(ActivityDetalle.ORIGEN, origen);
+        unBundle.putInt(ActivityDetalle.IDFORMATO, formato.getId());
+        unBundle.putInt(ActivityDetalle.PAGINA, numeroPagina);
+        unBundle.putString(ActivityDetalle.STRINGBUSQUEDA, stringABuscar);
+        unBundle.putInt(ActivityDetalle.DRAWERID, drawerId);
+        if (formato.getTitle() == null || formato.getTitle().isEmpty()) {
+            unBundle.putString(ActivityDetalle.TIPOFORMATO, "series");
+        } else {
+            unBundle.putString(ActivityDetalle.TIPOFORMATO, "peliculas");
         }
         unIntent.putExtras(unBundle);
         startActivity(unIntent);
-        overridePendingTransition(R.anim.scale_up, R.anim.scale_up);
+
+
     }
+
     public void cargarAboutUs() {
         FragmentAboutUs aboutusFragment = new FragmentAboutUs();
-        android.support.v4.app.FragmentManager fragmentManager= getSupportFragmentManager();
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.scale_up,R.anim.scale_up);
-        fragmentTransaction.replace(R.id.contenedor_buscador,aboutusFragment );
+        fragmentTransaction.setCustomAnimations(R.anim.scale_up, R.anim.hide_to_bottom);
+        fragmentTransaction.replace(R.id.contenedor_buscador, aboutusFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-    public void pedirListaBuscada(String queBuscar, Integer drawerId){
+
+    public void cargarTerms() {
+        FragmentTerms aboutusFragment = new FragmentTerms();
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.replace(R.id.contenedor_buscador, aboutusFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    public void pedirListaBuscada(String queBuscar, Integer drawerId) {
         //CARGO EL FRAGMENT
         FragmentBusqueda fragment_busqueda = new FragmentBusqueda();
         Bundle otroBundle = new Bundle();
@@ -313,16 +318,16 @@ public class ActivityMain extends AppCompatActivity implements FragmentTrivia.Tr
         //LE CARGO EL BUNDLE
         fragment_busqueda.setArguments(otroBundle);
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.contenedor_buscador, fragment_busqueda,"FragmentBuscador");
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.contenedor_buscador, fragment_busqueda, "FragmentBuscador");
         fragmentTransaction.addToBackStack(null);
         fragmentManager.popBackStackImmediate();
         fragmentTransaction.commit();
     }
 
-    private void hideSoftKeyboard(){
-        if(getCurrentFocus()!=null && getCurrentFocus() instanceof EditText){
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+    private void hideSoftKeyboard() {
+        if (getCurrentFocus() != null && getCurrentFocus() instanceof EditText) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(editBusqueda.getWindowToken(), 0);
         }
     }
@@ -365,14 +370,14 @@ public class ActivityMain extends AppCompatActivity implements FragmentTrivia.Tr
                     } else {
                         //pedirListaBuscada(text.toLowerCase());
                         if (login == false && tabLayout.getSelectedTabPosition() == 2) {
-                        }
-                        else {
+                        } else {
                             pedirListaBuscada(text.toLowerCase(), 0);
                         }
                     }
                 }
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String text) {
                 return false;
@@ -417,8 +422,7 @@ public class ActivityMain extends AppCompatActivity implements FragmentTrivia.Tr
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(navigationView)) {
             drawerLayout.closeDrawers();
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
@@ -434,8 +438,6 @@ public class ActivityMain extends AppCompatActivity implements FragmentTrivia.Tr
     public void recibirFormatoClickeado(Formato formato, String url) {
 
     }
-
-
 
 
     @Override
@@ -459,19 +461,19 @@ public class ActivityMain extends AppCompatActivity implements FragmentTrivia.Tr
         }
     }
 
-    public void logoutFacebook(){
+    public void logoutFacebook() {
         facebookLoginManager = LoginManager.getInstance();
         ClearCookies(getApplicationContext());
         facebookLoginManager.logOut();
     }
 
     public static void ClearCookies(Context context) {
-            CookieManager.getInstance().removeAllCookies(null);
-            CookieManager.getInstance().flush();
+        CookieManager.getInstance().removeAllCookies(null);
+        CookieManager.getInstance().flush();
 
     }
 
-    public void logoutFirebase(){
+    public void logoutFirebase() {
         ClearCookies(getApplicationContext());
         FirebaseAuth.getInstance().signOut();
     }

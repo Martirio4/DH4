@@ -34,24 +34,18 @@ public class FragmentBusqueda extends Fragment {
     private AdapterFormato adapterBusquedaFormatos;
     private Notificable notificable;
     private Context elContext;
-
-    public static final String QUEBUSCO="QUEBUSCO";
-    public static final String DRAWERID="DRAWERID";
-
+    public static final String QUEBUSCO = "QUEBUSCO";
+    public static final String DRAWERID = "DRAWERID";
     private String stringABuscar;
     private Integer drawerId;
-    ControllerFormato controllerBusquedaFormatos;
-    private Boolean isLoading=false;
-
+    private ControllerFormato controllerBusquedaFormatos;
+    private Boolean isLoading = false;
     private Integer formatoAMostrar;
     private RecyclerView recyclerBusqueda;
     private LinearLayoutManager layoutManagerBusqueda;
-
-
     //DECLARO INTERFAZ
     public interface Notificable {
-        public void recibirFormatoClickeado(Formato formato,String origen, Integer pagina, String StringABuscar, Integer drawerId);
-
+        public void recibirFormatoClickeado(Formato formato, String origen, Integer pagina, String StringABuscar, Integer drawerId);
     }
 
     //ON CREATE
@@ -60,28 +54,24 @@ public class FragmentBusqueda extends Fragment {
                              Bundle savedInstanceState) {
         //INFLAR LAYOUT
         final View view = inflater.inflate(R.layout.fragment_buscador, container, false);
-
         //RECIBIR EL BUNDLE
-
         Bundle unbundle = getArguments();
         stringABuscar = unbundle.getString(QUEBUSCO);
-        stringABuscar= stringABuscar.replace(" ","%20");
+        stringABuscar = stringABuscar.replace(" ", "%20");
         drawerId = unbundle.getInt(DRAWERID);
 
         //CASTEAR RECYCLER Y SETEAR ADAPTER
         final RecyclerView recyclerBusqueda = (RecyclerView) view.findViewById(R.id.recycler1);
         recyclerBusqueda.setHasFixedSize(true);
-        layoutManagerBusqueda= new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
+        layoutManagerBusqueda = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerBusqueda.setLayoutManager(layoutManagerBusqueda);
         adapterBusquedaFormatos = new AdapterFormato();
         adapterBusquedaFormatos.setContext(view.getContext());
         recyclerBusqueda.setAdapter(adapterBusquedaFormatos);
-
         adapterBusquedaFormatos.setListaFormatosOriginales(new ArrayList<Formato>());
         controllerBusquedaFormatos = new ControllerFormato(view.getContext());
-
-        ActivityMain activity=(ActivityMain) elContext;
-        formatoAMostrar= activity.obtenerTab();
+        ActivityMain activity = (ActivityMain) elContext;
+        formatoAMostrar = activity.obtenerTab();
 
         //CARGAR DATOS
         pedirPaginaBuscador();
@@ -101,48 +91,38 @@ public class FragmentBusqueda extends Fragment {
                 } else {
                     tipoFormato = "pelicula";
                 }
-                Integer pagina= (int) Math.ceil((posicion+1)/20.0);
-                if (drawerId==null || drawerId==0) {
+                Integer pagina = (int) Math.ceil((posicion + 1) / 20.0);
+                if (drawerId == null || drawerId == 0) {
                     notificable.recibirFormatoClickeado(formatoClickeado, "busqueda", pagina, stringABuscar, 0);
-                }
-                else{
+                } else {
                     notificable.recibirFormatoClickeado(formatoClickeado, "drawer", pagina, stringABuscar, drawerId);
                 }
             }
         };
 
         adapterBusquedaFormatos.setListener(listener1);
-
+        //SCROLL LISTENER PARA PAGINACION
         recyclerBusqueda.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                Integer ultimaPosicionVisible=layoutManagerBusqueda.findLastVisibleItemPosition();
-                Integer cantidadItems=layoutManagerBusqueda.getItemCount();
+                Integer ultimaPosicionVisible = layoutManagerBusqueda.findLastVisibleItemPosition();
+                Integer cantidadItems = layoutManagerBusqueda.getItemCount();
                 if (!isLoading) {
                     if (ultimaPosicionVisible >= cantidadItems - 2) {
                         pedirPaginaBuscador();
                     }
                 }
-                }
-            });
-
-
-
-
-
-
-
+            }
+        });
         return view;
-
     }
 
     public void pedirPaginaBuscador() {
         if (drawerId == 0) {
             if (controllerBusquedaFormatos.isPageAvailable()) {
                 isLoading = true;
-
                 switch (formatoAMostrar) {
                     case 0:
                         controllerBusquedaFormatos.buscarPelicula(new ResultListener<List<Formato>>() {
@@ -154,8 +134,7 @@ public class FragmentBusqueda extends Fragment {
                                 isLoading = false;
                             }
                         }, stringABuscar);
-                    break;
-
+                        break;
                     case 1:
                         controllerBusquedaFormatos.buscarSerie(new ResultListener<List<Formato>>() {
                             @Override
@@ -166,9 +145,9 @@ public class FragmentBusqueda extends Fragment {
                                 isLoading = false;
                             }
                         }, stringABuscar);
-                    break;
+                        break;
                     case 2:
-                        stringABuscar=stringABuscar.replace("%20"," ");
+                        stringABuscar = stringABuscar.replace("%20", " ");
                         controllerBusquedaFormatos.busquedaFavoritos(new ResultListener<List<Formato>>() {
                             @Override
                             public void finish(List<Formato> resultado) {
@@ -178,7 +157,7 @@ public class FragmentBusqueda extends Fragment {
 
                             }
                         }, stringABuscar);
-                    break;
+                        break;
                 }
             }
         }
@@ -190,35 +169,23 @@ public class FragmentBusqueda extends Fragment {
                     adapterBusquedaFormatos.notifyDataSetChanged();
                     isLoading = false;
                 }
-            },drawerId);
+            }, drawerId);
         }
     }
-
-
-
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.elContext=context;
+        this.elContext = context;
         this.notificable = (Notificable) context;
     }
 
     public void noSeEncuentranResultados() {
         //cargo el fragment de sin resultados
-        FragmentSinResultados sinCoincidenciasFragment= new FragmentSinResultados();
+        FragmentSinResultados sinCoincidenciasFragment = new FragmentSinResultados();
         FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.contenedor_fragment_maestro, sinCoincidenciasFragment);
         fragmentTransaction.commit();
-
-
     }
-
-
-
-
-
-
-
 }

@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
+
 import com.craps.myapplication.ControllerFormato.ControllerFormato;
 import com.craps.myapplication.Model.Actor;
 import com.craps.myapplication.Model.Formato;
@@ -17,24 +17,22 @@ import com.craps.myapplication.Utils.ResultListener;
 import com.craps.myapplication.Utils.TMDBHelper;
 import com.craps.myapplication.View.Adapters.AdapterFormato;
 import com.craps.myapplication.View.Adapters.AdapterPagerFormato;
-import com.craps.myapplication.View.Fragments.FragmentActores;
 import com.craps.myapplication.View.Fragments.FragmentDetalle;
 
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivitySegunda extends AppCompatActivity implements FragmentDetalle.Actorable,FragmentDetalle.Notificable,ControllerFormato.Registrable,AdapterFormato.Favoritable, FragmentDetalle.FavoritableFav {
+public class ActivityDetalle extends AppCompatActivity implements FragmentDetalle.Actorable, FragmentDetalle.Notificable, ControllerFormato.Registrable, AdapterFormato.Favoritable, FragmentDetalle.FavoritableFav {
 
     public static final String IDFORMATO = "IDFORMATO";
     public static final String ORIGEN = "ORIGEN";
     public static final String PAGINA = "PAGINA";
     public static final String TIPOFORMATO = "TIPOFORMATO";
-    public static final String STRINGBUSQUEDA="STRINGBUSQUEDA";
-    public static final String DRAWERID="DRAWERID";
-    public static final String CLAVEYOUTUBE="CLAVEYOUTUBE";
+    public static final String STRINGBUSQUEDA = "STRINGBUSQUEDA";
+    public static final String DRAWERID = "DRAWERID";
+    public static final String CLAVEYOUTUBE = "CLAVEYOUTUBE";
 
-    private Boolean isLoading=false;
+    private Boolean isLoading = false;
     private List<Formato> listaFormatos;
     private Integer idActual;
     private String origenFormato;
@@ -50,7 +48,6 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
     private ControllerFormato controllerDetalle;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,20 +61,20 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
         ActionBar ab = getSupportActionBar();
 
         ab.setDisplayHomeAsUpEnabled(true);
-        final Drawable upArrow =getResources().getDrawable(R.drawable.ic_arrow_back_black_24dp);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_black_24dp);
         upArrow.setColorFilter(getResources().getColor(R.color.marfil), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         // PABLO 1/1C
         //RECIBO BUNDLE Y BUSCO PELICULA CLICKEADA
         Intent unIntent = getIntent();
         Bundle unBundle = unIntent.getExtras();
-        idFormato=unBundle.getInt(IDFORMATO);
-        origenFormato =unBundle.getString(ORIGEN);
-        numeroPagina =unBundle.getInt(PAGINA);
-        tipoFormato=unBundle.getString(TIPOFORMATO);
-        stringABuscar=unBundle.getString(STRINGBUSQUEDA);
-        drawerId=unBundle.getInt(DRAWERID);
-        claveYoutube=unBundle.getString(CLAVEYOUTUBE);
+        idFormato = unBundle.getInt(IDFORMATO);
+        origenFormato = unBundle.getString(ORIGEN);
+        numeroPagina = unBundle.getInt(PAGINA);
+        tipoFormato = unBundle.getString(TIPOFORMATO);
+        stringABuscar = unBundle.getString(STRINGBUSQUEDA);
+        drawerId = unBundle.getInt(DRAWERID);
+        claveYoutube = unBundle.getString(CLAVEYOUTUBE);
 
         viewPagerDetalle = (ViewPager) findViewById(R.id.viewPagerDetalle);
         //LE SETEO EL ADAPTER AL VIEW PAGER, EL ADAPTER UTILIZA EL FRAGMENT MANAGER PARA CARGAR FRAGMENT Y LA LISTA DE PELICULAS PARA CREAR LOS FRAGMENTS CORRESPONDIENTES
@@ -90,7 +87,6 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
         pedirListaSegunOrigen();
 
 
-
         viewPagerDetalle.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -98,7 +94,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
             @Override
             public void onPageSelected(int position) {
-                if ((position>=(adapterPagerDetalle.getCount()-2))&&(!origenFormato.equals("actores"))){
+                if ((position >= (adapterPagerDetalle.getCount() - 2)) && (!origenFormato.equals("actores"))) {
                     pedirListaSegunOrigen();
                 }
 
@@ -112,9 +108,9 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
         });
     }
 
-    public void pedirListaSegunOrigen(){
+    public void pedirListaSegunOrigen() {
 
-        switch (origenFormato){
+        switch (origenFormato) {
             case "superior":
                 pedirPaginaRecyclerSuperior();
                 break;
@@ -130,7 +126,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
             case "drawer":
                 pedirPaginaDrawer();
                 break;
-            case"self":
+            case "self":
                 pedirPaginaSimilares();
                 break;
             case "favoritos":
@@ -143,18 +139,18 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
     }
 
 
-    public void pedirPaginaFavoritos(){
+    public void pedirPaginaFavoritos() {
         controllerDetalle.obtenerFavoritos(new ResultListener<List<Formato>>() {
             @Override
             public void finish(List<Formato> resultado) {
                 adapterPagerDetalle.setListaFormatos(resultado);
-                listaFormatos=resultado;
-                for (Formato unFormato:listaFormatos
-                     ) {
-                    if (unFormato.getId().equals(idFormato)){
-                        viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),false);
+                listaFormatos = resultado;
+                for (Formato unFormato : listaFormatos
+                        ) {
+                    if (unFormato.getId().equals(idFormato)) {
+                        viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato), false);
 
-                       
+
                     }
 
                 }
@@ -164,7 +160,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
     }
 
 
-    public void pedirPaginaSimilares(){
+    public void pedirPaginaSimilares() {
         if (controllerDetalle.isPageAvailable()) {
             isLoading = true;
 
@@ -173,18 +169,18 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                     @Override
                     public void finish(List<Formato> resultado) {
                         adapterPagerDetalle.addListaFormatos(resultado);
-                        listaFormatos=resultado;
+                        listaFormatos = resultado;
                         for (final Formato unFormato : listaFormatos) {
 
                             if (unFormato.getId().equals(idFormato)) {
-                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),false);
-                               
+                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato), false);
+
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
                         isLoading = false;
                     }
-                },idFormato);
+                }, idFormato);
 
             } else {
                 controllerDetalle.obtenerSeriesRelacionadas(new ResultListener<List<Formato>>() {
@@ -192,25 +188,25 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                     public void finish(List<Formato> resultado) {
 
                         adapterPagerDetalle.addListaFormatos(resultado);
-                        listaFormatos=resultado;
+                        listaFormatos = resultado;
                         for (final Formato unFormato : listaFormatos) {
 
                             if (unFormato.getId().equals(idFormato)) {
-                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),false
+                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato), false
                                 );
-                               
+
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
                         isLoading = false;
                     }
-                },idFormato);
+                }, idFormato);
             }
         }
     }
 
 
-    public void pedirPaginaSimilarclickeado(final Formato unFormato, String origen, Integer pagina, String tipoDeFormato ){
+    public void pedirPaginaSimilarclickeado(final Formato unFormato, String origen, Integer pagina, String tipoDeFormato) {
         if (controllerDetalle.isPageAvailable()) {
 
             isLoading = true;
@@ -219,38 +215,37 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                 controllerDetalle.obtenerPeliculasRelacionadas(new ResultListener<List<Formato>>() {
                     @Override
                     public void finish(List<Formato> resultado) {
-                        resultado.add(0,unFormato);
+                        resultado.add(0, unFormato);
                         adapterPagerDetalle.addListaFormatos(resultado);
                         viewPagerDetalle.setAdapter(adapterPagerDetalle);
-                        viewPagerDetalle.setCurrentItem(0,false);
+                        viewPagerDetalle.setCurrentItem(0, false);
                         isLoading = false;
                         adapterPagerDetalle.notifyDataSetChanged();
 
                     }
-                },unFormato.getId());
+                }, unFormato.getId());
 
 
-            }
-            else {
-                        controllerDetalle.obtenerSeriesRelacionadas(new ResultListener<List<Formato>>() {
+            } else {
+                controllerDetalle.obtenerSeriesRelacionadas(new ResultListener<List<Formato>>() {
                     @Override
                     public void finish(List<Formato> resultado) {
-                        resultado.add(0,unFormato);
+                        resultado.add(0, unFormato);
                         adapterPagerDetalle.addListaFormatos(resultado);
                         viewPagerDetalle.setAdapter(adapterPagerDetalle);
-                        viewPagerDetalle.setCurrentItem(0,false);
+                        viewPagerDetalle.setCurrentItem(0, false);
                         isLoading = false;
                         adapterPagerDetalle.notifyDataSetChanged();
 
                     }
-                },unFormato.getId());
+                }, unFormato.getId());
 
             }
         }
 
     }
 
-    public void pedirPaginaRecyclerSuperior(){
+    public void pedirPaginaRecyclerSuperior() {
         if (controllerDetalle.isPageAvailable()) {
             isLoading = true;
 
@@ -260,12 +255,12 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                     @Override
                     public void finish(List<Formato> resultado) {
                         adapterPagerDetalle.addListaFormatos(resultado);
-                        listaFormatos=resultado;
+                        listaFormatos = resultado;
                         for (final Formato unFormato : listaFormatos) {
 
                             if (unFormato.getId().equals(idFormato)) {
-                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),false);
-                               
+                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato), false);
+
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
@@ -277,12 +272,12 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                     @Override
                     public void finish(List<Formato> resultado) {
                         adapterPagerDetalle.addListaFormatos(resultado);
-                        listaFormatos=resultado;
+                        listaFormatos = resultado;
                         for (final Formato unFormato : listaFormatos) {
 
                             if (unFormato.getId().equals(idFormato)) {
-                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),false);
-                               
+                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato), false);
+
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
@@ -293,7 +288,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
         }
     }
 
-    public void pedirPaginaRecyclerMedio(){
+    public void pedirPaginaRecyclerMedio() {
         if (controllerDetalle.isPageAvailable()) {
             isLoading = true;
 
@@ -302,12 +297,12 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                     @Override
                     public void finish(List<Formato> resultado) {
                         adapterPagerDetalle.addListaFormatos(resultado);
-                        listaFormatos=resultado;
+                        listaFormatos = resultado;
                         for (final Formato unFormato : listaFormatos) {
 
                             if (unFormato.getId().equals(idFormato)) {
-                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),false);
-                               
+                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato), false);
+
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
@@ -319,23 +314,23 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                     @Override
                     public void finish(List<Formato> resultado) {
                         adapterPagerDetalle.addListaFormatos(resultado);
-                        listaFormatos=resultado;
+                        listaFormatos = resultado;
                         for (final Formato unFormato : listaFormatos) {
 
                             if (unFormato.getId().equals(idFormato)) {
-                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),false);
-                               
+                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato), false);
+
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
                         isLoading = false;
                     }
-                },TMDBHelper.MOVIE_GENRE_COMEDIA);
+                }, TMDBHelper.MOVIE_GENRE_COMEDIA);
             }
         }
     }
 
-    public void pedirPaginaRecyclerInferior(){
+    public void pedirPaginaRecyclerInferior() {
         if (controllerDetalle.isPageAvailable()) {
             isLoading = true;
 
@@ -344,12 +339,12 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                     @Override
                     public void finish(List<Formato> resultado) {
                         adapterPagerDetalle.addListaFormatos(resultado);
-                        listaFormatos=resultado;
+                        listaFormatos = resultado;
                         for (final Formato unFormato : listaFormatos) {
 
                             if (unFormato.getId().equals(idFormato)) {
-                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),false);
-                               
+                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato), false);
+
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
@@ -361,48 +356,48 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                     @Override
                     public void finish(List<Formato> resultado) {
                         adapterPagerDetalle.addListaFormatos(resultado);
-                        listaFormatos=resultado;
+                        listaFormatos = resultado;
                         for (final Formato unFormato : listaFormatos) {
 
                             if (unFormato.getId().equals(idFormato)) {
-                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),false);
-                               
+                                viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato), false);
+
                             }
                         }
                         adapterPagerDetalle.notifyDataSetChanged();
                         isLoading = false;
                     }
-                },TMDBHelper.MOVIE_GENRE_DRAMA);
+                }, TMDBHelper.MOVIE_GENRE_DRAMA);
             }
         }
     }
 
-   public void pedirPaginaDrawer(){
+    public void pedirPaginaDrawer() {
 
-       if (controllerDetalle.isPageAvailable()) {
-           isLoading = true;
+        if (controllerDetalle.isPageAvailable()) {
+            isLoading = true;
 
-           controllerDetalle.traerBusquedaDrawer(new ResultListener<List<Formato>>() {
-               @Override
-               public void finish(List<Formato> resultado) {
-                   adapterPagerDetalle.addListaFormatos(resultado);
-                   listaFormatos = resultado;
-                   for (final Formato unFormato : listaFormatos) {
+            controllerDetalle.traerBusquedaDrawer(new ResultListener<List<Formato>>() {
+                @Override
+                public void finish(List<Formato> resultado) {
+                    adapterPagerDetalle.addListaFormatos(resultado);
+                    listaFormatos = resultado;
+                    for (final Formato unFormato : listaFormatos) {
 
-                       if (unFormato.getId().equals(idFormato)) {
-                           viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),false);
-                          
-                       }
-                   }
-                   adapterPagerDetalle.notifyDataSetChanged();
-                   isLoading = false;
-               }
-           }, drawerId);
-       }
+                        if (unFormato.getId().equals(idFormato)) {
+                            viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato), false);
 
-   }
+                        }
+                    }
+                    adapterPagerDetalle.notifyDataSetChanged();
+                    isLoading = false;
+                }
+            }, drawerId);
+        }
 
-    public void pedirPaginaBuscador(){
+    }
+
+    public void pedirPaginaBuscador() {
         if (controllerDetalle.isPageAvailable()) {
             isLoading = true;
 
@@ -413,19 +408,19 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                         public void finish(List<Formato> resultado) {
 
                             adapterPagerDetalle.addListaFormatos(resultado);
-                            listaFormatos=resultado;
+                            listaFormatos = resultado;
                             for (final Formato unFormato : listaFormatos) {
 
                                 if (unFormato.getId().equals(idFormato)) {
-                                    viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),false);
-                                   
+                                    viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato), false);
+
                                 }
                             }
                             adapterPagerDetalle.notifyDataSetChanged();
                             isLoading = false;
                         }
-                    },stringABuscar);
-                break;
+                    }, stringABuscar);
+                    break;
 
                 case "series":
                     controllerDetalle.buscarSerie(new ResultListener<List<Formato>>() {
@@ -433,30 +428,30 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
                         public void finish(List<Formato> resultado) {
 
                             adapterPagerDetalle.addListaFormatos(resultado);
-                            listaFormatos=resultado;
+                            listaFormatos = resultado;
                             for (final Formato unFormato : listaFormatos) {
 
                                 if (unFormato.getId().equals(idFormato)) {
-                                    viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),false);
-                                   
+                                    viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato), false);
+
                                 }
                             }
                             adapterPagerDetalle.notifyDataSetChanged();
                             isLoading = false;
                         }
-                    },stringABuscar);
-                break;
+                    }, stringABuscar);
+                    break;
                 case "favoritos":
                     controllerDetalle.buscarFavoritos(new ResultListener<List<Formato>>() {
                         @Override
                         public void finish(List<Formato> resultado) {
                             adapterPagerDetalle.addListaFormatos(resultado);
-                            listaFormatos=resultado;
+                            listaFormatos = resultado;
                             for (final Formato unFormato : listaFormatos) {
 
                                 if (unFormato.getId().equals(idFormato)) {
-                                    viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato),false);
-                                   
+                                    viewPagerDetalle.setCurrentItem(listaFormatos.indexOf(unFormato), false);
+
                                 }
                             }
                             adapterPagerDetalle.notifyDataSetChanged();
@@ -464,7 +459,7 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
                         }
                     }, stringABuscar);
-                break;
+                    break;
             }
         }
     }
@@ -473,20 +468,21 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
     @Override
     public void recibirFormatoFavorito(Formato unFormato) {
 
-            ControllerFormato controllerFormato= new ControllerFormato(this);
-            controllerFormato.agregarFavorito(unFormato, ActivityMain.usuario);
+        ControllerFormato controllerFormato = new ControllerFormato(this);
+        controllerFormato.agregarFavorito(unFormato, ActivityMain.usuario);
 
 
     }
 
     @Override
     public void eliminarFormatoFavorito(Formato unFormato) {
-        if (ActivityMain.login==true){
+        if (ActivityMain.login == true) {
             ControllerFormato controllerFormato = new ControllerFormato(this);
             controllerFormato.eliminarFavorito(unFormato, ActivityMain.usuario);
 
         }
     }
+
     @Override
     public void solicitarRegistro() {
         Intent unIntent = new Intent(this, ActivityRegister.class);
@@ -495,24 +491,23 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
 
     @Override
     public void recibirFormatoClickeado(Formato formato, String origen, Integer pagina, String elString, Integer drawerId) {
-        adapterPagerDetalle=new AdapterPagerFormato(getSupportFragmentManager());
-        controllerDetalle=new ControllerFormato(ActivitySegunda.this);
+        adapterPagerDetalle = new AdapterPagerFormato(getSupportFragmentManager());
+        controllerDetalle = new ControllerFormato(ActivityDetalle.this);
         String unTipoDeFormato;
-        if (formato.getTitle()==null || formato.getTitle().isEmpty()) {
+        if (formato.getTitle() == null || formato.getTitle().isEmpty()) {
             unTipoDeFormato = "series";
-        }
-        else{
-            unTipoDeFormato="peliculas";
+        } else {
+            unTipoDeFormato = "peliculas";
         }
 
-        pedirPaginaSimilarclickeado(formato, origen, pagina,unTipoDeFormato );
+        pedirPaginaSimilarclickeado(formato, origen, pagina, unTipoDeFormato);
 
     }
 
     @Override
     public void recibirActorClickeado(Actor unActor, Integer idFormato, String queFormato) {
         Intent unIntent = new Intent(this, ActivityActores.class);
-        Bundle bundle= new Bundle();
+        Bundle bundle = new Bundle();
 
         bundle.putInt(ActivityActores.ACTORID, unActor.getId());
         bundle.putInt(ActivityActores.FORMATOID, idFormato);
@@ -522,44 +517,43 @@ public class ActivitySegunda extends AppCompatActivity implements FragmentDetall
         startActivity(unIntent);
     }
 
-    public void pedirSimilaresCreditoActor(){
-        listaFormatos=new ArrayList<>();
+    public void pedirSimilaresCreditoActor() {
+        listaFormatos = new ArrayList<>();
 
         isLoading = true;
         controllerDetalle.traerUnFormato(new ResultListener<Formato>() {
             @Override
             public void finish(final Formato resultado1) {
-                listaFormatos.add(0,resultado1);
+                listaFormatos.add(0, resultado1);
 
-                if (resultado1.getTitle()==null || resultado1.getTitle().isEmpty()){
+                if (resultado1.getTitle() == null || resultado1.getTitle().isEmpty()) {
                     controllerDetalle.obtenerSeriesRelacionadas(new ResultListener<List<Formato>>() {
                         @Override
                         public void finish(List<Formato> resultado) {
                             listaFormatos.addAll(resultado);
                             adapterPagerDetalle.setListaFormatos(listaFormatos);
-                            viewPagerDetalle.setCurrentItem(0,false);
+                            viewPagerDetalle.setCurrentItem(0, false);
                             adapterPagerDetalle.notifyDataSetChanged();
                             isLoading = false;
                         }
-                    },resultado1.getId());
-                }
-                else{
+                    }, resultado1.getId());
+                } else {
                     controllerDetalle.obtenerPeliculasRelacionadas(new ResultListener<List<Formato>>() {
                         @Override
                         public void finish(List<Formato> resultado) {
                             listaFormatos.addAll(resultado);
                             adapterPagerDetalle.setListaFormatos(listaFormatos);
-                            viewPagerDetalle.setCurrentItem(0,false);
+                            viewPagerDetalle.setCurrentItem(0, false);
                             adapterPagerDetalle.notifyDataSetChanged();
                             isLoading = false;
 
 
                         }
-                    },resultado1.getId());
+                    }, resultado1.getId());
                 }
 
             }
-        },idFormato,tipoFormato);
+        }, idFormato, tipoFormato);
 
     }
 

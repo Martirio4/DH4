@@ -20,7 +20,7 @@ public class AdapterPagerActores extends FragmentStatePagerAdapter {
 
     //EL ADAPTER NECESITA SIEMPRE UNA LISTA DE FRAGMENTS PARA MOSTRAR
     private List<Fragment> listaFragments;
-    private List<Actor> listaActores=new ArrayList<>();
+    private List<Actor> listaActores = new ArrayList<>();
 
 
     public AdapterPagerActores(FragmentManager fm) {
@@ -31,7 +31,7 @@ public class AdapterPagerActores extends FragmentStatePagerAdapter {
 
         //LE CARGO LOS FRAGMENTS QUE QUIERO. UTILIZO LA LISTA DE PELICULAS Y SERIES PARA CREAR LOS FRAGMENTS.
 
-        for(Actor unActor: listaActores){
+        for (Actor unActor : listaActores) {
             listaFragments.add(FragmentActores.fragmentActoresCreator(unActor.getId()));
         }
 
@@ -52,15 +52,15 @@ public class AdapterPagerActores extends FragmentStatePagerAdapter {
 
     public void setListaFormatos(List<Actor> listaActores) {
         this.listaActores = listaActores;
-        for(Actor unActor: listaActores){
+        for (Actor unActor : listaActores) {
             listaFragments.add(FragmentActores.fragmentActoresCreator(unActor.getId()));
         }
         notifyDataSetChanged();
     }
 
-    public void addListaFormatos(List<Actor> listaActores){
+    public void addListaFormatos(List<Actor> listaActores) {
         this.listaActores.addAll(listaActores);
-        for(Actor unActor: listaActores){
+        for (Actor unActor : listaActores) {
             listaFragments.add(FragmentActores.fragmentActoresCreator(unActor.getId()));
         }
         notifyDataSetChanged();

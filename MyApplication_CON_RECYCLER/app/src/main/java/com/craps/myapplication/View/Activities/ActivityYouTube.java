@@ -23,7 +23,7 @@ import static com.craps.myapplication.Utils.TMDBHelper.DEVELOPER_KEY;
 public class ActivityYouTube extends AppCompatActivity implements ControllerFormato.Registrable {
 
     public static final String DEVELOPERKEY = "devKey";
-    public static final String  ID = "id";
+    public static final String ID = "id";
     public static final String FORMATOAMOSTRAR = "formatoAMostrar";
 
 
@@ -49,7 +49,7 @@ public class ActivityYouTube extends AppCompatActivity implements ControllerForm
 
         final Integer id = id1;
 
-        controllerTrailers=new ControllerFormato(this);
+        controllerTrailers = new ControllerFormato(this);
 
         YouTubePlayerFragment mYouTubeFragment = YouTubePlayerFragment.newInstance();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -65,16 +65,15 @@ public class ActivityYouTube extends AppCompatActivity implements ControllerForm
                     controllerTrailers.traerTrailers(new ResultListener<List<Trailer>>() {
                         @Override
                         public void finish(List<Trailer> resultado) {
-                            if (resultado==null || resultado.size()<1){
-                            }
-                            else {
+                            if (resultado == null || resultado.size() < 1) {
+                            } else {
                                 List<String> lista = new ArrayList<String>();
 
                                 for (Trailer unTrailer : resultado
                                         ) {
                                     lista.add(unTrailer.getClaveVideoYouTube());
                                 }
-                               youTubePlayerP.loadVideos(lista);
+                                youTubePlayerP.loadVideos(lista);
                                 youTubePlayerP.setFullscreen(true);
                                 youTubePlayerP.play();
                             }
@@ -94,7 +93,7 @@ public class ActivityYouTube extends AppCompatActivity implements ControllerForm
 
 
                 //                if(errorReason.isUserRecoverableError()){
-                //            errorReason.getErrorDialog(ActivitySegunda.thi,RECOVERY_DIALOG_REQUEST).show();
+                //            errorReason.getErrorDialog(ActivityDetalle.thi,RECOVERY_DIALOG_REQUEST).show();
                 //        }else{
                 //            String errorMessage = String.format(
                 //                    "There was an error initializing the Youtube Player (%1$s)",

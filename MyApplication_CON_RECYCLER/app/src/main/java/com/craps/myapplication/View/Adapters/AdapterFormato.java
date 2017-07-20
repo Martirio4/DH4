@@ -12,19 +12,22 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
 import com.craps.myapplication.Model.Formato;
 import com.craps.myapplication.R;
 import com.craps.myapplication.Utils.TMDBHelper;
 import com.craps.myapplication.View.Fragments.FragmentBusqueda;
 import com.squareup.picasso.Picasso;
+
 import java.util.List;
+
 import android.support.v4.app.FragmentManager;
 
 /**
  * Created by elmar on 18/5/2017.
  */
 
-public class AdapterFormato extends RecyclerView.Adapter implements View.OnClickListener,View.OnLongClickListener {
+public class AdapterFormato extends RecyclerView.Adapter implements View.OnClickListener, View.OnLongClickListener {
 
     private Context context;
     private List<Formato> listaFormatosOriginales;
@@ -33,11 +36,12 @@ public class AdapterFormato extends RecyclerView.Adapter implements View.OnClick
     private AdapterView.OnLongClickListener listenerLong;
     private Favoritable favoritable;
 
-    public void setLongListener(View.OnLongClickListener unLongListener){
-        this.listenerLong=unLongListener;
+    public void setLongListener(View.OnLongClickListener unLongListener) {
+        this.listenerLong = unLongListener;
     }
-    public void setListener(View.OnClickListener listener){
-        this.listener=listener;
+
+    public void setListener(View.OnClickListener listener) {
+        this.listener = listener;
     }
 
     public void setContext(Context context) {
@@ -47,12 +51,13 @@ public class AdapterFormato extends RecyclerView.Adapter implements View.OnClick
     public void setListaFormatosOriginales(List<Formato> listaFormatosOriginales) {
         this.listaFormatosOriginales = listaFormatosOriginales;
     }
+
     public void addListaFormatosOriginales(List<Formato> listaFormatosOriginales) {
-        this.listaFormatosOriginales .addAll(listaFormatosOriginales);
+        this.listaFormatosOriginales.addAll(listaFormatosOriginales);
     }
 
 
-    public List<Formato> getListaFormatosOriginales(){
+    public List<Formato> getListaFormatosOriginales() {
         return listaFormatosOriginales;
     }
 
@@ -61,15 +66,14 @@ public class AdapterFormato extends RecyclerView.Adapter implements View.OnClick
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View viewCelda;
-        FragmentActivity unaActivity= (FragmentActivity) context;
+        FragmentActivity unaActivity = (FragmentActivity) context;
         FragmentManager fragmentManager = (FragmentManager) unaActivity.getSupportFragmentManager();
-        FragmentBusqueda fragmentBusqueda= (FragmentBusqueda) fragmentManager.findFragmentByTag("FragmentBuscador");
+        FragmentBusqueda fragmentBusqueda = (FragmentBusqueda) fragmentManager.findFragmentByTag("FragmentBuscador");
 
 
         if (fragmentBusqueda != null && fragmentBusqueda.isVisible()) {
             viewCelda = layoutInflater.inflate(R.layout.detalle_celda_busqueda, parent, false);
-        }
-        else{
+        } else {
             viewCelda = layoutInflater.inflate(R.layout.detalle_celda, parent, false);
         }
         FormatoViewHolder peliculasViewHolder = new FormatoViewHolder(viewCelda);
@@ -87,7 +91,7 @@ public class AdapterFormato extends RecyclerView.Adapter implements View.OnClick
         formatoViewHolder.imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                favoritable=(Favoritable)v.getContext();
+                favoritable = (Favoritable) v.getContext();
                 favoritable.recibirFormatoFavorito(unFormato);
             }
         });
@@ -123,18 +127,18 @@ public class AdapterFormato extends RecyclerView.Adapter implements View.OnClick
         public FormatoViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.peli_img_celda);
-            imageButton=(ImageButton) itemView.findViewById(R.id.boton_favo);
+            imageButton = (ImageButton) itemView.findViewById(R.id.boton_favo);
             ratingBar = (RatingBar) itemView.findViewById(R.id.ratingbar);
 
-            FragmentActivity unaActivity= (FragmentActivity) itemView.getContext();
+            FragmentActivity unaActivity = (FragmentActivity) itemView.getContext();
             FragmentManager fragmentManager = (FragmentManager) unaActivity.getSupportFragmentManager();
-            FragmentBusqueda fragmentBusqueda= (FragmentBusqueda) fragmentManager.findFragmentByTag("FragmentBuscador");
+            FragmentBusqueda fragmentBusqueda = (FragmentBusqueda) fragmentManager.findFragmentByTag("FragmentBuscador");
 
             Typeface roboto = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
 
             if (fragmentBusqueda != null && fragmentBusqueda.isVisible()) {
-                textViewTitulo =(TextView) itemView.findViewById(R.id.peli_texto_celda);
-                textViewDescripcion=(TextView) itemView.findViewById(R.id.detalleBusqueda);
+                textViewTitulo = (TextView) itemView.findViewById(R.id.peli_texto_celda);
+                textViewDescripcion = (TextView) itemView.findViewById(R.id.detalleBusqueda);
                 textViewTitulo.setTypeface(roboto);
                 textViewDescripcion.setTypeface(roboto);
             }
@@ -142,13 +146,12 @@ public class AdapterFormato extends RecyclerView.Adapter implements View.OnClick
 
         public void cargarFormato(Formato unFormato) {
 
-            ratingBar.setRating(unFormato.getVote_average()/2);
-            if (textViewTitulo !=null){
+            ratingBar.setRating(unFormato.getVote_average() / 2);
+            if (textViewTitulo != null) {
                 textViewDescripcion.setText(unFormato.getOverview());
-                if (unFormato.getTitle()==null){
+                if (unFormato.getTitle() == null) {
                     textViewTitulo.setText(unFormato.getName());
-                }
-                else{
+                } else {
                     textViewTitulo.setText(unFormato.getTitle());
 
                 }
@@ -156,7 +159,7 @@ public class AdapterFormato extends RecyclerView.Adapter implements View.OnClick
             }
 
             Picasso.with(imageView.getContext())
-                    .load(TMDBHelper.getImagePoster(TMDBHelper.IMAGE_SIZE_W92,unFormato.getPoster_path()))
+                    .load(TMDBHelper.getImagePoster(TMDBHelper.IMAGE_SIZE_W92, unFormato.getPoster_path()))
                     .placeholder(R.drawable.loading)
                     .error(R.drawable.posterpelinotfound)
                     .into(imageView);
@@ -165,7 +168,7 @@ public class AdapterFormato extends RecyclerView.Adapter implements View.OnClick
 
     }
 
-    public interface Favoritable{
+    public interface Favoritable {
         public void recibirFormatoFavorito(Formato unFormato);
     }
 }

@@ -26,7 +26,7 @@ import java.util.List;
  * Created by elmar on 18/5/2017.
  */
 
-public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClickListener,View.OnLongClickListener {
+public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClickListener, View.OnLongClickListener {
 
     private Context context;
     private List<Credito> listaCreditosOriginales;
@@ -35,11 +35,12 @@ public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClic
     private AdapterView.OnLongClickListener listenerLong;
     private Favoritable favoritable;
 
-    public void setLongListener(View.OnLongClickListener unLongListener){
-        this.listenerLong=unLongListener;
+    public void setLongListener(View.OnLongClickListener unLongListener) {
+        this.listenerLong = unLongListener;
     }
-    public void setListener(View.OnClickListener listener){
-        this.listener=listener;
+
+    public void setListener(View.OnClickListener listener) {
+        this.listener = listener;
     }
 
     public void setContext(Context context) {
@@ -49,12 +50,13 @@ public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClic
     public void setListaCreditosOriginales(List<Credito> listaCreditosOriginales) {
         this.listaCreditosOriginales = listaCreditosOriginales;
     }
+
     public void addListaCreditosOriginales(List<Credito> listaCreditosOriginales) {
         this.listaCreditosOriginales.addAll(listaCreditosOriginales);
     }
 
 
-    public List<Credito> getListaCreditosOriginales(){
+    public List<Credito> getListaCreditosOriginales() {
         return listaCreditosOriginales;
     }
 
@@ -63,13 +65,12 @@ public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClic
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View viewCelda;
-        FragmentActivity unaActivity= (FragmentActivity) context;
+        FragmentActivity unaActivity = (FragmentActivity) context;
         FragmentManager fragmentManager = (FragmentManager) unaActivity.getSupportFragmentManager();
-        FragmentBusqueda fragmentBusqueda= (FragmentBusqueda) fragmentManager.findFragmentByTag("FragmentBuscador");
+        FragmentBusqueda fragmentBusqueda = (FragmentBusqueda) fragmentManager.findFragmentByTag("FragmentBuscador");
 
 
-
-            viewCelda = layoutInflater.inflate(R.layout.detalle_celda_actores, parent, false);
+        viewCelda = layoutInflater.inflate(R.layout.detalle_celda_actores, parent, false);
 
         FormatoViewHolder peliculasViewHolder = new FormatoViewHolder(viewCelda);
         viewCelda.setOnClickListener(this);
@@ -116,23 +117,21 @@ public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClic
         public FormatoViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.peli_img_celda);
-            textViewTitulo =(TextView) itemView.findViewById(R.id.peli_texto_celda);
-            textViewDescripcion=(TextView) itemView.findViewById(R.id.detalleBusqueda);
+            textViewTitulo = (TextView) itemView.findViewById(R.id.peli_texto_celda);
+            textViewDescripcion = (TextView) itemView.findViewById(R.id.detalleBusqueda);
             Typeface roboto = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Roboto-Light.ttf");
             textViewTitulo.setTypeface(roboto);
             textViewDescripcion.setTypeface(roboto);
 
 
-
-            FragmentActivity unaActivity= (FragmentActivity) itemView.getContext();
+            FragmentActivity unaActivity = (FragmentActivity) itemView.getContext();
             FragmentManager fragmentManager = (FragmentManager) unaActivity.getSupportFragmentManager();
-            FragmentBusqueda fragmentBusqueda= (FragmentBusqueda) fragmentManager.findFragmentByTag("FragmentBuscador");
-
+            FragmentBusqueda fragmentBusqueda = (FragmentBusqueda) fragmentManager.findFragmentByTag("FragmentBuscador");
 
 
             if (fragmentBusqueda != null && fragmentBusqueda.isVisible()) {
-                textViewTitulo =(TextView) itemView.findViewById(R.id.peli_texto_celda);
-                textViewDescripcion=(TextView) itemView.findViewById(R.id.detalleBusqueda);
+                textViewTitulo = (TextView) itemView.findViewById(R.id.peli_texto_celda);
+                textViewDescripcion = (TextView) itemView.findViewById(R.id.detalleBusqueda);
                 textViewTitulo.setTypeface(roboto);
                 textViewDescripcion.setTypeface(roboto);
             }
@@ -141,25 +140,22 @@ public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClic
         public void cargarFormato(Credito unCredito) {
 
 
-                if (unCredito.getTitle()==null || unCredito.getTitle().isEmpty()) {
-                    if (unCredito.getOriginal_name() == null) {
-                    } else {
-                        textViewTitulo.setText(unCredito.getOriginal_name());
-                    }
+            if (unCredito.getTitle() == null || unCredito.getTitle().isEmpty()) {
+                if (unCredito.getOriginal_name() == null) {
+                } else {
+                    textViewTitulo.setText(unCredito.getOriginal_name());
                 }
-                else {
-                    if (unCredito.getOriginal_title() == null) {
-                    }
-                    else {
-                        textViewTitulo.setText(unCredito.getOriginal_title());
-                    }
+            } else {
+                if (unCredito.getOriginal_title() == null) {
+                } else {
+                    textViewTitulo.setText(unCredito.getOriginal_title());
                 }
-                textViewDescripcion.setText(unCredito.getCharacter());
-
+            }
+            textViewDescripcion.setText(unCredito.getCharacter());
 
 
             Picasso.with(imageView.getContext())
-                    .load(TMDBHelper.getImagePoster(TMDBHelper.IMAGE_SIZE_W92,unCredito.getPoster_path()))
+                    .load(TMDBHelper.getImagePoster(TMDBHelper.IMAGE_SIZE_W92, unCredito.getPoster_path()))
                     .placeholder(R.drawable.loading)
                     .error(R.drawable.posterpelinotfound)
                     .into(imageView);
@@ -168,7 +164,7 @@ public class AdapterCreditos extends RecyclerView.Adapter implements View.OnClic
 
     }
 
-    public interface Favoritable{
+    public interface Favoritable {
         public void recibirFormatoFavorito(Credito unCredito);
     }
 }

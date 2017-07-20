@@ -984,10 +984,10 @@ public class ControllerFormato {
                     listaPregunta.add(unaPregunta);
                 }
 
-                int randomNum = ThreadLocalRandom.current().nextInt(0, listaPregunta.size()+1);
+                int randomNum = ThreadLocalRandom.current().nextInt(0, listaPregunta.size());
                 Pregunta controlPregunta=listaPregunta.get(randomNum);
                 while (controlPregunta.getAutor().equals(FirebaseAuth.getInstance().getCurrentUser().getDisplayName())){
-                    randomNum = ThreadLocalRandom.current().nextInt(0, listaPregunta.size()+1);
+                    randomNum = ThreadLocalRandom.current().nextInt(0, listaPregunta.size());
                     controlPregunta=listaPregunta.get(randomNum);
                 }
 

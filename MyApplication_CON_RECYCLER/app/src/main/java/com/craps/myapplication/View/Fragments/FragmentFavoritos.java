@@ -31,11 +31,8 @@ public class FragmentFavoritos extends Fragment {
     private List<Formato> lista1;
     private ControllerFormato controllerFormato;
     //DECLARO INTERFAZ
-
     public interface Notificable {
         public void recibirFormatoClickeado(Formato formato, String origen, Integer pagina, String StringABuscar, Integer drawerId);
-
-
     }
 
 
@@ -43,18 +40,14 @@ public class FragmentFavoritos extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favoritos, container, false);
 
-
         //SETEAR EL ADAPTER
         final RecyclerView recycler1 = (RecyclerView) view.findViewById(R.id.recycler1);
-
-
         recycler1.setHasFixedSize(true);
         recycler1.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
         adapterFavoritos = new AdapterFormato();
@@ -71,17 +64,17 @@ public class FragmentFavoritos extends Fragment {
                 notificable.recibirFormatoClickeado(formatoClickeado, "favoritos", 1, "nulo", 0);
             }
         };
+
         adapterFavoritos.setListener(listener1);
         recycler1.setAdapter(adapterFavoritos);
 
-        //cargar datos
+        //CARGAR DATOS
         controllerFormato = new ControllerFormato(view.getContext());
         lista1 = new ArrayList<>();
 
         controllerFormato.obtenerFavoritos(new ResultListener<List<Formato>>() {
             @Override
             public void finish(List<Formato> resultado) {
-
                 adapterFavoritos.setListaFormatosOriginales(resultado);
                 lista1 = resultado;
                 adapterFavoritos.notifyDataSetChanged();
@@ -91,15 +84,10 @@ public class FragmentFavoritos extends Fragment {
         adapterFavoritos.setListaFormatosOriginales(lista1);
         adapterFavoritos.notifyDataSetChanged();
 
-
         TextView tituloR1 = (TextView) view.findViewById(R.id.texto_titulo_sinconexion);
-
-
         Typeface roboto = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
         tituloR1.setTypeface(roboto);
         tituloR1.setText("FAVORITOS");
-
-
         return view;
     }
 
@@ -114,17 +102,14 @@ public class FragmentFavoritos extends Fragment {
         return fragmentFavoritos;
     }
 
-
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-
         if (isVisibleToUser) {
             if (isResumed()) {
                 controllerFormato.obtenerFavoritos(new ResultListener<List<Formato>>() {
@@ -140,14 +125,11 @@ public class FragmentFavoritos extends Fragment {
         }
     }
 
-
-
     @Override
     public void onResume() {
         controllerFormato.obtenerFavoritos(new ResultListener<List<Formato>>() {
             @Override
             public void finish(List<Formato> resultado) {
-
                 adapterFavoritos.setListaFormatosOriginales(resultado);
                 lista1 = resultado;
                 adapterFavoritos.notifyDataSetChanged();

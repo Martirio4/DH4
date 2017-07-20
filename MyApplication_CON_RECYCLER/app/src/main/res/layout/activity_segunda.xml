@@ -25,13 +25,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/detalle_contenedor_fragment"
-    tools:context="com.craps.myapplication.View.Activities.ActivitySegunda">
+    tools:context="com.craps.myapplication.View.Activities.ActivityDetalle">
 
 </android.support.constraint.ConstraintLayout>
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPagerDetalle"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@color/paleta0"
         tools:layout_editor_absoluteY="8dp"
         tools:layout_editor_absoluteX="8dp">
     </android.support.v4.view.ViewPager>

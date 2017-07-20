@@ -27,15 +27,17 @@ import com.github.clans.fab.FloatingActionButton;
 public class FragmentTrivia extends Fragment {
 
     private Triviable triviable;
-   private ControllerFormato controllerTrivia;
+    private ControllerFormato controllerTrivia;
     private TextView puntaje;
     private FloatingActionButton compartir;
+    private Button botonEmpezar;
+    private Button botonSubirPregunta;
 
     public FragmentTrivia() {
         // Required empty public constructor
     }
 
-    public interface Triviable{
+    public interface Triviable {
         public void irATrivia(Integer tipoFragment);
     }
 
@@ -44,35 +46,29 @@ public class FragmentTrivia extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.trivia_fragment, container, false);
-
-        puntaje=(TextView)view.findViewById(R.id.puntajePortadaTrivia) ;
-
-        Button botonEmpezar= (Button) view.findViewById(R.id.btn_empezarTrivia);
+        View view = inflater.inflate(R.layout.trivia_fragment, container, false);
+        puntaje = (TextView) view.findViewById(R.id.puntajePortadaTrivia);
+        botonEmpezar= (Button) view.findViewById(R.id.btn_empezarTrivia);
         botonEmpezar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 triviable.irATrivia(0);
             }
         });
-
-
-        Button botonSubirPregunta= (Button) view.findViewById(R.id.btn_subirPregunta);
+        botonSubirPregunta= (Button) view.findViewById(R.id.btn_subirPregunta);
         botonSubirPregunta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 triviable.irATrivia(1);
             }
         });
-
-        controllerTrivia=new ControllerFormato(view.getContext());
+        controllerTrivia = new ControllerFormato(view.getContext());
         controllerTrivia.obtenerPuntajeFirebase(new ResultListener<String>() {
             @Override
             public void finish(String resultado) {
                 puntaje.setText(resultado);
             }
         });
-
         compartir = (FloatingActionButton) view.findViewById(R.id.compartirPuntajeInicial);
         compartir.setButtonSize(FloatingActionButton.SIZE_NORMAL);
         compartir.setImageResource(R.drawable.ic_share_black_241dp);
@@ -82,12 +78,9 @@ public class FragmentTrivia extends Fragment {
                 shareNativo(puntaje.getText().toString());
             }
         });
-
-
-
-
         return view;
     }
+
     public static FragmentTrivia crearFragmentMaestro() {
         FragmentTrivia fragmentTrivia = new FragmentTrivia();
         return fragmentTrivia;
@@ -96,7 +89,7 @@ public class FragmentTrivia extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.triviable=(Triviable) context;
+        this.triviable = (Triviable) context;
     }
 
     @Override
@@ -109,19 +102,17 @@ public class FragmentTrivia extends Fragment {
         });
         super.onResume();
     }
-    public void shareNativo(String Puntaje){
 
+    public void shareNativo(String Puntaje) {
         //Creamos un share de tipo ACTION_SENT
         Intent share = new Intent(android.content.Intent.ACTION_SEND);
-//Indicamos que voy a compartir texto
+        //Indicamos que voy a compartir texto
         share.setType("text/plain");
-//Le agrego un título
+        //Le agrego un título
         share.putExtra(Intent.EXTRA_SUBJECT, "Comparti Reelshot");
-//Le agrego el texto a compartir (Puede ser un link tambien)
-        share.putExtra(Intent.EXTRA_TEXT, "Obtuve un puntaje de "+Puntaje+" en la trivia de Reelshot!"+"\n"+"Podés superarme?");
-//Hacemos un start para que comparta el contenido.
+        //Le agrego el texto a compartir (Puede ser un link tambien)
+        share.putExtra(Intent.EXTRA_TEXT, "Obtuve un puntaje de " + Puntaje + " en la trivia de Reelshot!" + "\n" + "Podés superarme?");
+        //Hacemos un start para que comparta el contenido.
         startActivity(Intent.createChooser(share, "Compartí con tus amigos"));
-
-
     }
 }

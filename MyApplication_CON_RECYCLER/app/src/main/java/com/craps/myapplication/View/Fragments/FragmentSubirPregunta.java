@@ -39,18 +39,15 @@ public class FragmentSubirPregunta extends Fragment {
     private TextInputLayout textInputLayout14;
     private TextInputLayout textInputLayout15;
     private TextInputLayout textInputLayout16;
-    
     private EditText editEnunciado;
     private EditText respuestaCorrecta;
     private EditText respuestaIncorrecta1;
     private EditText respuestaIncorrecta2;
     private EditText respuestaIncorrecta3;
     private EditText respuestaIncorrecta4;
-    
     private Button botonUploadPregunta;
     private Button botonBorrarCampos;
     private Button botonVolverAtras;
-
     private DatabaseReference mdbase;
 
     public FragmentSubirPregunta() {
@@ -62,21 +59,21 @@ public class FragmentSubirPregunta extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.subir_pregunta, container, false);
-        
-        textInputLayout11= (TextInputLayout)  view.findViewById(R.id.inputLayout11);
-        textInputLayout12= (TextInputLayout)  view.findViewById(R.id.inputLayout12);
-        textInputLayout13= (TextInputLayout)  view.findViewById(R.id.inputLayout13);
-        textInputLayout14= (TextInputLayout)  view.findViewById(R.id.inputLayout14);
-        textInputLayout15= (TextInputLayout)  view.findViewById(R.id.inputLayout15);
-        textInputLayout16= (TextInputLayout)  view.findViewById(R.id.inputLayout16);
+        View view = inflater.inflate(R.layout.subir_pregunta, container, false);
 
-        editEnunciado=(EditText)view.findViewById(R.id.edit11);
-        respuestaCorrecta=(EditText)view.findViewById(R.id.edit12);
-        respuestaIncorrecta1=(EditText)view.findViewById(R.id.edit13);
-        respuestaIncorrecta2=(EditText)view.findViewById(R.id.edit14);
-        respuestaIncorrecta3=(EditText)view.findViewById(R.id.edit15);
-        respuestaIncorrecta4=(EditText)view.findViewById(R.id.edit16);
+        //CASTEO COMPONENTES DE LA VISTA
+        textInputLayout11 = (TextInputLayout) view.findViewById(R.id.inputLayout11);
+        textInputLayout12 = (TextInputLayout) view.findViewById(R.id.inputLayout12);
+        textInputLayout13 = (TextInputLayout) view.findViewById(R.id.inputLayout13);
+        textInputLayout14 = (TextInputLayout) view.findViewById(R.id.inputLayout14);
+        textInputLayout15 = (TextInputLayout) view.findViewById(R.id.inputLayout15);
+        textInputLayout16 = (TextInputLayout) view.findViewById(R.id.inputLayout16);
+        editEnunciado = (EditText) view.findViewById(R.id.edit11);
+        respuestaCorrecta = (EditText) view.findViewById(R.id.edit12);
+        respuestaIncorrecta1 = (EditText) view.findViewById(R.id.edit13);
+        respuestaIncorrecta2 = (EditText) view.findViewById(R.id.edit14);
+        respuestaIncorrecta3 = (EditText) view.findViewById(R.id.edit15);
+        respuestaIncorrecta4 = (EditText) view.findViewById(R.id.edit16);
 
         Typeface roboto = Typeface.createFromAsset(view.getContext().getAssets(), "fonts/Roboto-Regular.ttf");
 
@@ -87,11 +84,12 @@ public class FragmentSubirPregunta extends Fragment {
         respuestaIncorrecta3.setTypeface(roboto);
         respuestaIncorrecta4.setTypeface(roboto);
 
-        botonUploadPregunta=(Button)view.findViewById(R.id.btn_upload_pregunta);
+        //COMPORTAMIENTO BOTONES
+        botonUploadPregunta = (Button) view.findViewById(R.id.btn_upload_pregunta);
         botonUploadPregunta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer control=0;
+                Integer control = 0;
                 textInputLayout11.setError(null);
                 textInputLayout12.setError(null);
                 textInputLayout13.setError(null);
@@ -99,48 +97,47 @@ public class FragmentSubirPregunta extends Fragment {
                 textInputLayout15.setError(null);
                 textInputLayout16.setError(null);
 
-                if (editEnunciado.getText().toString().isEmpty()){
+                if (editEnunciado.getText().toString().isEmpty()) {
                     textInputLayout11.setError("Por favor ingrese un enunciado");
-                    control=control+1;
+                    control = control + 1;
                 }
-                if (respuestaCorrecta.getText().toString().isEmpty()){
+                if (respuestaCorrecta.getText().toString().isEmpty()) {
                     textInputLayout12.setError("Por favor ingrese una respuesta");
-                    control=control+1;
+                    control = control + 1;
                 }
-                if (respuestaIncorrecta1.getText().toString().isEmpty()){
+                if (respuestaIncorrecta1.getText().toString().isEmpty()) {
                     textInputLayout13.setError("Por favor ingrese una respuesta");
-                    control=control+1;
+                    control = control + 1;
                 }
-                if (respuestaIncorrecta2.getText().toString().isEmpty()){
+                if (respuestaIncorrecta2.getText().toString().isEmpty()) {
                     textInputLayout14.setError("Por favor ingrese una respuesta");
-                    control=control+1;
+                    control = control + 1;
                 }
-                if (respuestaIncorrecta3.getText().toString().isEmpty()){
+                if (respuestaIncorrecta3.getText().toString().isEmpty()) {
                     textInputLayout15.setError("Por favor ingrese una respuesta");
-                    control=control+1;
+                    control = control + 1;
                 }
-                if (respuestaIncorrecta4.getText().toString().isEmpty()){
+                if (respuestaIncorrecta4.getText().toString().isEmpty()) {
                     textInputLayout16.setError("Por favor ingrese una respuesta");
-                    control=control+1;
+                    control = control + 1;
                 }
-                if (control==0){
+                if (control == 0) {
                     String nombre;
-                    if (FirebaseAuth.getInstance().getCurrentUser().getDisplayName()==(null)||FirebaseAuth.getInstance().getCurrentUser().getDisplayName().isEmpty()){
-                        nombre=FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                    if (FirebaseAuth.getInstance().getCurrentUser().getDisplayName() == (null) || FirebaseAuth.getInstance().getCurrentUser().getDisplayName().isEmpty()) {
+                        nombre = FirebaseAuth.getInstance().getCurrentUser().getEmail();
                     }
-                    else{
-                       nombre= FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                    else {
+                        nombre = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
                     }
-                    Pregunta unaPregunta=crearPregunta(editEnunciado.getText().toString(),nombre, respuestaCorrecta.getText().toString(), respuestaIncorrecta1.getText().toString(), respuestaIncorrecta2.getText().toString(), respuestaIncorrecta3.getText().toString(), respuestaIncorrecta4.getText().toString());
-
-                    ControllerFormato controllerPreguntas=new ControllerFormato(v.getContext());
+                    Pregunta unaPregunta = crearPregunta(editEnunciado.getText().toString(), nombre, respuestaCorrecta.getText().toString(), respuestaIncorrecta1.getText().toString(), respuestaIncorrecta2.getText().toString(), respuestaIncorrecta3.getText().toString(), respuestaIncorrecta4.getText().toString());
+                    ControllerFormato controllerPreguntas = new ControllerFormato(v.getContext());
                     controllerPreguntas.subirPreguntaFirebase(unaPregunta);
                     crearDialogoPreguntaSubida();
                 }
             }
         });
 
-        botonBorrarCampos=(Button)view.findViewById(R.id.btn_limpiar_campos);
+        botonBorrarCampos = (Button) view.findViewById(R.id.btn_limpiar_campos);
         botonBorrarCampos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,32 +147,27 @@ public class FragmentSubirPregunta extends Fragment {
                 textInputLayout14.setError(null);
                 textInputLayout15.setError(null);
                 textInputLayout16.setError(null);
-
                 editEnunciado.setText("");
                 respuestaCorrecta.setText("");
                 respuestaIncorrecta1.setText("");
                 respuestaIncorrecta2.setText("");
                 respuestaIncorrecta3.setText("");
                 respuestaIncorrecta4.setText("");
-
-
             }
         });
 
-
-
-
-
-
-
-
-
-
-        return  view;
+        botonVolverAtras = (Button) view.findViewById(R.id.btn_volver_a_fragmentTrivia);
+        botonVolverAtras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
+        return view;
     }
 
-    public Pregunta crearPregunta(String enunciadoPregunta, String autor, String respuestaCorrecta, String respuestaIncorrecta1, String respuestaIncorrecta2, String respuestaIncorrecta3, String respuestaIncorrecta4){
-        Pregunta unaPregunta=new Pregunta();
+    public Pregunta crearPregunta(String enunciadoPregunta, String autor, String respuestaCorrecta, String respuestaIncorrecta1, String respuestaIncorrecta2, String respuestaIncorrecta3, String respuestaIncorrecta4) {
+        Pregunta unaPregunta = new Pregunta();
         unaPregunta.setAutor(autor);
         unaPregunta.setEnunciadoPregunta(enunciadoPregunta);
         unaPregunta.setRespuestaCorrecta(respuestaCorrecta);
@@ -185,15 +177,11 @@ public class FragmentSubirPregunta extends Fragment {
         unaPregunta.setRespuestaIncorrecta4(respuestaIncorrecta4);
         return unaPregunta;
     }
+
     public void crearDialogoPreguntaSubida() {
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.Dialog);
-
-
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.Dialog);
         builder.setTitle("ReelShot Trivia")
-                .setMessage("Su pregunta fue agregada con éxito"+"\n"+"desea agregar otra pregunta?")
+                .setMessage("Su pregunta fue agregada con éxito" + "\n" + "desea agregar otra pregunta?")
                 .setPositiveButton("Crear otra pregunta", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -203,26 +191,22 @@ public class FragmentSubirPregunta extends Fragment {
                         textInputLayout14.setError(null);
                         textInputLayout15.setError(null);
                         textInputLayout16.setError(null);
-
                         editEnunciado.setText("");
                         respuestaCorrecta.setText("");
                         respuestaIncorrecta1.setText("");
                         respuestaIncorrecta2.setText("");
                         respuestaIncorrecta3.setText("");
                         respuestaIncorrecta4.setText("");
-
                     }
                 })
                 .setNegativeButton("Salir", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         getActivity().finish();
-
                     }
                 });
 
-        AlertDialog unDialogo= builder.create();
+        AlertDialog unDialogo = builder.create();
         unDialogo.show();
 
         final Button positiveButton = unDialogo.getButton(AlertDialog.BUTTON_POSITIVE);

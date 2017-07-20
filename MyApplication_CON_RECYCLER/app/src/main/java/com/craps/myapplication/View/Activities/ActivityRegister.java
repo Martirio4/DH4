@@ -49,18 +49,16 @@ public class ActivityRegister extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        mAuth= FirebaseAuth.getInstance();
-        controllerUsuario=new ControllerUsuario(this);
-
-
+        mAuth = FirebaseAuth.getInstance();
+        controllerUsuario = new ControllerUsuario(this);
 
 
         TextView textViewLogin = (TextView) findViewById(R.id.textViewLogin);
 
-        textInputLayout1= (TextInputLayout)  findViewById(R.id.inputLayout1);
-        textInputLayout2= (TextInputLayout)  findViewById(R.id.inputLayout2);
-        textInputLayout3= (TextInputLayout)  findViewById(R.id.inputLayout3);
-        textInputLayout4= (TextInputLayout)  findViewById(R.id.inputLayout4);
+        textInputLayout1 = (TextInputLayout) findViewById(R.id.inputLayout1);
+        textInputLayout2 = (TextInputLayout) findViewById(R.id.inputLayout2);
+        textInputLayout3 = (TextInputLayout) findViewById(R.id.inputLayout3);
+        textInputLayout4 = (TextInputLayout) findViewById(R.id.inputLayout4);
 
         editTextUsuario = (EditText) findViewById(R.id.editTextUsuario);
         editTextMail = (EditText) findViewById(R.id.editTextmail);
@@ -94,9 +92,9 @@ public class ActivityRegister extends AppCompatActivity {
                     textInputLayout3.setError("Por favor ingrese una contraseña valida");
                     control = control + 1;
                 }
-                if (editTextPassword.getText().toString().length()<6){
+                if (editTextPassword.getText().toString().length() < 6) {
                     textInputLayout3.setError("La contraseña debe tener al menos 6 caracteres");
-                    control=control+1;
+                    control = control + 1;
                 }
 
                 if (control > 0) {
@@ -114,18 +112,18 @@ public class ActivityRegister extends AppCompatActivity {
                     if (controllerUsuario.existeUsuario(nuevoUsuario)) {
                         Toast.makeText(ActivityRegister.this, "El usuario ya existe, utilize otro mail", Toast.LENGTH_SHORT).show();
                         finish();
-                        Intent unIntent= new Intent(ActivityRegister.this,ActivityLogin.class);
+                        Intent unIntent = new Intent(ActivityRegister.this, ActivityLogin.class);
                         startActivity(unIntent);
-                    }
-                    else  {
+                    } else {
                         crearCuentaFirebase(editTextMail.getText().toString().toLowerCase(), editTextPassword.getText().toString());
                     }
-                }
-                else {
+                } else {
                     textInputLayout3.setError("Las contraseñas ingresadas no coinciden");
                     editTextPassRepe.setText("");
                 }
-            };
+            }
+
+            ;
 
         });
     }
@@ -135,22 +133,22 @@ public class ActivityRegister extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                       if (task.isSuccessful()){
-                           Usuario nuevoUsuario=new Usuario();
-                           nuevoUsuario.setMail(email);
-                           nuevoUsuario.setContraseña(password);
-                           controllerUsuario.RegistrarUsuario(nuevoUsuario);
+                        if (task.isSuccessful()) {
+                            Usuario nuevoUsuario = new Usuario();
+                            nuevoUsuario.setMail(email);
+                            nuevoUsuario.setContraseña(password);
+                            controllerUsuario.RegistrarUsuario(nuevoUsuario);
 
-                           Intent unIntent = new Intent(ActivityRegister.this, ActivityLogin.class);
-                           startActivity(unIntent);
-                       }
+                            Intent unIntent = new Intent(ActivityRegister.this, ActivityLogin.class);
+                            startActivity(unIntent);
+                        }
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
 
-                        //creo usuario en mi base de datos
+                            //creo usuario en mi base de datos
                             Toast.makeText(ActivityRegister.this, "Sin Conexion, intente mas tarde.", Toast.LENGTH_SHORT).show();
                         }
 
@@ -160,20 +158,18 @@ public class ActivityRegister extends AppCompatActivity {
     }
 
 
-
-
-    public void ingresarLogueadoNuevoUsuario(String mail){
-            Intent unIntent = new Intent(ActivityRegister.this, ActivityMain.class);
-            Bundle bundle= new Bundle();
-            bundle.putString(ActivityMain.USUARIO, mail);
-            unIntent.putExtras(bundle);
-            startActivity(unIntent);
+    public void ingresarLogueadoNuevoUsuario(String mail) {
+        Intent unIntent = new Intent(ActivityRegister.this, ActivityMain.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(ActivityMain.USUARIO, mail);
+        unIntent.putExtras(bundle);
+        startActivity(unIntent);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent unIntent=new Intent(this, ActivityLogin.class);
+        Intent unIntent = new Intent(this, ActivityLogin.class);
         startActivity(unIntent);
     }
 }

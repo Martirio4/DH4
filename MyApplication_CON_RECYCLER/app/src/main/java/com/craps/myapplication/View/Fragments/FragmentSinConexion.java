@@ -34,9 +34,9 @@ import java.util.List;
  */
 public class FragmentSinConexion extends Fragment {
 
-   private AdapterFormato unadapter1;
+    private AdapterFormato unadapter1;
     private Notificable notificable;
-    private List<Formato>lista1;
+    private List<Formato> lista1;
 
     //DECLARO INTERFAZ
     public interface Notificable {
@@ -54,7 +54,7 @@ public class FragmentSinConexion extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_sin_conexion, container, false);
+        View view = inflater.inflate(R.layout.fragment_sin_conexion, container, false);
 
         Bundle unbundle = getArguments();
 
@@ -63,7 +63,7 @@ public class FragmentSinConexion extends Fragment {
 
 
         recycler1.setHasFixedSize(true);
-        recycler1.setLayoutManager(new GridLayoutManager(view.getContext(),3));
+        recycler1.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
         unadapter1 = new AdapterFormato();
         unadapter1.setContext(view.getContext());
 
@@ -73,7 +73,7 @@ public class FragmentSinConexion extends Fragment {
             public void onClick(View view) {
                 //ESTO SE UTILIZA PARA OBTENER LA POSITION DE LO QUE FUE CLICKEADO.
                 Integer posicion = recycler1.getChildAdapterPosition(view);
-                List< Formato > listaPeliculasOriginales = unadapter1.getListaFormatosOriginales();
+                List<Formato> listaPeliculasOriginales = unadapter1.getListaFormatosOriginales();
                 Formato formatoClickeado = listaPeliculasOriginales.get(posicion);
                 notificable.recibirFormatoClickeado(formatoClickeado, null);
             }
@@ -86,7 +86,7 @@ public class FragmentSinConexion extends Fragment {
         //cargar datos
 
         final ControllerFormato controllerFormato = new ControllerFormato(view.getContext());
-        lista1 =new ArrayList<>();
+        lista1 = new ArrayList<>();
         /*
         controllerFormato.obtenerFormatos(new ResultListener<List<Formato>>() {
             @Override
@@ -105,28 +105,25 @@ public class FragmentSinConexion extends Fragment {
         TextView tituloR1 = (TextView) view.findViewById(R.id.texto_titulo_sinconexion);
 
 
-        Typeface roboto = Typeface.createFromAsset(getContext().getAssets(),"fonts/Roboto-Light.ttf");
+        Typeface roboto = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
         tituloR1.setTypeface(roboto);
         tituloR1.setText("SIN ACCESO A INTERNET");
 
 
         //CASTEO EL FAB REFRESH
-        FloatingActionButton fabrefresh=(FloatingActionButton) view.findViewById(R.id.fab_refresh);
+        FloatingActionButton fabrefresh = (FloatingActionButton) view.findViewById(R.id.fab_refresh);
 
         fabrefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (HTTPConnectionManager.isNetworkingOnline(v.getContext())){
-                    Intent unIntent= new Intent(v.getContext(), ActivityMain.class);
+                if (HTTPConnectionManager.isNetworkingOnline(v.getContext())) {
+                    Intent unIntent = new Intent(v.getContext(), ActivityMain.class);
                     startActivity(unIntent);
-                }
-                else{
+                } else {
                     Toast.makeText(v.getContext(), "Sin conexion a Internet", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-
 
 
         return view;
@@ -137,8 +134,9 @@ public class FragmentSinConexion extends Fragment {
         super.onAttach(context);
         this.notificable = (Notificable) context;
     }
-    public static FragmentSinConexion crearFragmentMaestro(){
-        FragmentSinConexion fragmentSinConexion=new FragmentSinConexion();
+
+    public static FragmentSinConexion crearFragmentMaestro() {
+        FragmentSinConexion fragmentSinConexion = new FragmentSinConexion();
         return fragmentSinConexion;
     }
 }

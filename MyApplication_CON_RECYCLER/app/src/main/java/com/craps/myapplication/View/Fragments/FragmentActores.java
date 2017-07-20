@@ -32,17 +32,12 @@ import java.util.List;
  */
 public class FragmentActores extends Fragment {
 
-    public static final String ACTORID="ACTORID";
-
-
+    public static final String ACTORID = "ACTORID";
     private RecyclerView recyclerCreditos;
     private AdapterCreditos adapterCreditos;
-    RecyclerView recyclerImagenes;
-    AdapterImagenes adapterImagenes;
-
+    private RecyclerView recyclerImagenes;
+    private AdapterImagenes adapterImagenes;
     private ControllerFormato controllerFragmentActores;
-    public FragmentActores() {
-    }
     private Boolean isLoading = false;
     private Integer actorid;
     private String nombreActor;
@@ -52,13 +47,12 @@ public class FragmentActores extends Fragment {
     private TextView textoaño;
     private TextView textosinopsis;
     private Notificable notificable;
-
-    //PABLO 1/3 A - DEMO 10/07 (VER CLICKABLE EN LAYOUT ONCLIK_DETALLE)
     private Integer maxLength = 175;
     private final List<Character> doNotEndTitlesWithTheseCharacters = Arrays.asList(':', ',', ';', '-', '"', '/', '+');
     private String biografiaCortada;
-    //PABLO 1/3 C - DEMO 10/07
 
+    public FragmentActores() {
+    }
 
     //DECLARO INTERFAZ
     public interface Notificable {
@@ -71,24 +65,23 @@ public class FragmentActores extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_actores, container, false);
 
-        textonombre=(TextView)view.findViewById(R.id.tag_nombre2);
-        textoaño=(TextView)view.findViewById(R.id.tag_año2);
-        textosinopsis=(TextView)view.findViewById(R.id.tag_sinopsis2);
+        textonombre = (TextView) view.findViewById(R.id.tag_nombre2);
+        textoaño = (TextView) view.findViewById(R.id.tag_año2);
+        textosinopsis = (TextView) view.findViewById(R.id.tag_sinopsis2);
 
-        controllerFragmentActores= new ControllerFormato(view.getContext());
+        controllerFragmentActores = new ControllerFormato(view.getContext());
 
         //RECIBO EL BUNDLE Y SACVO LOS DATOS, LOS PONGO EN LOS TEXTVIEWS
-        Bundle unBundle= getArguments();
-        if (unBundle==null || unBundle.isEmpty()){
-            actorid=270;
-        }
-        else{
-            actorid=unBundle.getInt(ACTORID);
+        Bundle unBundle = getArguments();
+        if (unBundle == null || unBundle.isEmpty()) {
+            actorid = 270;
+        } else {
+            actorid = unBundle.getInt(ACTORID);
         }
 
         //RECYCLER IMAGENES
         recyclerImagenes = (RecyclerView) view.findViewById(R.id.recyclerFotoActor);
-        recyclerImagenes.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL,false));
+        recyclerImagenes.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         adapterImagenes = new AdapterImagenes();
         adapterImagenes.setContext(view.getContext());
@@ -102,86 +95,66 @@ public class FragmentActores extends Fragment {
                 adapterImagenes.setListaImagenesOriginales(resultado);
                 adapterImagenes.notifyDataSetChanged();
             }
-        },actorid);
+        }, actorid);
 
-        //LISTENER CLICK FOTO ACTOR
-       /* View.OnClickListener listenerFotoActor= new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Integer laposicion = recyclerImagenes.getChildAdapterPosition(v);
-                List <Imagen> listaFotosActor = adapterImagenes.getListaImagenesOriginales();
-                Imagen imagenClickeada = listaFotosActor.get(laposicion);
-                Imagen unaImagen= new Imagen();
-                unaImagen.setRutaImagen(imagenClickeada.getRutaImagen());
-
-                notificable.recibirImagenClickeada(unaImagen);
-            }
-        };
-
-
-        adapterImagenes.setListener(listenerFotoActor);
-*/
-        //Datos
-
+        //CARGAR DATOS
         controllerFragmentActores.traerDetallesPersona(new ResultListener<Actor>() {
             @Override
             public void finish(Actor resultado) {
-                nombreActor=resultado.getNombreActor();
-                fechaNacimientoActor=resultado.getCumpleaños();
-                biografiaActor=resultado.getBiografia();
+                nombreActor = resultado.getNombreActor();
+                fechaNacimientoActor = resultado.getCumpleaños();
+                biografiaActor = resultado.getBiografia();
                 cargarDatosActor();
                 cargarDatosCreditos();
             }
-        },actorid);
+        }, actorid);
 
+        //SETEAR TEXTOS
         Typeface roboto = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
-
         textonombre.setTypeface(roboto);
         textoaño.setTypeface(roboto);
         textosinopsis.setTypeface(roboto);
 
         //RECYCLER CREDITOS
-        recyclerCreditos =(RecyclerView)view.findViewById(R.id.recycler_participacion);
+        recyclerCreditos = (RecyclerView) view.findViewById(R.id.recycler_participacion);
         recyclerCreditos.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        adapterCreditos= new AdapterCreditos();
+        adapterCreditos = new AdapterCreditos();
         adapterCreditos.setContext(view.getContext());
         adapterCreditos.setListaCreditosOriginales(new ArrayList<Credito>());
         recyclerCreditos.setAdapter(adapterCreditos);
 
-        //listener clickeo peliculas creditos
-        View.OnClickListener listenerActore= new View.OnClickListener() {
+        //LISTENER CLICKEO PELICULAS
+        View.OnClickListener listenerActore = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Integer posicion = recyclerCreditos.getChildAdapterPosition(v);
-                List <Credito> listaActoresOriginales = adapterCreditos.getListaCreditosOriginales();
+                List<Credito> listaActoresOriginales = adapterCreditos.getListaCreditosOriginales();
                 Credito creditoClickeado = listaActoresOriginales.get(posicion);
-                Formato unFormato= new Formato();
+                Formato unFormato = new Formato();
                 unFormato.setId(creditoClickeado.getId());
-                if (creditoClickeado.getTitle()==null || creditoClickeado.getTitle().isEmpty()){
+                if (creditoClickeado.getTitle() == null || creditoClickeado.getTitle().isEmpty()) {
                     unFormato.setTipoFormato("series");
-                }
-                else{
+                } else {
                     unFormato.setTipoFormato("peliculas");
                 }
-                notificable.recibirFormatoClickeado(unFormato,"actores",1,"nulo",0);
+                notificable.recibirFormatoClickeado(unFormato, "actores", 1, "nulo", 0);
             }
         };
         adapterCreditos.setListener(listenerActore);
-
         return view;
     }
 
-    public void cargarDatosActor(){
+    public void cargarDatosActor() {
         textonombre.setText(nombreActor);
         textoaño.setVisibility(View.VISIBLE);
         textoaño.setText(fechaNacimientoActor);
         textosinopsis.setVisibility(View.VISIBLE);
 
-        if (biografiaActor!=null&&biografiaActor.length()>0){
+        if (biografiaActor != null && biografiaActor.length() > 0) {
             cortarSinopsis(biografiaActor, maxLength);
             textosinopsis.setText(biografiaCortada);
         }
-        else{
+        else {
             textosinopsis.setText(R.string.noSinopsis);
         }
 
@@ -190,13 +163,15 @@ public class FragmentActores extends Fragment {
             public void onClick(View v) {
                 if (textosinopsis.getText() == biografiaCortada) {
                     textosinopsis.setText(biografiaActor);
-                } else {
+                }
+                else {
                     textosinopsis.setText(biografiaCortada);
                 }
-            }});
+            }
+        });
     }
 
-    public void cargarDatosCreditos(){
+    public void cargarDatosCreditos() {
         controllerFragmentActores.traerCreditosPersona(new ResultListener<List<Credito>>() {
             @Override
             public void finish(List<Credito> resultado) {
@@ -209,11 +184,12 @@ public class FragmentActores extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.notificable=(Notificable)context;
+        this.notificable = (Notificable) context;
     }
-    public static FragmentActores fragmentActoresCreator(Integer unActorid){
+
+    public static FragmentActores fragmentActoresCreator(Integer unActorid) {
         FragmentActores fragmentActores = new FragmentActores();
-        Bundle unBundle= new Bundle();
+        Bundle unBundle = new Bundle();
         unBundle.putInt(ACTORID, unActorid);
         fragmentActores.setArguments(unBundle);
         return fragmentActores;
@@ -221,25 +197,19 @@ public class FragmentActores extends Fragment {
 
     //PABLO 3/3 A - DEMO 10/07 (VER CLICKABLE EN LAYOUT ONCLIK_DETALLE)
     public String cortarSinopsis(String biografiaOriginal, Integer largoMax) {
-
         if (biografiaOriginal.length() <= largoMax) {
             return biografiaOriginal;
         }
-
         biografiaCortada = biografiaOriginal.substring(0, largoMax);
         biografiaCortada = biografiaCortada.substring(0, biografiaCortada.lastIndexOf(' '));
-
         while (endsInAWeirdCharacter(biografiaCortada)) {
             biografiaCortada = biografiaCortada.substring(0, biografiaCortada.length() - 1);
         }
-
         biografiaCortada = biografiaCortada + "...";
-
         return biografiaCortada;
-
     }
 
-    public Boolean endsInAWeirdCharacter(String unString){
+    public Boolean endsInAWeirdCharacter(String unString) {
         return !(doNotEndTitlesWithTheseCharacters.indexOf(unString.charAt(unString.length() - 1)) == -1);
     }
 

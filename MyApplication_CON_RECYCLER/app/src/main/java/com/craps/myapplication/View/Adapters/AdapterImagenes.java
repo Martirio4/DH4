@@ -29,7 +29,7 @@ import java.util.List;
  * Created by elmar on 18/5/2017.
  */
 
-public class AdapterImagenes extends RecyclerView.Adapter implements View.OnClickListener,View.OnLongClickListener {
+public class AdapterImagenes extends RecyclerView.Adapter implements View.OnClickListener, View.OnLongClickListener {
 
     private Context context;
     private List<Imagen> listaImagenesOriginales;
@@ -38,11 +38,12 @@ public class AdapterImagenes extends RecyclerView.Adapter implements View.OnClic
     private AdapterView.OnLongClickListener listenerLong;
     private Favoritable favoritable;
 
-    public void setLongListener(View.OnLongClickListener unLongListener){
-        this.listenerLong=unLongListener;
+    public void setLongListener(View.OnLongClickListener unLongListener) {
+        this.listenerLong = unLongListener;
     }
-    public void setListener(View.OnClickListener listener){
-        this.listener=listener;
+
+    public void setListener(View.OnClickListener listener) {
+        this.listener = listener;
     }
 
     public void setContext(Context context) {
@@ -52,12 +53,13 @@ public class AdapterImagenes extends RecyclerView.Adapter implements View.OnClic
     public void setListaImagenesOriginales(List<Imagen> listaImagenesOriginales) {
         this.listaImagenesOriginales = listaImagenesOriginales;
     }
+
     public void addListaImagenesOriginales(List<Imagen> listaImagenesOriginales) {
         this.listaImagenesOriginales.addAll(listaImagenesOriginales);
     }
 
 
-    public List<Imagen> getListaImagenesOriginales(){
+    public List<Imagen> getListaImagenesOriginales() {
         return listaImagenesOriginales;
     }
 
@@ -83,14 +85,13 @@ public class AdapterImagenes extends RecyclerView.Adapter implements View.OnClic
             @Override
             public void onClick(View v) {
                 Imagen imagenClickeada = listaImagenesOriginales.get(position);
-                Intent unIntent= new Intent(holder.itemView.getContext(),ActivityPoster.class);
-                Bundle unBundle= new Bundle();
-                unBundle.putString(ActivityPoster.POSTERID,imagenClickeada.getRutaImagen());
+                Intent unIntent = new Intent(holder.itemView.getContext(), ActivityPoster.class);
+                Bundle unBundle = new Bundle();
+                unBundle.putString(ActivityPoster.POSTERID, imagenClickeada.getRutaImagen());
                 unIntent.putExtras(unBundle);
                 holder.itemView.getContext().startActivity(unIntent);
             }
         });
-
 
 
     }
@@ -127,10 +128,8 @@ public class AdapterImagenes extends RecyclerView.Adapter implements View.OnClic
         public void cargarFormato(Imagen unImagen) {
 
 
-
-
             Picasso.with(imageView.getContext())
-                    .load(TMDBHelper.getImagePoster(TMDBHelper.IMAGE_SIZE_W185,unImagen.getRutaImagen()))
+                    .load(TMDBHelper.getImagePoster(TMDBHelper.IMAGE_SIZE_W185, unImagen.getRutaImagen()))
                     .placeholder(R.drawable.loading)
                     .error(R.drawable.posterpelinotfound)
                     .into(imageView);
@@ -139,7 +138,7 @@ public class AdapterImagenes extends RecyclerView.Adapter implements View.OnClic
 
     }
 
-    public interface Favoritable{
+    public interface Favoritable {
         public void recibirFormatoFavorito(Imagen unImagen);
     }
 }
